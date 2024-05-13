@@ -1,15 +1,19 @@
 .navbar {
-    position: sticky;
+    position: fixed; /* Change from sticky to fixed */
     top: 0;
+    left: 0; /* Add left: 0 */
     z-index: 1;
-    width: 100vw;
-    height: 6vh;
+    width: 100%;
+    min-height: 6vh;
     display: flex;
     align-items: center;
     background-color: rgb(32, 33, 32);
     justify-content: space-between;
     padding: 0;
 }
+
+
+
 
 
 

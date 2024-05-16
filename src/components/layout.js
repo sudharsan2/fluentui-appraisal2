@@ -104,13 +104,13 @@ const CustomLayout = ({ children }) => {
     
     if (windowWidth < 500) {
       
-      return { width: "30vw", height: "vh", backgroundColor: themestate ? "rgb(41,41,41)" : "#fff" };
+      return { width: "30vw", height: "", backgroundColor: themestate ? "rgb(41,41,41)" : "#fff" };
     } else if (windowWidth < 863) {
       
-      return { width: "40vw", height: "vh", backgroundColor: themestate ? "rgb(41,41,41)" : "#fff" };
+      return { width: "40vw", height: "", backgroundColor: themestate ? "rgb(41,41,41)" : "#fff" };
     }else {
       
-      return { width: "100vw", height: "vh", backgroundColor: themestate ? "rgb(41,41,41)" : "#fff" };
+      return { width: "100vw", height: "", backgroundColor: themestate ? "rgb(41,41,41)" : "#fff" };
     }
   };
 
@@ -147,7 +147,7 @@ const CustomLayout = ({ children }) => {
               />
             </div>
             <div className='notification-container'>
-              <AlertBadgeRegular style={{ color: "#fff", height: "100%", width: "100%" }} />
+              <AlertBadgeRegular style={{ color: "#fff", height: "100%", width: "100%" ,cursor:"pointer"}} />
             </div>
             <div className='questionmark-container'>
             <a href='https://focusrtech.com/' target="_blank" rel="noopener noreferrer">
@@ -156,7 +156,7 @@ const CustomLayout = ({ children }) => {
             </div>
             <Popover appearance={themestate ? 'inverted' : ""}>
               <PopoverTrigger disableButtonEnhancement>
-                <div style={{ marginRight: "15px", height: "48px", display: "flex", flexDirection: "column", justifyContent: "center", cursor: "pointer" }}>
+                <div style={{ marginRight: "15px", height: "48px", display: "flex", flexDirection: "column", justifyContent: "center",cursor:"pointer" }}>
                   <Avatar color="colorful" name="Gokilavani K" size={36} />
                 </div>
               </PopoverTrigger>
@@ -168,14 +168,14 @@ const CustomLayout = ({ children }) => {
         </div>
       </div>
       <div style={{ marginTop: "48px" }}>
-        <Drawer1 >{children}</Drawer1>
+        {children}
       </div>
     </div>
   );
 };
  
 export default CustomLayout;
- 
- 
- 
+
+
+
  

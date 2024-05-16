@@ -1,26 +1,55 @@
+
+ 
 .navbar {
-    position: fixed; /* Change from sticky to fixed */
+    position: fixed;
     top: 0;
     left: 0; /* Add left: 0 */
+    bottom: 0;
     z-index: 1;
     width: 100%;
-    min-height: 6vh;
+    height: 48px;
+    /* min-height:48px; */
     display: flex;
     align-items: center;
     background-color: rgb(32, 33, 32);
     justify-content: space-between;
     padding: 0;
 }
+ 
+ 
+ 
+.questionmark-container{
+    display: flex;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-right: 20px;
+    height: 30px;
+    width: 30px;
+   
+}
+ 
+.theme-container{
+    display: flex;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    /* margin-right: 20px; */
+    height: 30px;
+    width: 30px;
+    cursor: pointer;
+    /* -moz-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    transform: scaleX(-1);
+    -ms-filter: fliph;
+    filter: fliph;  */
+   
+}
+ 
+ 
 
-
-
-
-
-
-
-
+ 
 .menu-item {
-    
+   
     font-size:15px;
     /* background-color: red; */
     background-color: transparent;
@@ -28,66 +57,71 @@
 .selectMenuItem{
     background-color: transparent;
 }
-
-
-
-
+ 
+ 
+ 
+ 
 .left-part {
     display: flex;
     align-items: center;
     padding: 10px;
     box-sizing: border-box;
 }
-
+ 
 .focusr-logo{
-    
+   
     display: flex;
     align-items: center;
-    
+   
 }
-
+ 
 .focusr-logo-img{
-    width: 30px;
-    height: 30px;   
+    width: 25px;
+    height: 25px;  
 }
-
+ 
 .focusR-text{
     color:white;
     font-size: 20px;
     padding: 10px;
+    transition: 0.5s ease-in-out
 }
-
+.focusR-text:hover{
+    filter: hue-rotate(360deg);
+}
+ 
 .center{
-    width:40%;
+    width:50%;
     display: flex;
     align-items: center;
     /* border-radius: 20%; */
     background-color: #ffffff
-    
-    
+   
+   
 }
-
+ 
 .right-part{
     display: flex;
     align-items: center;
     padding: 10px;
 }
-
+ 
 .notification-container{
     display: flex;
     margin: 20px;
     height: 30px;
     width: 30px;
-    
+    cursor: pointer;
+   
 }
-
+ 
 .notification-icon{
     color: #ffffff;
     font-size: 20px;
     cursor: pointer;
-    
+   
 }
-
+ 
 .logout-user-icon{
     border-radius: 50%;
     width: 30px;
@@ -100,7 +134,7 @@
     color: white;
     cursor: pointer;
 }
-
+ 
 .logout-user-icon-pop{
     border-radius: 50%;
     width: 50px;
@@ -113,7 +147,7 @@
     color: rgb(0, 0, 0);
     cursor: pointer;
 }
-
+ 
 /* @media (max-width: 768px) {
     .left-part {
         display: none;
@@ -124,19 +158,19 @@
         display: none;
     }
 } */
-
+ 
 @media (max-width: 768px){
     .focusR-text {
         display: none;
     }
 }
-
+ 
 @media (max-width: 350px) {
     .center {
         display: none;
     }
 }
-
+ 
 @media (max-width: 238px) {
     .notification-container {
         display: none;

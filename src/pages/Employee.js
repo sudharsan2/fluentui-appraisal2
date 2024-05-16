@@ -24,7 +24,10 @@ const Employee=()=>{
 
     
 
-    return(<Button onClick={handleButtonClick}>Employee</Button>)
+    return(<div>
+    <h1 style={{color: 'black',paddingLeft:'500px', paddingTop:'500px'}}>Employee</h1>
+    <Button onClick={handleButtonClick}>Employee</Button>
+    </div>)
 }
 
 export default Employee;

@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 const Login = () => {
   const navigate = useNavigate();
   const imgurl = require("../media/logo1000.png");
+  const imgurl1 = require("../media/ace1.jpg");
   const handleLogin=()=>{
     navigate('/dashboard')
   }
@@ -18,7 +19,11 @@ const Login = () => {
        
         <div className="login-container">
           <div className="logo">
-            <img src={imgurl} style={{width:'105%', height:'72.5%'}} alt = 'Logo'/>
+            <img src={imgurl} style={{width:'105%', height:'60.5%'}} alt = 'Logo'/>
+            </div>
+            <div className="logor">
+              
+            {/* <img src={imgurl1} style={{width:'80%', height:'72.5%'}} alt = 'Logo'/> */}
             </div>
           <div className="form-container">
             <h1 style={{paddingRight:'65%'}}>Sign in </h1>

@@ -104,13 +104,13 @@ const CustomLayout = ({ children }) => {
     
     if (windowWidth < 500) {
       
-      return { width: "30vw", height: "3vh", backgroundColor: themestate ? "rgb(41,41,41)" : "#fff" };
+      return { width: "30vw", height: "vh", backgroundColor: themestate ? "rgb(41,41,41)" : "#fff" };
     } else if (windowWidth < 863) {
       
-      return { width: "40vw", height: "3vh", backgroundColor: themestate ? "rgb(41,41,41)" : "#fff" };
+      return { width: "40vw", height: "vh", backgroundColor: themestate ? "rgb(41,41,41)" : "#fff" };
     }else {
       
-      return { width: "100vw", height: "3vh", backgroundColor: themestate ? "rgb(41,41,41)" : "#fff" };
+      return { width: "100vw", height: "vh", backgroundColor: themestate ? "rgb(41,41,41)" : "#fff" };
     }
   };
 
@@ -168,7 +168,7 @@ const CustomLayout = ({ children }) => {
         </div>
       </div>
       <div style={{ marginTop: "48px" }}>
-        <Drawer1 />
+        <Drawer1 >{children}</Drawer1>
       </div>
     </div>
   );

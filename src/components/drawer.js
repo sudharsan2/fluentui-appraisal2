@@ -68,6 +68,7 @@ import {
     shorthands,
     tokens,
     useId,
+    Tooltip
   } from "@fluentui/react-components";
  
 const useStyles = makeStyles({
@@ -256,6 +257,7 @@ const NavDrawerDefault = (props, {children}) => {
     <NavDrawerBody 
         style={themestate?{backgroundColor:darktheme.sidebarcolordark, cursor:"pointer"}:{cursor:"pointer"}}
      >
+      <Tooltip content={'Dashboard'} positioning='after' withArrow={true} appearance={themestate?"inverted":"normal"}>
       <NavItem
         target="_blank"
         icon={<Dashboard style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
@@ -265,6 +267,9 @@ const NavDrawerDefault = (props, {children}) => {
       >
        
       </NavItem>
+      </Tooltip>
+
+      <Tooltip content={'Employee'} positioning='after' withArrow={true} appearance={themestate?"inverted":"normal"}>
       <NavItem
         target="_blank"
         icon={<LayerDiagonalPersonRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
@@ -274,6 +279,11 @@ const NavDrawerDefault = (props, {children}) => {
       >
        
       </NavItem>
+      </Tooltip>
+
+
+
+      <Tooltip content={'Manager'} positioning='after' withArrow={true} appearance={themestate?"inverted":"normal"}>
       <NavItem
         target="_blank"
         icon={<PersonStarRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
@@ -283,6 +293,10 @@ const NavDrawerDefault = (props, {children}) => {
       >
        
       </NavItem>
+      </Tooltip>
+
+
+      <Tooltip content={'Reviewer'} positioning='after' withArrow={true} appearance={themestate?"inverted":"normal"}>
       <NavItem
         target="_blank"
         icon={<PremiumPersonRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
@@ -292,7 +306,10 @@ const NavDrawerDefault = (props, {children}) => {
       >
        
       </NavItem>
-     
+      </Tooltip>
+
+
+      <Tooltip content={'Summary'} positioning='after' withArrow={true} appearance={themestate?"inverted":"normal"}>
       <NavItem
         target="_blank"
         icon={<TableSearchRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
@@ -302,6 +319,7 @@ const NavDrawerDefault = (props, {children}) => {
       >
        
       </NavItem>
+      </Tooltip>
     </NavDrawerBody>
   ) : (
     <NavDrawerBody 

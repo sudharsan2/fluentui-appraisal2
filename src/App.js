@@ -20,6 +20,7 @@ function App() {
         
         <Route path='dashboard'  element={<CustomLayout><Dashboard/></CustomLayout>}/>
         <Route path='employee' element={<CustomLayout><Employee/></CustomLayout>}/>
+        <Route path='employeepage' element={<Employee/>}/>
         <Route path='form/:token' element={<EmployeeForm/>}/>
         
         

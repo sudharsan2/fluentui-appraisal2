@@ -72,15 +72,17 @@ import {
  
 const useStyles = makeStyles({
   root: {
-    ...shorthands.border("2px", "solid", "#ccc"),
+    // ...shorthands.border("2px", "solid", "#ccc"),
     ...shorthands.overflow("hidden"),
-    marginTop:"-2px",
-    marginLeft:"-2px",
+    // marginTop:"-2px",
+    // marginLeft:"-2px",
     
     position:"fixed",
     left:0,
-    width:"100vw",
+    width:"100%",
+    height:"100%",
     display: "flex",
+    
     
     backgroundColor: "#fff",
    
@@ -119,12 +121,22 @@ const useStyles = makeStyles({
     //   backgroundColor: navItemTokens.backgroundColorPressed,
     },
   },
-  navItem: {
+  navItemlight: {
     marginTop: "10px",
     left:0,
    
     "&:hover": {
       backgroundColor: "#ccc", // Change background color on hover
+     
+    },
+  },
+  navItemdark: {
+    marginTop: "10px",
+    left:0,
+    backgroundColor:"rgb(33,33,33)",
+   
+    "&:hover": {
+      backgroundColor: "#616161", // Change background color on hover
      
     },
   },
@@ -138,10 +150,7 @@ const useStyles = makeStyles({
         backgroundColor: "#f0f0f0", // Change background color on hover
        
       },
-  },
-  navdrawer:{
-    color:"black"
-  },
+  }
 });
  
 const Person = bundleIcon(PersonFilled, PersonRegular);
@@ -181,15 +190,15 @@ const Settings = bundleIcon(Settings20Filled, Settings20Regular);
 const NavDrawerDefault = (props, {children}) => {
   
   const dispatch = useDispatch();
- 
+
   const lighttheme = useSelector((state) => state.theme.light);
- 
+
   const darktheme = useSelector((state) => state.theme.dark);
- 
+
   const themestate = useSelector((state) => state.theme.theme)
- 
+
   
- 
+
   const [collapse, setCollapse] = useState(false);
  
   const styles = useStyles();
@@ -204,9 +213,9 @@ const NavDrawerDefault = (props, {children}) => {
   };
  
   return (
-   
+    
     <div className={styles.root} style={{height: 'calc(100vh - 48px)'}}>
-       
+       {/* <div style={themestate?{backgroundColor:darktheme.sidebarcolordark, height: 'calc(100vh - 48px)'}:{backgroundColor:lighttheme.sidebarcolorlight}}> */}
         <NavDrawer
   defaultSelectedValue="1"
   defaultSelectedCategoryValue="1"
@@ -215,20 +224,23 @@ const NavDrawerDefault = (props, {children}) => {
   onOpenChange={(_, { open }) => setIsOpen(open)}
   size="small"
   className={useStyles.navdrawer}
-  style={collapse ? { width: `59px`, transition: "width 0.5s" } : { transition: "width 0.5s" , zIndex: 10000}}
+  style={collapse ? { width: `59px`, transition: "width 0.5s" , borderRightStyle: "none"} : { transition: "width 0.5s", borderRightStyle: "none" }}
 >
-    <div style={themestate?{backgroundColor:darktheme.sidebarcolordark, height: 'calc(100vh - 48px)'}:{}}>
-  <NavDrawerHeader style={{cursor:"pointer", zIndex:10000}}>
+    {/* <div style={themestate?{backgroundColor:darktheme.sidebarcolordark, height: 'calc(100vh - 48px)'}:{}}> */}
+    
+  <NavDrawerHeader 
+    style={themestate?{backgroundColor:darktheme.sidebarcolordark, cursor:"pointer"}:{cursor:"pointer"}}
+  >
     <NavDrawerHeaderNav
         onClick={() => {
           setCollapse(!collapse);
         }}
-        style={{cursor:"pointer", zIndex:10000}}
+        
         
     >
       <Button
         appearance="transparent"
-        icon={<Navi style={{color:'rgb(75,75,75)'}}/>}
+        icon={<Navi style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}}/>}
         className={styles.hamburger}
         onClick={() => {
           setCollapse(!collapse);
@@ -237,120 +249,125 @@ const NavDrawerDefault = (props, {children}) => {
       />
     </NavDrawerHeaderNav>
   </NavDrawerHeader>
+  <div style={themestate?{backgroundColor:darktheme.sidebarcolordark,height:"20px"}:{height:"20px"}}></div>
   
   
   {collapse ? (
-    <NavDrawerBody style={{ marginTop: "20px", zIndex:10000}} >
+    <NavDrawerBody 
+        style={themestate?{backgroundColor:darktheme.sidebarcolordark, cursor:"pointer"}:{cursor:"pointer"}}
+     >
       <NavItem
         target="_blank"
-        icon={<Dashboard style={{color:'rgb(75,75,75)'}} />}
+        icon={<Dashboard style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
         onClick={someClickHandler}
         value="1"
-        className={styles.navItem}
+        className={themestate? styles.navItemdark : styles.navItemlight}
       >
        
       </NavItem>
       <NavItem
         target="_blank"
-        icon={<LayerDiagonalPersonRegular style={{color:'rgb(75,75,75)'}} />}
+        icon={<LayerDiagonalPersonRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
         onClick={someClickHandler}
         value="2"
-        className={styles.navItem}
+        className={themestate? styles.navItemdark : styles.navItemlight}
       >
        
       </NavItem>
       <NavItem
         target="_blank"
-        icon={<PersonStarRegular style={{color:'rgb(75,75,75)'}} />}
+        icon={<PersonStarRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
         onClick={someClickHandler}
         value="3"
-        className={styles.navItem}
+        className={themestate? styles.navItemdark : styles.navItemlight}
       >
        
       </NavItem>
       <NavItem
         target="_blank"
-        icon={<PremiumPersonRegular style={{color:'rgb(75,75,75)'}} />}
+        icon={<PremiumPersonRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
         onClick={someClickHandler}
         value="4"
-        className={styles.navItem}
+        className={themestate? styles.navItemdark : styles.navItemlight}
       >
        
       </NavItem>
      
       <NavItem
         target="_blank"
-        icon={<TableSearchRegular style={{color:'rgb(75,75,75)'}} />}
+        icon={<TableSearchRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
         onClick={someClickHandler}
         value="5"
-        className={styles.navItem}
+        className={themestate? styles.navItemdark : styles.navItemlight}
       >
        
       </NavItem>
     </NavDrawerBody>
   ) : (
-    <NavDrawerBody style={{ marginTop: "20px", zIndex:10000}} >
+    <NavDrawerBody 
+    style={themestate?{backgroundColor:darktheme.sidebarcolordark, cursor:"pointer"}:{cursor:"pointer"}}
+    >
       <div style={{width:'100%'}}>
       <NavItem
         target="_blank"
-        icon={<Dashboard style={{color:'rgb(75,75,75)'}} />}
+        icon={<Dashboard style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
         onClick={someClickHandler}
         value="1"
-        className={styles.navItem}
-        style={{ marginTop: "10px", fontSize:"17px", borderRadius:'0' }}
-      >
-        <div style={{marginTop:"2px" , color:'rgb(75,75,75)'}}>Dashboard</div>
+        className={themestate? styles.navItemdark : styles.navItemlight}
+        style={{ marginTop: "10px", fontSize:"17px"}}      
+        >
+        <div style={themestate?{marginTop:"2px" , color:darktheme.fontcolordark}:{marginTop:"2px" , color:lighttheme.fontcolorlight}}>Dashboard</div>
       </NavItem>
       </div>
       <div style={{width:'100%'} }>
       <NavItem
         target="_blank"
-        icon={<LayerDiagonalPersonRegular style={{color:'rgb(75,75,75)'}} />}
+        icon={<LayerDiagonalPersonRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
         onClick={someClickHandler}
         value="2"
-        className={styles.navItem}
-        style={{ marginTop: "10px", fontSize:"17px", borderRadius:'0' }}
-      >
-        <div style={{marginTop:"2px" , color:'rgb(75,75,75)'}}>Employee</div>
+        className={themestate? styles.navItemdark : styles.navItemlight}
+        style={{ marginTop: "10px", fontSize:"17px"}}  
+        >
+        <div style={themestate?{marginTop:"2px" , color:darktheme.fontcolordark}:{marginTop:"2px" , color:lighttheme.fontcolorlight}}>Employee</div>
        
       </NavItem>
       </div>
       <div style={{width:'100%'}}>
       <NavItem
         target="_blank"
-        icon={<PersonStarRegular style={{color:'rgb(75,75,75)'}} />}
+        icon={<PersonStarRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
         onClick={someClickHandler}
         value="3"
-        className={styles.navItem}
-        style={{ marginTop: "10px", fontSize:"17px", borderRadius:'0' }}
-      >
-        <div style={{marginTop:"2px", color:'rgb(75,75,75)'}}>Manager</div>
+        className={themestate? styles.navItemdark : styles.navItemlight}
+        style={{ marginTop: "10px", fontSize:"17px"}}  
+        >
+        <div style={themestate?{marginTop:"2px" , color:darktheme.fontcolordark}:{marginTop:"2px" , color:lighttheme.fontcolorlight}}>Manager</div>
        
       </NavItem>
       </div>
       <div style={{width:'100%'}}>
       <NavItem
         target="_blank"
-        icon={<PremiumPersonRegular style={{color:'rgb(75,75,75)'}} />}
+        icon={<PremiumPersonRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
         onClick={someClickHandler}
         value="4"
-        className={styles.navItem}
-        style={themestate?{ marginTop: "10px", fontSize:"17px", borderRadius:'0', backgroundColor:darktheme.sidebarcolordark }:{ marginTop: "10px", fontSize:"17px", borderRadius:'0'}}
+        className={themestate? styles.navItemdark : styles.navItemlight}
+        style={{ marginTop: "10px", fontSize:"17px"}}
       >
-        <div style={{marginTop:"2px", color:'rgb(75,75,75)'}}>Reviewer</div>
+        <div style={themestate?{marginTop:"2px" , color:darktheme.fontcolordark}:{marginTop:"2px" , color:lighttheme.fontcolorlight}}>Reviewer</div>
        
       </NavItem>
       </div>
       <div style={{width:'100%'}}>
       <NavItem
         target="_blank"
-        icon={<TableSearchRegular style={{color:'rgb(75,75,75)'}} />}
+        icon={<TableSearchRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
         onClick={someClickHandler}
         value="5"
-        className={styles.navItem}
-        style={{fontSize:'17px', }}
+        className={themestate? styles.navItemdark : styles.navItemlight}
+        style={themestate?{ marginTop: "10px", fontSize:"17px", color:darktheme.fontcolordark}:{ marginTop: "10px", fontSize:"17px",color:lighttheme.fontcolorlight}}
       >
-        <div style={{marginTop:"2px", color:'rgb(75,75,75)'}}>Summary</div>
+        <div style={{marginTop:"2px"}}>Summary</div>
        
       </NavItem>
       </div>
@@ -358,7 +375,7 @@ const NavDrawerDefault = (props, {children}) => {
   )}
   
   
-  <NavDrawerFooter>
+  <NavDrawerFooter style={themestate?{backgroundColor:darktheme.sidebarcolordark}:{}} >
   
     {!collapse&&(
     // <NavItem
@@ -369,10 +386,11 @@ const NavDrawerDefault = (props, {children}) => {
     // //   style={{color:"#E9E9E9"}}
     // //   icon={<Person />}
     // >
-    <div style={{ position: 'relative', paddingTop:'30vh', left: 0, width: '100%', textAlign: 'center', fontWeight: 'bold', zIndex: 9 }}>
-    <p style={{ marginBottom: '15px', color: 'rgb(75,75,75)' }}>by FocusR AI</p>
-    <p style={{ marginTop: '-10px', color: 'rgb(75,75,75)' }}>V 0.0.1</p>
-  </div>
+    <div style={{width:"100%", display:"flex", flexDirection:"column", alignItems:"center"}}>
+      
+      <p style={themestate?{marginBottom:"30px", color:darktheme.fontcolordark}:{marginBottom:"30px",color:lighttheme.fontcolorlight}}>by FocusR AI</p>
+      <p style={themestate?{marginTop:"-20px",color:darktheme.fontcolordark}:{marginTop:"-20px",color:lighttheme.fontcolorlight}}>V 0.0.1</p>
+    </div>
     // </NavItem>
     )
     }
@@ -386,12 +404,13 @@ const NavDrawerDefault = (props, {children}) => {
     </NavItem> */}
     
   </NavDrawerFooter>
-  </div>
+  {/* </div> */}
   
 </NavDrawer>
- 
- 
-      <div className={styles.content} >
+{/* </div> */}
+
+
+      <div className={styles.content} style={themestate?{background:darktheme.contentpagedark}:{}} >
         {/* <Button appearance="primary" onClick={() => setIsOpen(!isOpen)}>
           {type === "inline" ? "Toggle" : "Open"}
         </Button>

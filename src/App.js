@@ -14,9 +14,9 @@ function App() {
   return (
 
     
-    <Router basename='/appraisal'>
+    <Router basename=''>
       <Routes>
-        <Route path='/' element={<Login/>}/>
+        <Route path='' element={<Login/>}/>
         
         <Route path='dashboard'  element={<CustomLayout><Dashboard/></CustomLayout>}/>
         <Route path='employee' element={<CustomLayout><Employee/></CustomLayout>}/>

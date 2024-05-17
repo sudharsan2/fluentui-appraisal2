@@ -246,7 +246,7 @@ const data = {
   ],
 };
 
-const Employee = () => {
+const Reviewer = () => {
   const styles = useStyles();
   const [selectedTab, setSelectedTab] = React.useState("tab1");
   const [selectedItems, setSelectedItems] = React.useState({});
@@ -361,7 +361,6 @@ const Employee = () => {
                 <Tab value="tab1">Employee Info</Tab>
                 <Tab value="tab2">Employee Form</Tab>
                 
-                
             </TabList>
             <div className={styles.container}>
       <div className={styles.section}>
@@ -440,20 +439,19 @@ const Employee = () => {
         {/* <div style={{position:'fixed', backgroundColor:'white', zIndex:1000, width:'vw'}}> */}
         {/* <div style={{ position: 'fixed', backgroundColor: 'white', zIndex: 1000, width: '100%' }}> */}
  
-        <h2 style={{paddingLeft:''}}>Employee</h2>
+        <h2 style={{paddingLeft:''}}>Reviewer</h2>
       <TabList
         defaultSelectedValue="tab2"
         appearance="subtle"
         onTabSelect={handleTabChange}
       >
-        <Tab value="tab1">This month</Tab>
-        <Tab value="tab2">Next month</Tab>
-        <Tab value="tab3">Employee</Tab>
+        <Tab value="tab1">Yet to be filled</Tab>
+        <Tab value="tab2">Filled</Tab>
         {/* <Tab value="tab3">Employee</Tab> */}
         
       </TabList>
       <div className={styles.controls}>
-        <Button style={{border:'1px solid transparent', borderRadius:0}} onClick={handleAddEmployee}><AddRegular className={styles.iconLarge}/>Add Employee</Button>
+        <Button style={{border:'1px solid transparent', borderRadius:0}} onClick={handleAddEmployee}><ChartMultipleFilled className={styles.iconLarge}/>Statistics</Button>
         <Button style={{border:'1px solid transparent', borderRadius:0}} onClick={handleDeleteEmployee}><PersonDeleteRegular className={styles.iconLarge}/>Delete Employee</Button>
         <Button style={{border:'1px solid transparent', borderRadius:0}} onClick={handleEditEmployee}><EditRegular className={styles.iconLarge}/>Edit Employee</Button>
         <SearchBox
@@ -534,4 +532,4 @@ const Employee = () => {
   );
 };
 
-export default Employee;
+export default Reviewer;

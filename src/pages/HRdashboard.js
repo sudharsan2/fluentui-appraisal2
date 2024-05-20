@@ -1,6 +1,6 @@
 import {useSelector, useDispatch} from 'react-redux';
 
-const Dashboard = () => {
+const HRDashboard = () => {
 
     const lighttheme = useSelector((state) => state.theme.light);
  
@@ -28,4 +28,4 @@ const Dashboard = () => {
     );
 }
 
-export default Dashboard;
+export default HRDashboard;

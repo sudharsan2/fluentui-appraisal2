@@ -17,7 +17,7 @@ import {
   Checkbox,
   Modal,
 } from "@fluentui/react-components";
-import {AddRegular, PersonDeleteRegular , EditRegular, SearchRegular, FilterRegular, FilterDismissRegular, FilterAddRegular    } from "@fluentui/react-icons"; // Import the icons
+import {AddRegular, PersonDeleteRegular , EditRegular, SearchRegular, FilterRegular, FilterDismissRegular, FilterAddRegular, ChartMultipleFilled    } from "@fluentui/react-icons"; // Import the icons
 
 const useStyles = makeStyles({
   root: {
@@ -205,12 +205,14 @@ const data = {
   ],
 };
 
-const Summary = () => {
+const HRManager = () => {
   const styles = useStyles();
   const [selectedTab, setSelectedTab] = React.useState("tab1");
   const [selectedItems, setSelectedItems] = React.useState({});
   const [searchQuery, setSearchQuery] = React.useState("");
   const [showFilters, setShowFilters] = React.useState(false);
+  const [selectedFilters, setSelectedFilters] = React.useState([]);
+  const newSelectedFilters = [];
 
   const handleTabChange = (event, data) => {
     setSelectedTab(data.value);
@@ -231,11 +233,18 @@ const Summary = () => {
   const handleToggleFilters = () => {
     setShowFilters(!showFilters);
   };
+  
   const handleRemoveFilters = () => {
     setSearchQuery("");
     // Handle resetting other filter options as needed
   };
+  
 
+  const handleApplyFilters = () => {
+    setSelectedFilters(newSelectedFilters); // Update selected filters state
+  };
+
+  
   const handleAddEmployee = () => {
     alert("Add Employee functionality to be implemented");
   };
@@ -251,9 +260,7 @@ const Summary = () => {
     setShowFilters((prev) => !prev);
   };
 
-  const handleApplyFilters = () => {
-    alert("Apply Filters functionality to be implemented");
-  };
+  
 
 
   const filteredData = data[selectedTab].filter((item) =>
@@ -265,19 +272,19 @@ const Summary = () => {
         {/* <div style={{position:'fixed', backgroundColor:'white', zIndex:1000, width:'vw'}}> */}
         {/* <div style={{ position: 'fixed', backgroundColor: 'white', zIndex: 1000, width: '100%' }}> */}
  
-        <h2 style={{paddingLeft:''}}>Employee</h2>
-      {/* <TabList
+        <h2 style={{paddingLeft:''}}>Manager</h2>
+      <TabList
         defaultSelectedValue="tab2"
         appearance="subtle"
         onTabSelect={handleTabChange}
       >
-        <Tab value="tab1">This month</Tab>
-        <Tab value="tab2">Next month</Tab>
-        <Tab value="tab3">Employee</Tab>
+        <Tab value="tab1">Yet to be filled</Tab>
+        <Tab value="tab2">Filled</Tab>
+        {/* <Tab value="tab3">Employee</Tab> */}
         
-      </TabList> */}
+      </TabList>
       <div className={styles.controls}>
-        <Button style={{border:'1px solid transparent', borderRadius:0}} onClick={handleAddEmployee}><AddRegular className={styles.iconLarge}/>Add Employee</Button>
+        <Button style={{border:'1px solid transparent', borderRadius:0}} onClick={handleAddEmployee}><ChartMultipleFilled className={styles.iconLarge}/>Statistics</Button>
         <Button style={{border:'1px solid transparent', borderRadius:0}} onClick={handleDeleteEmployee}><PersonDeleteRegular className={styles.iconLarge}/>Delete Employee</Button>
         <Button style={{border:'1px solid transparent', borderRadius:0}} onClick={handleEditEmployee}><EditRegular className={styles.iconLarge}/>Edit Employee</Button>
         <SearchBox
@@ -294,21 +301,32 @@ const Summary = () => {
       {showFilters && (
         // <Modal header="Filters" onClose={handleFilterToggle}>
           <div className={styles.filterPanel}>
-            <Checkbox label="Employee Fill" />
-            <Checkbox label="Manager Fill" />
-            <Checkbox label="Reviewer Fill" />
-            <Checkbox label="Revised Fill" />
-            <Checkbox label="Appraisal" />
-            <Checkbox label="Choose Dept" />
-            <Checkbox label="Choose Manager" />
-            <Checkbox label="Choose Reviewer" />
-            <Checkbox label="Date Cap
-            "/> 
+            <Checkbox label="Employee Fill" onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+            <Checkbox label="Manager Fill" onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+            <Checkbox label="Reviewer Fill" onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+            <Checkbox label="Revised Fill" onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+            <Checkbox label="Appraisal" onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+            <Checkbox label="Choose Dept" onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+            <Checkbox label="Choose Manager" onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+            <Checkbox label="Choose Reviewer" onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+            <Checkbox label="Date Cap" onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+            
+             
             <Button style={{border:'1px solid transparent', marginTop:'10px', borderRadius:0}} onClick={handleApplyFilters}> Apply </Button>
             <Button style={{border:'1px solid transparent', marginTop:'10px', borderRadius:0}} onClick={handleRemoveFilters}> Remove all</Button>
           </div>
         // </Modal>
       )}
+      {/* {selectedFilters.length > 0 && (
+            <div>
+              <h3>Filters:</h3>
+              <ul>
+                {selectedFilters.map((filter, index) => (
+                  <li key={index}>{filter}</li>
+                ))}
+              </ul>
+            </div>
+          )} */}
      {/* </div> */}
      <div style={{ maxHeight: '70vh', overflowY: 'auto' }}>
   <Table>
@@ -328,7 +346,12 @@ const Summary = () => {
         <TableRow key={item.empid}>
           <TableSelectionCell
             checked={!!selectedItems[item.empid]}
-            onChange={() => handleSelectionChange(item.empid)}
+            onChange={(event) => {
+          
+              //  event.stopPropagation(); // Prevents the row click event from being triggered
+               handleSelectionChange(item.empid);
+              //  setOpen(false)
+             }}
           />
           <TableCell>{item.empid}</TableCell>
           <TableCell>{item.name}</TableCell>
@@ -346,4 +369,4 @@ const Summary = () => {
   );
 };
 
-export default Summary;
+export default HRManager;

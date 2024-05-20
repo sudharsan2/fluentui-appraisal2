@@ -7,12 +7,15 @@ import Sample from './components/sample';
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Login from './pages/Login';
-import Dashboard from './pages/dashboard';
-import Employee from './pages/Employee';
+import Dashboard from './pages/HRdashboard';
+import HREmployee from './pages/HREmployee';
 import EmployeeForm from './pages/employeeform';
-import Manager from './pages/Manager';
-import Reviewer from './pages/Reviewer';
-import Summary from './pages/Summary';
+import HRManager from './pages/HRManager';
+import HRReviewer from './pages/HRReviewer';
+import HRSummary from './pages/HRSummary';
+import MGAppraisal from './pages/MGAppraisal';
+import MGReviewer from './pages/MGReviewer';
+import RVReviewer from './pages/RVReviewer';
 
 function App() {
   return (
@@ -23,10 +26,13 @@ function App() {
         <Route path='' element={<Login/>}/>
         {/* <Route path='dashboard'  element={<CustomLayout><Dashboard/></CustomLayout>}/> */}
         <Route path='dashboard'  element={<CustomLayout><NavDrawerDefault><Dashboard/></NavDrawerDefault></CustomLayout>}/>
-        <Route path='employee' element={<CustomLayout><NavDrawerDefault><Employee/></NavDrawerDefault></CustomLayout>}/>
-        <Route path='manager' element={<CustomLayout><NavDrawerDefault><Manager/></NavDrawerDefault></CustomLayout>}/>
-        <Route path='reviewer' element={<CustomLayout><NavDrawerDefault><Reviewer/></NavDrawerDefault></CustomLayout>}/>
-        <Route path='summary' element={<CustomLayout><NavDrawerDefault><Summary/></NavDrawerDefault></CustomLayout>}/>
+        <Route path='hremployee' element={<CustomLayout><NavDrawerDefault><HREmployee/></NavDrawerDefault></CustomLayout>}/>
+        <Route path='hrmanager' element={<CustomLayout><NavDrawerDefault><HRManager/></NavDrawerDefault></CustomLayout>}/>
+        <Route path='hrreviewer' element={<CustomLayout><NavDrawerDefault><HRReviewer/></NavDrawerDefault></CustomLayout>}/>
+        <Route path='hrsummary' element={<CustomLayout><NavDrawerDefault><HRSummary/></NavDrawerDefault></CustomLayout>}/>
+        <Route path='mgappraisal' element={<CustomLayout><NavDrawerDefault><MGAppraisal/></NavDrawerDefault></CustomLayout>}/>
+        <Route path='mgreviewer' element={<CustomLayout><NavDrawerDefault><MGReviewer/></NavDrawerDefault></CustomLayout>}/>
+        <Route path='rvreviewer' element={<CustomLayout><NavDrawerDefault><RVReviewer/></NavDrawerDefault></CustomLayout>}/>
       
         <Route path='form/:token' element={<EmployeeForm/>}/>
         

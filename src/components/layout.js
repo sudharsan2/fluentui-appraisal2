@@ -44,7 +44,7 @@ const ExampleContent = () => {
         <Text truncate wrap={false} className={styles.text} style={themestate ? { width: "75%", color: darktheme.fontcolordark } : { width: "75%" }}>
           FocusR Consultancy and Technologies pvt ltd.
         </Text>
-        <Link appearance="subtle" href="http://localhost:3000/appraisal/" style={themestate ? { width: "25%", textAlign: "right", color: darktheme.fontcolordark } : { width: "25%", textAlign: "right" }}>
+        <Link appearance="subtle" href="http://localhost:3000/" style={themestate ? { width: "25%", textAlign: "right", color: darktheme.fontcolordark ,WebkitTapHighlightColor: 'transparent'} : { width: "25%", textAlign: "right",WebkitTapHighlightColor: 'transparent' }}>
           Sign out
         </Link>
       </div>
@@ -137,7 +137,7 @@ const CustomLayout = ({ children }) => {
             />
           </Field>
           <div className='right-part'>
-            <div className='theme-container' onClick={handleTheme}>
+            <div className='theme-container' onClick={handleTheme} style={{WebkitTapHighlightColor: 'transparent'}}>
               <DarkModeSwitch
                 checked={isDarkMode}
                 onChange={toggleDarkMode}
@@ -156,7 +156,7 @@ const CustomLayout = ({ children }) => {
             </div>
             <Popover appearance={themestate ? 'inverted' : ""}>
               <PopoverTrigger disableButtonEnhancement>
-                <div style={{ marginRight: "15px", height: "48px", display: "flex", flexDirection: "column", justifyContent: "center",cursor:"pointer" }}>
+                <div style={{ marginRight: "15px", height: "48px", display: "flex", flexDirection: "column", justifyContent: "center",cursor:"pointer",WebkitTapHighlightColor: 'transparent' }}>
                   <Avatar color="colorful" name="Gokilavani K" size={36} />
                 </div>
               </PopoverTrigger>

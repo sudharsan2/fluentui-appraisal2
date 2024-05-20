@@ -3,7 +3,7 @@ import './App.css';
 import CustomLayout from './components/layout';
 import NavDrawerDefault from './components/drawer';
 import Sample from './components/sample';
-import NavDrawerDefault from './components/drawer';
+// import NavDrawerDefault from './components/drawer';
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Login from './pages/Login';

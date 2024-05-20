@@ -530,15 +530,15 @@ const useStyles = makeStyles({
    
   },
   content: {
-    // ...shorthands.flex(1),
-    // ...shorthands.padding("16px"),
+    ...shorthands.flex(1),
+    ...shorthands.padding("16px"),
  
-    // display: "grid",
-    // justifyContent: "flex-start",
-    // alignItems: "flex-start",
+    display: "grid",
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
    
-    // gridRowGap: tokens.spacingVerticalXXL,
-    // gridAutoRows: "max-content",
+    gridRowGap: tokens.spacingVerticalXXL,
+    gridAutoRows: "max-content",
   },
   field: {
     display: "grid",
@@ -629,272 +629,115 @@ const Settings = bundleIcon(Settings20Filled, Settings20Regular);
  
  
  
-const NavDrawerDefault = ({children}) => {
+// Define your navigation items as JSON input
+const navItems = [
+  {
+    id: 1,
+    label: 'Dashboard',
+    icon: Dashboard,
+   
+  },
+  {
+    id: 2,
+    label: 'Employee',
+    icon: LayerDiagonalPersonRegular,
+    
+  },
+  {
+    id: 3,
+    label: 'Manager',
+    icon: PersonStarRegular,
+    
+  },
+  {
+    id: 4,
+    label: 'Reviewer',
+    icon: PremiumPersonRegular,
+   
+  },
+  {
+    id: 5,
+    label: 'Summary',
+    icon: TableSearchRegular,
+    
+  },
+];
 
+const NavDrawerDefault = ({ children }) => {
   const navigate = useNavigate();
- 
   const dispatch = useDispatch();
- 
   const lighttheme = useSelector((state) => state.theme.light);
- 
   const darktheme = useSelector((state) => state.theme.dark);
- 
-  const themestate = useSelector((state) => state.theme.theme)
- 
- 
- 
+  const themestate = useSelector((state) => state.theme.theme);
   const [collapse, setCollapse] = useState(false);
- 
   const styles = useStyles();
- 
   const labelId = useId("type-label");
- 
   const [isOpen, setIsOpen] = useState(true);
   const [type, setType] = useState("inline");
- 
+
   const someClickHandler = () => {
     navigate("employee");
   };
- 
+
   return (
-   
-    <div className={styles.root} style={{height: 'calc(100vh - 48px)'}}>
-       {/* <div style={themestate?{backgroundColor:darktheme.sidebarcolordark, height: 'calc(100vh - 48px)'}:{backgroundColor:lighttheme.sidebarcolorlight}}> */}
-        <NavDrawer
-  defaultSelectedValue="1"
-  defaultSelectedCategoryValue="1"
-  open={isOpen}
-  type={type}
-  onOpenChange={(_, { open }) => setIsOpen(open)}
-  size="small"
-  className={useStyles.navdrawer}
-  style={collapse ? { width: `59px`, transition: "width 0.5s" , borderRightStyle: "none"} : { transition: "width 0.5s", borderRightStyle: "none" }}
->
-    {/* <div style={themestate?{backgroundColor:darktheme.sidebarcolordark, height: 'calc(100vh - 48px)'}:{}}> */}
-   
-  <NavDrawerHeader
-    style={themestate?{backgroundColor:darktheme.sidebarcolordark, cursor:"pointer"}:{cursor:"pointer"}}
-  >
-    <NavDrawerHeaderNav
-        onClick={() => {
-          setCollapse(!collapse);
-        }}
-       
-       
-    >
-      <Button
-        appearance="transparent"
-        icon={<Navi style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}}/>}
-        className={styles.hamburger}
-        onClick={() => {
-          setCollapse(!collapse);
-        }}
-       
-      />
-    </NavDrawerHeaderNav>
-  </NavDrawerHeader>
-  <div style={themestate?{backgroundColor:darktheme.sidebarcolordark,height:"20px"}:{height:"20px"}}></div>
- 
- 
-  {collapse ? (
-    <NavDrawerBody
-        style={themestate?{backgroundColor:darktheme.sidebarcolordark, cursor:"pointer"}:{cursor:"pointer"}}
-     >
-      <Tooltip content={'Dashboard'} positioning='after' withArrow={true} appearance={themestate?"inverted":"normal"}>
-      <NavItem
-        target="_blank"
-        icon={<Dashboard style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
-        onClick={someClickHandler}
-        value="1"
-        className={themestate? styles.navItemdark : styles.navItemlight}
+    <div className={styles.root} style={{ height: 'calc(100vh - 48px)' }}>
+      <NavDrawer
+        defaultSelectedValue="1"
+        defaultSelectedCategoryValue="1"
+        open={isOpen}
+        type={type}
+        onOpenChange={(_, { open }) => setIsOpen(open)}
+        size="small"
+        className={useStyles.navdrawer}
+        style={{ transition: "width 0.5s", borderRightStyle: "none" }}
       >
-       
-      </NavItem>
-      </Tooltip>
- 
-      <Tooltip content={'Employee'} positioning='after' withArrow={true} appearance={themestate?"inverted":"normal"}>
-      <NavItem
-        target="_blank"
-        icon={<LayerDiagonalPersonRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
-        onClick={someClickHandler}
-        value="2"
-        className={themestate? styles.navItemdark : styles.navItemlight}
-      >
-       
-      </NavItem>
-      </Tooltip>
- 
- 
- 
-      <Tooltip content={'Manager'} positioning='after' withArrow={true} appearance={themestate?"inverted":"normal"}>
-      <NavItem
-        target="_blank"
-        icon={<PersonStarRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
-        onClick={someClickHandler}
-        value="3"
-        className={themestate? styles.navItemdark : styles.navItemlight}
-      >
-       
-      </NavItem>
-      </Tooltip>
- 
- 
-      <Tooltip content={'Reviewer'} positioning='after' withArrow={true} appearance={themestate?"inverted":"normal"}>
-      <NavItem
-        target="_blank"
-        icon={<PremiumPersonRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
-        onClick={someClickHandler}
-        value="4"
-        className={themestate? styles.navItemdark : styles.navItemlight}
-      >
-       
-      </NavItem>
-      </Tooltip>
- 
- 
-      <Tooltip content={'Summary'} positioning='after' withArrow={true} appearance={themestate?"inverted":"normal"}>
-      <NavItem
-        target="_blank"
-        icon={<TableSearchRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
-        onClick={someClickHandler}
-        value="5"
-        className={themestate? styles.navItemdark : styles.navItemlight}
-      >
-       
-      </NavItem>
-      </Tooltip>
-    </NavDrawerBody>
-  ) : (
-    <NavDrawerBody
-    style={themestate?{backgroundColor:darktheme.sidebarcolordark, cursor:"pointer"}:{cursor:"pointer"}}
-    >
-      <div style={{width:'100%'}}>
-      <NavItem
-        target="_blank"
-        icon={<Dashboard style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
-        onClick={someClickHandler}
-        value="1"
-        className={themestate? styles.navItemdark : styles.navItemlight}
-        style={{ marginTop: "10px", fontSize:"17px"}}      
-        >
-        <div style={themestate?{marginTop:"2px" , color:darktheme.fontcolordark}:{marginTop:"2px" , color:lighttheme.fontcolorlight}}>Dashboard</div>
-      </NavItem>
-      </div>
-      <div style={{width:'100%'} }>
-      <NavItem
-        target="_blank"
-        icon={<LayerDiagonalPersonRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
-        onClick={someClickHandler}
-        value="2"
-        className={themestate? styles.navItemdark : styles.navItemlight}
-        style={{ marginTop: "10px", fontSize:"17px"}}  
-        >
-        <div style={themestate?{marginTop:"2px" , color:darktheme.fontcolordark}:{marginTop:"2px" , color:lighttheme.fontcolorlight}}>Employee</div>
-       
-      </NavItem>
-      </div>
-      <div style={{width:'100%'}}>
-      <NavItem
-        target="_blank"
-        icon={<PersonStarRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
-        onClick={someClickHandler}
-        value="3"
-        className={themestate? styles.navItemdark : styles.navItemlight}
-        style={{ marginTop: "10px", fontSize:"17px"}}  
-        >
-        <div style={themestate?{marginTop:"2px" , color:darktheme.fontcolordark}:{marginTop:"2px" , color:lighttheme.fontcolorlight}}>Manager</div>
-       
-      </NavItem>
-      </div>
-      <div style={{width:'100%'}}>
-      <NavItem
-        target="_blank"
-        icon={<PremiumPersonRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
-        onClick={someClickHandler}
-        value="4"
-        className={themestate? styles.navItemdark : styles.navItemlight}
-        style={{ marginTop: "10px", fontSize:"17px"}}
-      >
-        <div style={themestate?{marginTop:"2px" , color:darktheme.fontcolordark}:{marginTop:"2px" , color:lighttheme.fontcolorlight}}>Reviewer</div>
-       
-      </NavItem>
-      </div>
-      <div style={{width:'100%'}}>
-      <NavItem
-        target="_blank"
-        icon={<TableSearchRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
-        onClick={someClickHandler}
-        value="5"
-        className={themestate? styles.navItemdark : styles.navItemlight}
-        style={themestate?{ marginTop: "10px", fontSize:"17px", color:darktheme.fontcolordark}:{ marginTop: "10px", fontSize:"17px",color:lighttheme.fontcolorlight}}
-      >
-        <div style={{marginTop:"2px"}}>Summary</div>
-       
-      </NavItem>
-      </div>
-    </NavDrawerBody>
-  )}
- 
- 
-  <NavDrawerFooter style={themestate?{backgroundColor:darktheme.sidebarcolordark}:{}} >
- 
-    {!collapse&&(
-    // <NavItem
-    //   value="21"
-    //   target="_blank"
-    // //   onClick={someClickHandler}
-    //   className={styles.navfooter}
-    // //   style={{color:"#E9E9E9"}}
-    // //   icon={<Person />}
-    // >
-    <div style={{width:"100%", display:"flex", flexDirection:"column", alignItems:"center"}}>
-     
-      <p style={themestate?{marginBottom:"30px", color:darktheme.fontcolordark}:{marginBottom:"30px",color:lighttheme.fontcolorlight}}>by FocusR AI</p>
-      <p style={themestate?{marginTop:"-20px",color:darktheme.fontcolordark}:{marginTop:"-20px",color:lighttheme.fontcolorlight}}>V 0.0.1</p>
-    </div>
-    // </NavItem>
-    )
-    }
-    {/* <NavItem
-      icon={<Settings />}
-      target="_blank"
-      onClick={someClickHandler}
-      value="24"
-    >
-      App Settings
-    </NavItem> */}
-   
-  </NavDrawerFooter>
-  {/* </div> */}
- 
-</NavDrawer>
-{/* </div> */}
- 
- 
-      <div className={styles.content} style={themestate?{background:darktheme.contentpagedark}:{}} >
-        {/* <Button appearance="primary" onClick={() => setIsOpen(!isOpen)}>
-          {type === "inline" ? "Toggle" : "Open"}
-        </Button>
- 
-        <div className={styles.field}>
-          <Label id={labelId}>Type</Label>
-          <RadioGroup
-            value={type}
-            onChange={(_, data) => setType(data.value)}
-            aria-labelledby={labelId}
+        <NavDrawerHeader style={{ cursor: "pointer" }}>
+          <NavDrawerHeaderNav
+            onClick={() => {
+              setCollapse(!collapse);
+            }}
           >
-            <Radio value="overlay" label="Overlay (Default)" />
-            <Radio value="inline" label="Inline" />
-          </RadioGroup>
-        </div> */}
-        {/* {Children} */}
-        <div style={{}}>
-        {children}
-        </div>
+            <Button
+              appearance="transparent"
+              icon={<Navi style={themestate ? { color: darktheme.fontcolordark } : { color: lighttheme.fontcolorlight }} />}
+              className={styles.hamburger}
+              onClick={() => {
+                setCollapse(!collapse);
+              }}
+            />
+          </NavDrawerHeaderNav>
+        </NavDrawerHeader>
+        <div style={{ height: "20px" }}></div>
+
+        <NavDrawerBody style={{ cursor: "pointer" }}>
+          {navItems.map((item) => (
+            <Tooltip key={item.id} content={item.label} positioning="after" withArrow={true} appearance={themestate ? "inverted" : "normal"}>
+              <NavItem
+                target="_blank"
+                icon={<item.icon style={themestate ? { color: darktheme.fontcolordark } : { color: lighttheme.fontcolorlight }} />}
+                onClick={item.onClick}
+                value={item.id.toString()}
+                className={themestate ? styles.navItemdark : styles.navItemlight}
+              />
+            </Tooltip>
+          ))}
+        </NavDrawerBody>
+
+        <NavDrawerFooter style={themestate ? { backgroundColor: darktheme.sidebarcolordark } : {}}>
+          {!collapse && (
+            <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
+              <p style={themestate ? { marginBottom: "30px", color: darktheme.fontcolordark } : { marginBottom: "30px", color: lighttheme.fontcolorlight }}>by FocusR AI</p>
+              <p style={themestate ? { marginTop: "-20px", color: darktheme.fontcolordark } : { marginTop: "-20px", color: lighttheme.fontcolorlight }}>V 0.0.1</p>
+            </div>
+          )}
+        </NavDrawerFooter>
+      </NavDrawer>
+
+      <div className={styles.content} style={themestate ? { background: darktheme.contentpagedark } : {}}>
+        <div style={{}}>{children}</div>
       </div>
     </div>
   );
 };
- 
+
 export default NavDrawerDefault;
- 

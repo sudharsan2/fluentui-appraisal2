@@ -8,7 +8,7 @@ import useIsMountedRef from "../hooks/useIsMountedRef";
 import "./login.css";
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchLoginDetailsAsync, getIsAuthenticatedFromAuth, getIsLoadingFromAuth, getErrorFromAuth } from '../Store/authSlice';
-
+ 
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -17,18 +17,18 @@ const Login = () => {
   const isAuthenticated = useSelector(getIsAuthenticatedFromAuth);
   const isError = useSelector(getErrorFromAuth);
   const [showPassword, setShowPassword] = useState(false);
-
+ 
   const LoginSchema = Yup.object({
     username: Yup.string().required("Username is required"),
     password: Yup.string().required("Password is required"),
   });
-
+ 
   const formik = useFormik({
     initialValues: {
       username: "",
       password: "",
     },
-
+ 
     validationSchema: LoginSchema,
     onSubmit: async (values, { setErrors, setSubmitting }) => {
       try {
@@ -46,7 +46,7 @@ const Login = () => {
       }
     },
   });
-
+ 
   useEffect(() => {
     if (isAuthenticated === 2) {
       const role = localStorage.getItem("role");
@@ -74,11 +74,11 @@ const Login = () => {
       });
     }
   }, [isAuthenticated, navigate, isError]);
-
+ 
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
   };
-
+ 
   return (
     <div className="Login">
       <div className="login-container">
@@ -141,5 +141,6 @@ const Login = () => {
     </div>
   );
 };
-
+ 
 export default Login;
+ 

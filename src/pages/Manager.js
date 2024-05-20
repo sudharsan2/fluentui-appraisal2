@@ -16,8 +16,16 @@ import {
   SearchBox,
   Checkbox,
   Modal,
+  OverlayDrawer,
+  DrawerBody,
+  DrawerHeader,
+  DrawerHeaderTitle,
+  DrawerProps,
+  Avatar,
+  Text,
+  Link
 } from "@fluentui/react-components";
-import {AddRegular, PersonDeleteRegular , EditRegular, SearchRegular, FilterRegular, FilterDismissRegular, FilterAddRegular, ChartMultipleFilled    } from "@fluentui/react-icons"; // Import the icons
+import {AddRegular, PersonDeleteRegular , EditRegular, SearchRegular, FilterRegular, FilterDismissRegular, FilterAddRegular, ChartMultipleFilled , Dismiss24Regular ,Timer20Regular,Calendar20Regular,ShareIos24Regular,ShareMultiple24Filled,Add24Filled, ShareIos24Filled   } from "@fluentui/react-icons"; // Import the icons
 
 const useStyles = makeStyles({
   root: {
@@ -46,6 +54,40 @@ const useStyles = makeStyles({
     fontSize: "24px",
     paddingRight: '10px',
     color:'rgb(1, 105, 185)' // Increase the size of the icon
+  },
+  container: {
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr',
+    gap: '20px',
+    // padding: '20px',
+    marginTop:"3vh",
+    fontFamily: 'Arial, sans-serif',
+    marginLeft:"3vw"
+  },
+  section: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '10px',
+  },
+  gridrow:{
+    marginTop:"3vw"
+  },
+  heading: {
+    fontWeight: 'bold',
+  },
+  row: {
+    display: 'flex',
+    // justifyContent: 'space-between',
+    width: '100%',
+  },
+  editDetails: {
+    display: 'flex',
+    alignItems: 'center',
+    cursor: 'pointer',
+    color: '#0078d4', // Change this to your preferred color
+  },
+  editIcon: {
+    marginRight: '5px',
   },
 });
 
@@ -213,6 +255,9 @@ const Manager = () => {
   const [showFilters, setShowFilters] = React.useState(false);
   const [selectedFilters, setSelectedFilters] = React.useState([]);
   const newSelectedFilters = [];
+  const [open, setOpen] = React.useState(false);
+  const [selectedTab1, setSelectedTab1] = React.useState('tab1');
+  const [selectedEmployee, setSelectedEmployee] = React.useState(null);
 
   const handleTabChange = (event, data) => {
     setSelectedTab(data.value);
@@ -226,6 +271,10 @@ const Manager = () => {
     }));
   };
 
+  const handleTabSelect = (event, data) => {
+    setSelectedTab1(data.value);
+  };
+ 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
@@ -260,6 +309,11 @@ const Manager = () => {
     setShowFilters((prev) => !prev);
   };
 
+  const handleRowClick = (employee) => {
+    setSelectedEmployee(employee);
+    setOpen(true);
+  };
+
   
 
 
@@ -271,6 +325,263 @@ const Manager = () => {
     <div className={styles.root}>
         {/* <div style={{position:'fixed', backgroundColor:'white', zIndex:1000, width:'vw'}}> */}
         {/* <div style={{ position: 'fixed', backgroundColor: 'white', zIndex: 1000, width: '100%' }}> */}
+        <OverlayDrawer
+        size="large"
+        position="end"
+        open={open}
+        onOpenChange={(_, state) => {setOpen(state.open);
+          setSelectedTab1('tab1');
+        }}
+        style={{height:'calc(100vh - 48px)',marginTop:"48px"}}
+      >
+        <DrawerHeader>
+          <DrawerHeaderTitle
+            action={
+              <Button
+                appearance="subtle"
+                aria-label="Close"
+                icon={<Dismiss24Regular />}
+                onClick={() => {setOpen(false);
+                  setSelectedTab1('tab1');
+                }}
+              />
+            }
+          >
+             
+          </DrawerHeaderTitle>
+        </DrawerHeader>
+        {open && selectedEmployee && (
+        <DrawerBody>
+        <div>
+          <div style={{marginLeft:"3vw", marginTop:"2vh",display:"flex",width:"100%"}}>
+            <Avatar color="brand" initials="BR" name="brand color avatar" size={96}/>
+            <div style={{display:"flex",marginLeft:"2vw", flexDirection:"column",justifyContent:"center",width:"60%"}}>
+            <Text  size={700} style={{marginBottom:"2vh"}}> {selectedEmployee.name}</Text>
+            <div style={{display:"flex" ,width:"100%",justifyContent: "space-between"}}>
+            <Text  size={400}> {selectedEmployee.empid} </Text>
+            <div style={{display:"flex"}}>
+            <Timer20Regular style={{color:'rgb(1,105,185)'}}/>
+            <Text  size={400} style={{marginLeft:"3px"}}> Yet to fill the employee form</Text>
+            </div>
+            <div style={{display:"flex"}}>
+            <Calendar20Regular style={{color:'rgb(1,105,185)'}}/>
+            <Text  size={400} style={{marginLeft:"3px"}}> 1 May 2024</Text>
+            </div>
+            </div>
+            </div>
+            </div>
+            <TabList
+                defaultSelectedValue="tab1"
+                appearance="subtle"
+                onTabSelect={handleTabSelect}
+                style={{marginLeft:"3vw", marginTop:"3vh"}}
+            >
+                <Tab value="tab1">Employee Info</Tab>
+                <Tab value="tab2">Employee Form</Tab>
+                <Tab value="tab3">Manager Form</Tab>
+               
+               
+            </TabList>
+           
+        <div className={styles.container}>
+          { selectedTab1==='tab1'&&(
+            <>
+          <div className={styles.section}>
+            <div className={styles.heading}>Name and Emp ID :</div>
+            <div>{selectedEmployee.name}</div>
+            <div>{selectedEmployee.empid}</div>
+ 
+            <div className={styles.gridrow}>
+              <div className={styles.heading}>Email</div>
+              <div>{selectedEmployee.email}</div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.heading}>Current Status</div>
+              <div>{selectedEmployee.status}</div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.heading}>Role</div>
+              <div>{selectedEmployee.role}</div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.heading}>Department</div>
+              <div>{selectedEmployee.dept}</div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.editDetails}>
+                <EditRegular className={styles.editIcon} />
+                <span>Edit Details</span>
+              </div>
+            </div>
+          </div>
+          <div className={styles.section}>
+            <div className={styles.heading}>Manager Info</div>
+            <div>{selectedEmployee.manager}</div>
+            <div>{selectedEmployee.managerId}</div>
+            <div className={styles.gridrow}>
+              <div className={styles.row}>
+                <div className={styles.heading}>Date of Joining</div>
+                <div style={{marginLeft:"10px"}}>{selectedEmployee.doj}</div>
+              </div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.row}>
+                <div className={styles.heading}>Date of Starting</div>
+                <div style={{marginLeft:"10px"}}>{selectedEmployee.dos}</div>
+              </div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.row}>
+                <div className={styles.heading}>Appraisal Date</div>
+                <div style={{marginLeft:"10px"}} >{selectedEmployee.appraisal}</div>
+              </div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.row}>
+                <div className={styles.heading}>Total Experience</div>
+                <div>{selectedEmployee.totalExperience}</div>
+              </div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.row}>
+                <div className={styles.heading}>Experience in FocusR</div>
+                <div>{selectedEmployee.focusRExperience}</div>
+              </div>
+            </div>
+          </div>
+          </>)}
+
+          { selectedTab1==='tab2'&&(
+            <>
+          <div className={styles.section}>
+            <div className={styles.heading}>Name and Emp ID :</div>
+            <div>{selectedEmployee.name}</div>
+            <div>{selectedEmployee.empid}</div>
+ 
+            <div className={styles.gridrow}>
+              <div className={styles.heading}>Email</div>
+              <div>{selectedEmployee.email}</div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.heading}>Current Status</div>
+              <div>{selectedEmployee.status}</div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.heading}>Role</div>
+              <div>{selectedEmployee.role}</div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.heading}>Department</div>
+              <div>{selectedEmployee.dept}</div>
+            </div>
+            
+          </div>
+          <div className={styles.section}>
+            {/* <div className={styles.heading}><ShareIos24Regular style={{color:'rgb(1,105,185)'}} /></div> */}
+            <div className={styles.heading} style={{display:"flex"}}><ShareMultiple24Filled style={{color:'rgb(1,105,185)'}}/> <Link style={{marginLeft:"10px"}}>Share Form link</Link></div>
+            <div>{selectedEmployee.managerId}</div>
+            <div className={styles.gridrow}>
+              <div className={styles.row}>
+                <div className={styles.heading}>Date of Joining</div>
+                <div style={{marginLeft:"10px"}}>{selectedEmployee.doj}</div>
+              </div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.row}>
+                <div className={styles.heading}>Date of Starting</div>
+                <div style={{marginLeft:"10px"}}>{selectedEmployee.dos}</div>
+                <div>{selectedEmployee.dos}</div>
+              </div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.row}>
+                <div className={styles.heading}>Appraisal Date</div>
+                <div style={{marginLeft:"10px"}}>{selectedEmployee.appraisal}</div>
+              </div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.row}>
+              <div className={styles.heading} style={{display:"flex"}}><Add24Filled style={{color:'rgb(1,105,185)'}}/> <Link style={{marginLeft:"10px"}}>Add Reviewer</Link></div>
+                <div>{selectedEmployee.totalExperience}</div>
+              </div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.row}>
+              <div className={styles.heading} style={{display:"flex"}}><ShareIos24Filled  style={{color:'rgb(1,105,185)'}}/> <Link style={{marginLeft:"10px"}}>share to {selectedEmployee.manager}</Link></div>
+                {/* <div>{selectedEmployee.focusRExperience}</div> */}
+              </div>
+            </div>
+          </div>
+          </>)}
+
+          { selectedTab1==='tab3'&&(
+            <>
+          <div className={styles.section}>
+            <div className={styles.heading}>Name and Emp ID :</div>
+            <div>{selectedEmployee.name}</div>
+            <div>{selectedEmployee.empid}</div>
+ 
+            <div className={styles.gridrow}>
+              <div className={styles.heading}>Email</div>
+              <div>{selectedEmployee.email}</div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.heading}>Current Status</div>
+              <div>{selectedEmployee.status}</div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.heading}>Role</div>
+              <div>{selectedEmployee.role}</div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.heading}>Department</div>
+              <div>{selectedEmployee.dept}</div>
+            </div>
+            
+          </div>
+          <div className={styles.section}>
+            {/* <div className={styles.heading}><ShareIos24Regular style={{color:'rgb(1,105,185)'}} /></div> */}
+            {/* <div className={styles.heading} style={{display:"flex"}}><ShareMultiple24Filled style={{color:'rgb(1,105,185)'}}/> <Link style={{marginLeft:"10px"}}>Share Form link</Link></div> */}
+            <div>{selectedEmployee.managerId}</div>
+            <div className={styles.gridrow}>
+              <div className={styles.row}>
+                <div className={styles.heading}>Date of Joining</div>
+                <div style={{marginLeft:"10px"}}>{selectedEmployee.doj}</div>
+              </div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.row}>
+                <div className={styles.heading}>Date of Starting</div>
+                <div style={{marginLeft:"10px"}}>{selectedEmployee.dos}</div>
+                <div>{selectedEmployee.dos}</div>
+              </div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.row}>
+                <div className={styles.heading}>Appraisal Date</div>
+                <div style={{marginLeft:"10px"}}>{selectedEmployee.appraisal}</div>
+              </div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.row}>
+              {/* <div className={styles.heading} style={{display:"flex"}}><Add24Filled style={{color:'rgb(1,105,185)'}}/> <Link style={{marginLeft:"10px"}}>Add Reviewer</Link></div> */}
+                {/* <div>{selectedEmployee.totalExperience}</div> */}
+              </div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.row}>
+              <div className={styles.heading} style={{display:"flex"}}><ShareIos24Filled  style={{color:'rgb(1,105,185)'}}/> <Link style={{marginLeft:"10px"}}>share to {selectedEmployee.manager}</Link></div>
+                {/* <div>{selectedEmployee.focusRExperience}</div> */}
+              </div>
+            </div>
+          </div>
+          </>)}
+        </div>
+     
+        </div>
+        </DrawerBody>
+         )}
+      </OverlayDrawer>
  
         <h2 style={{paddingLeft:''}}>Manager</h2>
       <TabList
@@ -343,7 +654,8 @@ const Manager = () => {
     </TableHeader>
     <TableBody>
       {filteredData.map((item) => (
-        <TableRow key={item.empid}>
+        <TableRow key={item.empid}
+        onClick={() => handleRowClick(item)}>
           <TableSelectionCell
             checked={!!selectedItems[item.empid]}
             onChange={() => handleSelectionChange(item.empid)}

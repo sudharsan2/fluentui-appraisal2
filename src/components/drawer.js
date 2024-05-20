@@ -986,6 +986,7 @@ const useStyles = makeStyles({
     width:"100%",
     height:"100%",
     display: "flex",
+    fontFamily: 'Arial, sans-serif',
    
    
     backgroundColor: "#fff",
@@ -1111,7 +1112,7 @@ const NavDrawerDefault = (props) => {
   const someClickHandler = (nav) => {
     switch (nav) {
         case 'dashboard':
-            navigate("/HRdashboard");
+            navigate("/dashboard");
             break;
         case 'employee':
             navigate("/employee");

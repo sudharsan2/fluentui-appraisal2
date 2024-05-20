@@ -1,4 +1,4 @@
-import * as React from "react";
+import React,{useState} from "react";
 import {
   makeStyles,
   shorthands,
@@ -24,8 +24,9 @@ import {
   Avatar,
   Text,
 } from "@fluentui/react-components";
-import {AddRegular, PersonDeleteRegular , EditRegular, SearchRegular, FilterRegular, FilterDismissRegular, FilterAddRegular, ChartMultipleFilled,Dismiss24Regular ,Timer20Regular,Calendar20Regular    } from "@fluentui/react-icons"; // Import the icons
-
+import {AddRegular, PersonDeleteRegular , EditRegular, SearchRegular, FilterRegular, FilterDismissRegular, FilterAddRegular, ChartMultipleFilled,Dismiss24Regular ,Timer20Regular,Calendar20Regular,ShareIos24Regular,ShareMultiple24Filled,Add24Filled, ShareIos24Filled} from "@fluentui/react-icons"; // Import the icons
+import { Link } from "@fluentui/react";
+ 
 const useStyles = makeStyles({
   root: {
     alignItems: "flex-start",
@@ -34,6 +35,7 @@ const useStyles = makeStyles({
     justifyContent: "flex-start",
     ...shorthands.padding("50px", "20px"),
     rowGap: "20px",
+    // fontFamily: 'Arial, sans-serif',
   },
   controls: {
     display: "flex",
@@ -89,7 +91,7 @@ const useStyles = makeStyles({
     marginRight: '5px',
   },
 });
-
+ 
 const data = {
   tab1: [
     {
@@ -188,7 +190,7 @@ const data = {
         appraisal: "Good",
         manager: "John Doe",
       },
-    
+   
   ],
   tab2: [
     {
@@ -245,77 +247,90 @@ const data = {
     },
   ],
 };
-
-const Employee = () => {
+ 
+const HREmployee = () => {
   const styles = useStyles();
   const [selectedTab, setSelectedTab] = React.useState("tab1");
   const [selectedItems, setSelectedItems] = React.useState({});
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [searchQuery, setSearchQuery] = React.useState("");
   const [showFilters, setShowFilters] = React.useState(false);
   const [selectedFilters, setSelectedFilters] = React.useState([]);
   const newSelectedFilters = [];
   const [open, setOpen] = React.useState(false);
-
+  const [selectedTab1, setSelectedTab1] = React.useState('tab1');
+ 
   const handleTabChange = (event, data) => {
     setSelectedTab(data.value);
     setSelectedItems({}); // Reset selection when tab changes
   };
-
+ 
   const handleSelectionChange = (id) => {
     setSelectedItems((prev) => ({
       ...prev,
       [id]: !prev[id],
     }));
   };
-
+ 
+  const handleRowClick = (employee) => {
+    setSelectedEmployee(employee);
+    setOpen(true);
+  };
+ 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
-
+ 
   const handleToggleFilters = () => {
     setShowFilters(!showFilters);
   };
-  
+ 
   const handleRemoveFilters = () => {
     setSearchQuery("");
     // Handle resetting other filter options as needed
   };
-  
 
+  const handleTabSelect = (event, data) => {
+    setSelectedTab1(data.value);
+};
+ 
+ 
   const handleApplyFilters = () => {
     setSelectedFilters(newSelectedFilters); // Update selected filters state
   };
-
-  
+ 
+ 
   const handleAddEmployee = () => {
     alert("Add Employee functionality to be implemented");
   };
-
+ 
   const handleDeleteEmployee = () => {
     alert("Delete Employee functionality to be implemented");
   };
-
+ 
   const handleEditEmployee = () => {
     alert("Edit Employee functionality to be implemented");
   };
   const handleFilterToggle = () => {
     setShowFilters((prev) => !prev);
   };
-
-  
-
-
+ 
+ 
+ 
+ 
   const filteredData = data[selectedTab].filter((item) =>
     item.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
+ 
   return (
     <div className={styles.root}>
           <OverlayDrawer
         size="large"
         position="end"
         open={open}
-        onOpenChange={(_, state) => setOpen(state.open)}
+        onOpenChange={(_, state) => {setOpen(state.open);
+          setSelectedTab1('tab1');
+        }}
         style={{height:'calc(100vh - 48px)',marginTop:"48px"}}
       >
         <DrawerHeader>
@@ -325,22 +340,24 @@ const Employee = () => {
                 appearance="subtle"
                 aria-label="Close"
                 icon={<Dismiss24Regular />}
-                onClick={() => setOpen(false)}
+                onClick={() => {setOpen(false);
+                  setSelectedTab1('tab1');
+                }}
               />
             }
           >
              
           </DrawerHeaderTitle>
         </DrawerHeader>
- 
+        {open && selectedEmployee && (
         <DrawerBody>
         <div>
           <div style={{marginLeft:"3vw", marginTop:"2vh",display:"flex",width:"100%"}}>
             <Avatar color="brand" initials="BR" name="brand color avatar" size={96}/>
             <div style={{display:"flex",marginLeft:"2vw", flexDirection:"column",justifyContent:"center",width:"60%"}}>
-            <Text  size={700} style={{marginBottom:"2vh"}}> Eswarsudhan K</Text>
+            <Text  size={700} style={{marginBottom:"2vh"}}> {selectedEmployee.name}</Text>
             <div style={{display:"flex" ,width:"100%",justifyContent: "space-between"}}>
-            <Text  size={400}> M1432</Text>
+            <Text  size={400}> {selectedEmployee.empid} </Text>
             <div style={{display:"flex"}}>
             <Timer20Regular style={{color:'rgb(1,105,185)'}}/>
             <Text  size={400} style={{marginLeft:"3px"}}> Yet to fill the employee form</Text>
@@ -353,89 +370,152 @@ const Employee = () => {
             </div>
             </div>
             <TabList
-                defaultSelectedValue="tab2"
+                defaultSelectedValue="tab1"
                 appearance="subtle"
-                // onTabSelect={handleTabChange}
+                onTabSelect={handleTabSelect}
                 style={{marginLeft:"3vw", marginTop:"3vh"}}
             >
                 <Tab value="tab1">Employee Info</Tab>
                 <Tab value="tab2">Employee Form</Tab>
-                
-                
+               
+               
             </TabList>
-            <div className={styles.container}>
-      <div className={styles.section}>
-        <div className={styles.heading}>Name and Emp ID :</div>
-        <div>Eswarsudhan K</div>
-        <div>M123</div>
-        
-        <div className={styles.gridrow}>
-        <div className={styles.heading}>Email</div>
-        <div>eswarsudhan.k@focustech.com</div>
+           
+        <div className={styles.container}>
+          { selectedTab1==='tab1'&&(
+            <>
+          <div className={styles.section}>
+            <div className={styles.heading}>Name and Emp ID :</div>
+            <div>{selectedEmployee.name}</div>
+            <div>{selectedEmployee.empid}</div>
+ 
+            <div className={styles.gridrow}>
+              <div className={styles.heading}>Email</div>
+              <div>{selectedEmployee.email}</div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.heading}>Current Status</div>
+              <div>{selectedEmployee.status}</div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.heading}>Role</div>
+              <div>{selectedEmployee.role}</div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.heading}>Department</div>
+              <div>{selectedEmployee.dept}</div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.editDetails}>
+                <EditRegular className={styles.editIcon} />
+                <span>Edit Details</span>
+              </div>
+            </div>
+          </div>
+          <div className={styles.section}>
+            <div className={styles.heading}>Manager Info</div>
+            <div>{selectedEmployee.manager}</div>
+            <div>{selectedEmployee.managerId}</div>
+            <div className={styles.gridrow}>
+              <div className={styles.row}>
+                <div className={styles.heading}>Date of Joining</div>
+                <div style={{marginLeft:"10px"}}>{selectedEmployee.doj}</div>
+              </div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.row}>
+                <div className={styles.heading}>Date of Starting</div>
+                <div style={{marginLeft:"10px"}}>{selectedEmployee.dos}</div>
+              </div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.row}>
+                <div className={styles.heading}>Appraisal Date</div>
+                <div style={{marginLeft:"10px"}} >{selectedEmployee.appraisal}</div>
+              </div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.row}>
+                <div className={styles.heading}>Total Experience</div>
+                <div>{selectedEmployee.totalExperience}</div>
+              </div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.row}>
+                <div className={styles.heading}>Experience in FocusR</div>
+                <div>{selectedEmployee.focusRExperience}</div>
+              </div>
+            </div>
+          </div>
+          </>)}
+
+          { selectedTab1==='tab2'&&(
+            <>
+          <div className={styles.section}>
+            <div className={styles.heading}>Name and Emp ID :</div>
+            <div>{selectedEmployee.name}</div>
+            <div>{selectedEmployee.empid}</div>
+ 
+            <div className={styles.gridrow}>
+              <div className={styles.heading}>Email</div>
+              <div>{selectedEmployee.email}</div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.heading}>Current Status</div>
+              <div>{selectedEmployee.status}</div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.heading}>Role</div>
+              <div>{selectedEmployee.role}</div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.heading}>Department</div>
+              <div>{selectedEmployee.dept}</div>
+            </div>
+            
+          </div>
+          <div className={styles.section}>
+            {/* <div className={styles.heading}><ShareIos24Regular style={{color:'rgb(1,105,185)'}} /></div> */}
+            <div className={styles.heading} style={{display:"flex"}}><ShareMultiple24Filled style={{color:'rgb(1,105,185)'}}/> <Link style={{marginLeft:"10px"}}>Share Form link</Link></div>
+            <div>{selectedEmployee.managerId}</div>
+            <div className={styles.gridrow}>
+              <div className={styles.row}>
+                <div className={styles.heading}>Date of Joining</div>
+                <div style={{marginLeft:"10px"}}>{selectedEmployee.doj}</div>
+              </div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.row}>
+                <div className={styles.heading}>Date of Starting</div>
+                <div style={{marginLeft:"10px"}}>{selectedEmployee.dos}</div>
+                <div>{selectedEmployee.dos}</div>
+              </div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.row}>
+                <div className={styles.heading}>Appraisal Date</div>
+                <div style={{marginLeft:"10px"}}>{selectedEmployee.appraisal}</div>
+              </div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.row}>
+              <div className={styles.heading} style={{display:"flex"}}><Add24Filled style={{color:'rgb(1,105,185)'}}/> <Link style={{marginLeft:"10px"}}>Add Reviewer</Link></div>
+                <div>{selectedEmployee.totalExperience}</div>
+              </div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.row}>
+              <div className={styles.heading} style={{display:"flex"}}><ShareIos24Filled  style={{color:'rgb(1,105,185)'}}/> <Link style={{marginLeft:"10px"}}>Add Reviewer</Link></div>
+                <div>{selectedEmployee.focusRExperience}</div>
+              </div>
+            </div>
+          </div>
+          </>)}
         </div>
-        <div className={styles.gridrow}>
-        <div className={styles.heading}>Current Status</div>
-        <div>Yet to fill the employee form</div>
-        </div>
-        <div className={styles.gridrow}>
-        <div className={styles.heading}>Role</div>
-        <div>Front End Developer</div>
-        </div>
-        <div className={styles.gridrow}>
-        <div className={styles.heading}>Department</div>
-        <div>Product Development</div>
-        </div>
-        <div className={styles.gridrow}>
-        <div className={styles.editDetails}>
-          <EditRegular className={styles.editIcon} />
-          <span>Edit Details</span>
-        </div>
-        </div>
-      </div>
-      <div className={styles.section}>
-        <div className={styles.heading}>Manager Info</div>
-        <div>Thangamani K</div>
-        <div>M103</div>
-        <div className={styles.gridrow}>
-        <div className={styles.row}>
-          <div className={styles.heading}>Date of Joining</div>
-          <div>1 January 2023</div>
-        </div>
-        </div>
-        <div className={styles.gridrow}>
-        <div className={styles.row}>
-          <div className={styles.heading}>Date of Starting</div>
-          <div>1 May 2023</div>
-        </div>
-        </div>
-        <div className={styles.gridrow}>
-        <div className={styles.row}>
-          <div className={styles.heading}>Appraisal Date</div>
-          <div>1 May 2024</div>
-        </div>
-        </div>
-        <div className={styles.gridrow}>
-        <div className={styles.row}>
-          <div className={styles.heading}>Total Experience</div>
-          <div>1</div>
-        </div>
-        </div>
-        <div className={styles.gridrow}>
-        <div className={styles.row}>
-          <div className={styles.heading}>Experience in FocusR</div>
-          <div>1</div>
-        </div>
-        </div>
-        {/* <div className={styles.gridrow}>
-        <div className={styles.editDetails}>
-          <EditRegular className={styles.editIcon} />
-          <span>Edit Details</span>
-        </div>
-        </div> */}
-      </div>
-    </div>
+     
         </div>
         </DrawerBody>
+         )}
       </OverlayDrawer>
         {/* <div style={{position:'fixed', backgroundColor:'white', zIndex:1000, width:'vw'}}> */}
         {/* <div style={{ position: 'fixed', backgroundColor: 'white', zIndex: 1000, width: '100%' }}> */}
@@ -450,7 +530,7 @@ const Employee = () => {
         <Tab value="tab2">Next month</Tab>
         <Tab value="tab3">Employee</Tab>
         {/* <Tab value="tab3">Employee</Tab> */}
-        
+       
       </TabList>
       <div className={styles.controls}>
         <Button style={{border:'1px solid transparent', borderRadius:0}} onClick={handleAddEmployee}><AddRegular className={styles.iconLarge}/>Add Employee</Button>
@@ -479,7 +559,7 @@ const Employee = () => {
             <Checkbox label="Choose Manager" onChange={()=>newSelectedFilters.push('Employee Fill')}/>
             <Checkbox label="Choose Reviewer" onChange={()=>newSelectedFilters.push('Employee Fill')}/>
             <Checkbox label="Date Cap" onChange={()=>newSelectedFilters.push('Employee Fill')}/>
-            
+           
              
             <Button style={{border:'1px solid transparent', marginTop:'10px', borderRadius:0}} onClick={handleApplyFilters}> Apply </Button>
             <Button style={{border:'1px solid transparent', marginTop:'10px', borderRadius:0}} onClick={handleRemoveFilters}> Remove all</Button>
@@ -513,7 +593,7 @@ const Employee = () => {
     <TableBody>
       {filteredData.map((item) => (
         <TableRow key={item.empid}
-        onClick={() => setOpen(true)}>
+        onClick={() => handleRowClick(item)}>
           <TableSelectionCell
             checked={!!selectedItems[item.empid]}
             onChange={() => handleSelectionChange(item.empid)}
@@ -529,9 +609,16 @@ const Employee = () => {
     </TableBody>
   </Table>
 </div>
-
+ 
     </div>
   );
 };
+ 
+export default HREmployee;
+ 
 
-export default Employee;
+
+
+
+
+ 

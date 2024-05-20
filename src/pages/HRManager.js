@@ -346,7 +346,12 @@ const HRManager = () => {
         <TableRow key={item.empid}>
           <TableSelectionCell
             checked={!!selectedItems[item.empid]}
-            onChange={() => handleSelectionChange(item.empid)}
+            onChange={(event) => {
+          
+              //  event.stopPropagation(); // Prevents the row click event from being triggered
+               handleSelectionChange(item.empid);
+              //  setOpen(false)
+             }}
           />
           <TableCell>{item.empid}</TableCell>
           <TableCell>{item.name}</TableCell>

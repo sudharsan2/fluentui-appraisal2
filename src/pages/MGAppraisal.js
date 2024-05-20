@@ -519,8 +519,12 @@ const MGAppraisal = () => {
         onClick={() => handleRowClick(item)}>
           <TableSelectionCell
             checked={!!selectedItems[item.empid]}
-            onChange={() => handleSelectionChange(item.empid)}
-          />
+            onChange={(event) => {
+          
+                //  event.stopPropagation(); // Prevents the row click event from being triggered
+                 handleSelectionChange(item.empid);
+                 setOpen(false)
+               }}  />
           <TableCell>{item.empid}</TableCell>
           <TableCell>{item.name}</TableCell>
           <TableCell>{item.dept}</TableCell>

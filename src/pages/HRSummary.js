@@ -328,9 +328,14 @@ const HRSummary = () => {
         <TableRow key={item.empid}>
           <TableSelectionCell
             checked={!!selectedItems[item.empid]}
-            onChange={() => handleSelectionChange(item.empid)}
-          />
-          <TableCell>{item.empid}</TableCell>
+            onChange={(event) => {
+          
+              //  event.stopPropagation(); // Prevents the row click event from being triggered
+               handleSelectionChange(item.empid);
+              //  setOpen(false)
+             }}
+               />
+          <TableCell >{item.empid}</TableCell>
           <TableCell>{item.name}</TableCell>
           <TableCell>{item.dept}</TableCell>
           <TableCell>{item.doj}</TableCell>

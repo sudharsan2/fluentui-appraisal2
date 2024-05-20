@@ -24,8 +24,7 @@ import {
   Avatar,
   Text,
 } from "@fluentui/react-components";
-import {AddRegular, PersonDeleteRegular , EditRegular, SearchRegular, FilterRegular, FilterDismissRegular, FilterAddRegular, ChartMultipleFilled,Dismiss24Regular ,Timer20Regular,Calendar20Regular    } from "@fluentui/react-icons"; // Import the icons
-import zIndex from "@mui/material/styles/zIndex";
+import {AddRegular, PersonDeleteRegular , EditRegular, SearchRegular, FilterRegular, FilterDismissRegular, FilterAddRegular, ChartMultipleFilled,Dismiss24Regular ,Timer20Regular,Calendar20Regular, ArrowDownRegular, ArrowClockwiseRegular   } from "@fluentui/react-icons"; // Import the icons
 
 const useStyles = makeStyles({
   root: {
@@ -89,11 +88,6 @@ const useStyles = makeStyles({
   editIcon: {
     marginRight: '5px',
   },
-
-  filterPanel:{
-    display:'flex',
-    flexDirection:'column',
-  }
 });
 
 const data = {
@@ -252,7 +246,7 @@ const data = {
   ],
 };
 
-const HREmployee = () => {
+const MGReviewer = () => {
   const styles = useStyles();
   const [selectedTab, setSelectedTab] = React.useState("tab1");
   const [selectedItems, setSelectedItems] = React.useState({});
@@ -449,23 +443,22 @@ const HREmployee = () => {
         {/* <div style={{position:'fixed', backgroundColor:'white', zIndex:1000, width:'vw'}}> */}
         {/* <div style={{ position: 'fixed', backgroundColor: 'white', zIndex: 1000, width: '100%' }}> */}
  
-        <h2 style={{paddingLeft:''}}>Employee</h2>
+        <h2 style={{paddingLeft:''}}>Review</h2>
       <TabList
         defaultSelectedValue="tab2"
         appearance="subtle"
         onTabSelect={handleTabChange}
       >
-        <Tab value="tab1">This month</Tab>
-        <Tab value="tab2">Next month</Tab>
-        <Tab value="tab3">Employee</Tab>
+        <Tab value="tab1">To do</Tab>
+        <Tab value="tab2">Review done</Tab>
+        {/* <Tab value="tab3">Employee</Tab> */}
         {/* <Tab value="tab3">Employee</Tab> */}
         
       </TabList>
       <div className={styles.controls}>
-        <Button style={{border:'1px solid transparent', borderRadius:0}} onClick={handleAddEmployee}><AddRegular className={styles.iconLarge}/>Add Employee</Button>
-        <Button style={{border:'1px solid transparent', borderRadius:0}} onClick={handleDeleteEmployee}><PersonDeleteRegular className={styles.iconLarge}/>Delete Employee</Button>
-        <Button style={{border:'1px solid transparent', borderRadius:0}} onClick={handleEditEmployee}><EditRegular className={styles.iconLarge}/>Edit Employee</Button>
-        <SearchBox
+      <Button style={{border:'1px solid transparent', borderRadius:0}} onClick={handleAddEmployee}><ArrowClockwiseRegular className={styles.iconLarge}/>Refresh</Button>
+        <Button style={{border:'1px solid transparent', borderRadius:0}} onClick={handleDeleteEmployee}><ArrowDownRegular  className={styles.iconLarge}/>Export</Button>
+         <SearchBox
               placeholder="Search..."
             //   style={getSearchBoxStyle()}
             //   className={themestate && "searchboxicon searchboxinputtext searchboxinputplaceholder"}
@@ -479,7 +472,6 @@ const HREmployee = () => {
       {showFilters && (
         // <Modal header="Filters" onClose={handleFilterToggle}>
           <div className={styles.filterPanel}>
-            <div style={{display:'flex'}}>
             <Checkbox label="Employee Fill" onChange={()=>newSelectedFilters.push('Employee Fill')}/>
             <Checkbox label="Manager Fill" onChange={()=>newSelectedFilters.push('Employee Fill')}/>
             <Checkbox label="Reviewer Fill" onChange={()=>newSelectedFilters.push('Employee Fill')}/>
@@ -489,12 +481,11 @@ const HREmployee = () => {
             <Checkbox label="Choose Manager" onChange={()=>newSelectedFilters.push('Employee Fill')}/>
             <Checkbox label="Choose Reviewer" onChange={()=>newSelectedFilters.push('Employee Fill')}/>
             <Checkbox label="Date Cap" onChange={()=>newSelectedFilters.push('Employee Fill')}/>
-            </div>
-            <div style={{display:'flex'}}>
+            
+             
             <Button style={{border:'1px solid transparent', marginTop:'10px', borderRadius:0}} onClick={handleApplyFilters}> Apply </Button>
             <Button style={{border:'1px solid transparent', marginTop:'10px', borderRadius:0}} onClick={handleRemoveFilters}> Remove all</Button>
-            </div>
-            </div>
+          </div>
         // </Modal>
       )}
       {/* {selectedFilters.length > 0 && (
@@ -523,26 +514,23 @@ const HREmployee = () => {
     </TableHeader>
     <TableBody>
       {filteredData.map((item) => (
-       <TableRow key={item.empid} onClick={() => handleRowClick(item)} >
-       <TableSelectionCell
-         checked={!!selectedItems[item.empid]}
-         style={{zIndex:1000}}
-         onChange={(event) => {
+        <TableRow key={item.empid}
+        onClick={() => handleRowClick(item)}>
+          <TableSelectionCell
+            checked={!!selectedItems[item.empid]}
+            onChange={(event) => {
           
-          //  event.stopPropagation(); // Prevents the row click event from being triggered
-           handleSelectionChange(item.empid);
-           setOpen(false)
-         }}
-         
-       />
-       <TableCell >{item.empid}</TableCell>
-       <TableCell>{item.name}</TableCell>
-       <TableCell>{item.dept}</TableCell>
-       <TableCell>{item.doj}</TableCell>
-       <TableCell>{item.appraisal}</TableCell>
-       <TableCell>{item.manager}</TableCell>
-     </TableRow>
-     
+                //  event.stopPropagation(); // Prevents the row click event from being triggered
+                 handleSelectionChange(item.empid);
+                 setOpen(false)
+               }}/>
+          <TableCell>{item.empid}</TableCell>
+          <TableCell>{item.name}</TableCell>
+          <TableCell>{item.dept}</TableCell>
+          <TableCell>{item.doj}</TableCell>
+          <TableCell>{item.appraisal}</TableCell>
+          <TableCell>{item.manager}</TableCell>
+        </TableRow>
       ))}
     </TableBody>
   </Table>
@@ -552,4 +540,4 @@ const HREmployee = () => {
   );
 };
 
-export default HREmployee;
+export default MGReviewer;

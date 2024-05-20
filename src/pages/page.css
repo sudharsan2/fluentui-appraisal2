@@ -1,0 +1,60 @@
+.hovereffect{}
+
+.hovereffect.dark{
+    
+   border-bottom-color: #383838;
+}
+
+.hovereffect.dark:hover {
+    background-color: #383838; /* Change this to the desired hover color */
+    cursor: pointer; /* Optional: Change cursor to pointer on hover */
+}
+
+.button {
+    border: 1px solid transparent;
+    margin-top: 10px;
+    border-radius: 0;
+    color: black; /* Default font color */
+  }
+  
+  .button.dark {
+    background-color: rgb(19, 19, 19);
+    color: white; /* Font color when in dark mode */
+    transition: 0.3s ease-in-out;
+  }
+  
+  .button.dark:hover {
+    color: white; /* Font color when in dark mode */
+    background-color: rgb(59, 59, 59);
+  }
+  
+  .tab {
+    border: 1px solid transparent;
+    margin-top: 10px;
+    border-radius: 0;
+    color: black; /* Default font color */
+  }
+  
+  .tab.dark {
+    background-color: rgb(19, 19, 19);
+    color: white; /* Font color when in dark mode */
+    transition: 0.3s ease-in-out;
+  }
+ .tab.dark span{
+    color: white; /* Font color when in dark mode */
+    transition: 0.3s ease-in-out;
+   
+ }
+
+ .tab.dark:hover{
+    color: white;
+    background-color: rgb(59, 59, 59);
+  }
+  
+  .tab.dark:hover span{
+    color: white;
+    background-color: rgba(59, 59, 59, 0);
+  }
+
+  
+  

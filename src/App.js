@@ -14,6 +14,8 @@ import HRManager from './pages/HRManager';
 import HRReviewer from './pages/HRReviewer';
 import HRSummary from './pages/HRSummary';
 import MGAppraisal from './pages/MGAppraisal';
+import MGReviewer from './pages/MGReviewer';
+import RVReviewer from './pages/RVReviewer';
 
 function App() {
   return (
@@ -29,6 +31,8 @@ function App() {
         <Route path='hrreviewer' element={<CustomLayout><NavDrawerDefault><HRReviewer/></NavDrawerDefault></CustomLayout>}/>
         <Route path='hrsummary' element={<CustomLayout><NavDrawerDefault><HRSummary/></NavDrawerDefault></CustomLayout>}/>
         <Route path='mgappraisal' element={<CustomLayout><NavDrawerDefault><MGAppraisal/></NavDrawerDefault></CustomLayout>}/>
+        <Route path='mgreviewer' element={<CustomLayout><NavDrawerDefault><MGReviewer/></NavDrawerDefault></CustomLayout>}/>
+        <Route path='rvreviewer' element={<CustomLayout><NavDrawerDefault><RVReviewer/></NavDrawerDefault></CustomLayout>}/>
       
         <Route path='form/:token' element={<EmployeeForm/>}/>
         

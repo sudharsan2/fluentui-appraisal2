@@ -1095,7 +1095,7 @@ const Settings = bundleIcon(Settings20Filled, Settings20Regular);
  
  
  
-const NavDrawerDefault = (props) => {
+const MGNavDrawerDefault = (props) => {
  
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -1110,21 +1110,19 @@ const NavDrawerDefault = (props) => {
  
   const someClickHandler = (nav) => {
     switch (nav) {
-        case 'dashboard':
-            navigate("/HRdashboard");
+        case 'appraisal':
+            navigate("/mgappraisal");
             break;
-        case 'employee':
-            navigate("/hremployee");
+        case 'review':
+            navigate("/mgreviewer");
             break;
-        case 'manager':
+        case 'summary':
             navigate("/hrmanager");
             break;   
         case 'reviewer':
             navigate("/hrreviewer");
             break;  
-        case 'summary':
-        navigate("/hrsummary");
-        break;
+       
         default:
             console.error("Unknown navigation target:", nav);
     }
@@ -1174,11 +1172,11 @@ const NavDrawerDefault = (props) => {
     <NavDrawerBody
         style={themestate?{backgroundColor:darktheme.sidebarcolordark, cursor:"pointer",WebkitTapHighlightColor: 'transparent'}:{cursor:"pointer",WebkitTapHighlightColor: 'transparent'}}
      >
-      <Tooltip content={'Dashboard'} positioning='after' withArrow={true} appearance={themestate?"inverted":"normal"}>
+      <Tooltip content={'Appraisal'} positioning='after' withArrow={true} appearance={themestate?"inverted":"normal"}>
       <NavItem
         target="_blank"
         icon={<Dashboard style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
-        onClick={() => someClickHandler('dashboard')}
+        onClick={() => someClickHandler('appraisal')}
         value="1"
         className={themestate? styles.navItemdark : styles.navItemlight}
       >
@@ -1186,11 +1184,11 @@ const NavDrawerDefault = (props) => {
       </NavItem>
       </Tooltip>
  
-      <Tooltip content={'Employee'} positioning='after' withArrow={true} appearance={themestate?"inverted":"normal"}>
+      <Tooltip content={'Review'} positioning='after' withArrow={true} appearance={themestate?"inverted":"normal"}>
       <NavItem
         target="_blank"
         icon={<LayerDiagonalPersonRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
-        onClick={() => someClickHandler('employee')}
+        onClick={() => someClickHandler('review')}
         value="2"
         className={themestate? styles.navItemdark : styles.navItemlight}
       >
@@ -1200,11 +1198,11 @@ const NavDrawerDefault = (props) => {
  
  
  
-      <Tooltip content={'Manager'} positioning='after' withArrow={true} appearance={themestate?"inverted":"normal"}>
+      <Tooltip content={'Summary'} positioning='after' withArrow={true} appearance={themestate?"inverted":"normal"}>
       <NavItem
         target="_blank"
         icon={<PersonStarRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
-        onClick={() => someClickHandler('manager')}
+        onClick={() => someClickHandler('summary')}
         value="3"
         className={themestate? styles.navItemdark : styles.navItemlight}
       >
@@ -1213,30 +1211,7 @@ const NavDrawerDefault = (props) => {
       </Tooltip>
  
  
-      <Tooltip content={'Reviewer'} positioning='after' withArrow={true} appearance={themestate?"inverted":"normal"}>
-      <NavItem
-        target="_blank"
-        icon={<PremiumPersonRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
-        onClick={() => someClickHandler('reviewer')}
-        value="4"
-        className={themestate? styles.navItemdark : styles.navItemlight}
-      >
-       
-      </NavItem>
-      </Tooltip>
- 
- 
-      <Tooltip content={'Summary'} positioning='after' withArrow={true} appearance={themestate?"inverted":"normal"}>
-      <NavItem
-        target="_blank"
-        icon={<TableSearchRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
-        onClick={() => someClickHandler('summary')}
-        value="5"
-        className={themestate? styles.navItemdark : styles.navItemlight}
-      >
-       
-      </NavItem>
-      </Tooltip>
+     
     </NavDrawerBody>
   ) : (
     <NavDrawerBody
@@ -1246,24 +1221,24 @@ const NavDrawerDefault = (props) => {
       <NavItem
         target="_blank"
         icon={<Dashboard style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
-        onClick={() => someClickHandler('dashboard')}
+        onClick={() => someClickHandler('appraisal')}
         value="1"
         className={themestate? styles.navItemdark : styles.navItemlight}
         style={{ marginTop: "10px", fontSize:"17px"}}      
         >
-        <div style={themestate?{marginTop:"2px" , color:darktheme.fontcolordark}:{marginTop:"2px" , color:lighttheme.fontcolorlight}}>Dashboard</div>
+        <div style={themestate?{marginTop:"2px" , color:darktheme.fontcolordark}:{marginTop:"2px" , color:lighttheme.fontcolorlight}}>Appraisal</div>
       </NavItem>
       </div>
       <div style={{width:'100%'} }>
       <NavItem
         target="_blank"
         icon={<LayerDiagonalPersonRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
-        onClick={() => someClickHandler('employee')}
+        onClick={() => someClickHandler('review')}
         value="2"
         className={themestate? styles.navItemdark : styles.navItemlight}
         style={{ marginTop: "10px", fontSize:"17px"}}  
         >
-        <div style={themestate?{marginTop:"2px" , color:darktheme.fontcolordark}:{marginTop:"2px" , color:lighttheme.fontcolorlight}}>Employee</div>
+        <div style={themestate?{marginTop:"2px" , color:darktheme.fontcolordark}:{marginTop:"2px" , color:lighttheme.fontcolorlight}}>Review</div>
        
       </NavItem>
       </div>
@@ -1271,41 +1246,16 @@ const NavDrawerDefault = (props) => {
       <NavItem
         target="_blank"
         icon={<PersonStarRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
-        onClick={() => someClickHandler('manager')}
+        onClick={() => someClickHandler('summary')}
         value="3"
         className={themestate? styles.navItemdark : styles.navItemlight}
         style={{ marginTop: "10px", fontSize:"17px"}}  
         >
-        <div style={themestate?{marginTop:"2px" , color:darktheme.fontcolordark}:{marginTop:"2px" , color:lighttheme.fontcolorlight}}>Manager</div>
+        <div style={themestate?{marginTop:"2px" , color:darktheme.fontcolordark}:{marginTop:"2px" , color:lighttheme.fontcolorlight}}>Summary</div>
        
       </NavItem>
       </div>
-      <div style={{width:'100%'}}>
-      <NavItem
-        target="_blank"
-        icon={<PremiumPersonRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
-        onClick={() => someClickHandler('reviewer')}
-        value="4"
-        className={themestate? styles.navItemdark : styles.navItemlight}
-        style={{ marginTop: "10px", fontSize:"17px"}}
-      >
-        <div style={themestate?{marginTop:"2px" , color:darktheme.fontcolordark}:{marginTop:"2px" , color:lighttheme.fontcolorlight}}>Reviewer</div>
-       
-      </NavItem>
-      </div>
-      <div style={{width:'100%'}}>
-      <NavItem
-        target="_blank"
-        icon={<TableSearchRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
-        onClick={() => someClickHandler('summary')}
-        value="5"
-        className={themestate? styles.navItemdark : styles.navItemlight}
-        style={themestate?{ marginTop: "10px", fontSize:"17px", color:darktheme.fontcolordark}:{ marginTop: "10px", fontSize:"17px",color:lighttheme.fontcolorlight}}
-      >
-        <div style={{marginTop:"2px"}}>Summary</div>
-       
-      </NavItem>
-      </div>
+      
     </NavDrawerBody>
   )}
  
@@ -1356,4 +1306,4 @@ const NavDrawerDefault = (props) => {
   );
 };
 
-export default NavDrawerDefault;
+export default MGNavDrawerDefault;

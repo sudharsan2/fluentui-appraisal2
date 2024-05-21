@@ -1,4 +1,5 @@
-import * as React from "react";
+import React,{useState} from "react";
+import {useSelector, useDispatch} from 'react-redux';
 import {
   makeStyles,
   shorthands,
@@ -16,8 +17,17 @@ import {
   SearchBox,
   Checkbox,
   Modal,
+  OverlayDrawer,
+  DrawerBody,
+  DrawerHeader,
+  DrawerHeaderTitle,
+  DrawerProps,
+  Avatar,
+  Text,
 } from "@fluentui/react-components";
-import {AddRegular, PersonDeleteRegular , EditRegular, SearchRegular, FilterRegular, FilterDismissRegular, FilterAddRegular, ChartMultipleFilled    } from "@fluentui/react-icons"; // Import the icons
+import {AddRegular, PersonDeleteRegular , EditRegular, SearchRegular, FilterRegular, FilterDismissRegular, FilterAddRegular, ChartMultipleFilled,ChartMultipleRegular,Dismiss24Regular ,Timer20Regular,Calendar20Regular, ArrowDownRegular, ArrowClockwiseRegular   } from "@fluentui/react-icons"; // Import the icons
+import './page.css';
+
 
 const useStyles = makeStyles({
   root: {
@@ -46,6 +56,40 @@ const useStyles = makeStyles({
     fontSize: "24px",
     paddingRight: '10px',
     color:'rgb(1, 105, 185)' // Increase the size of the icon
+  },
+  container: {
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr',
+    gap: '20px',
+    // padding: '20px',
+    marginTop:"3vh",
+    fontFamily: 'Arial, sans-serif',
+    marginLeft:"3vw"
+  },
+  section: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '10px',
+  },
+  gridrow:{
+    marginTop:"3vw"
+  },
+  heading: {
+    fontWeight: 'bold',
+  },
+  row: {
+    display: 'flex',
+    // justifyContent: 'space-between',
+    width: '100%',
+  },
+  editDetails: {
+    display: 'flex',
+    alignItems: 'center',
+    cursor: 'pointer',
+    color: '#0078d4', // Change this to your preferred color
+  },
+  editIcon: {
+    marginRight: '5px',
   },
 });
 
@@ -209,10 +253,15 @@ const HRManager = () => {
   const styles = useStyles();
   const [selectedTab, setSelectedTab] = React.useState("tab1");
   const [selectedItems, setSelectedItems] = React.useState({});
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [searchQuery, setSearchQuery] = React.useState("");
   const [showFilters, setShowFilters] = React.useState(false);
   const [selectedFilters, setSelectedFilters] = React.useState([]);
+  const lighttheme = useSelector((state) => state.theme.light);
+  const darktheme = useSelector((state) => state.theme.dark);
+  const themestate = useSelector((state) => state.theme.theme);
   const newSelectedFilters = [];
+  const [open, setOpen] = React.useState(false);
 
   const handleTabChange = (event, data) => {
     setSelectedTab(data.value);
@@ -224,6 +273,11 @@ const HRManager = () => {
       ...prev,
       [id]: !prev[id],
     }));
+  };
+
+  const handleRowClick = (employee) => {
+    setSelectedEmployee(employee);
+    setOpen(true);
   };
 
   const handleSearchChange = (event) => {
@@ -263,58 +317,209 @@ const HRManager = () => {
   
 
 
+
+  
+
+
   const filteredData = data[selectedTab].filter((item) =>
     item.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
     <div className={styles.root}>
+          <OverlayDrawer
+        size="large"
+        position="end"
+        open={open}
+        onOpenChange={(_, state) => setOpen(state.open)}
+        style={{height:'calc(100vh - 48px)',marginTop:"48px"}}
+      >
+        <DrawerHeader>
+          <DrawerHeaderTitle
+            action={
+              <Button
+                appearance="subtle"
+                aria-label="Close"
+                icon={<Dismiss24Regular />}
+                onClick={() => setOpen(false)}
+              />
+            }
+          >
+             
+          </DrawerHeaderTitle>
+        </DrawerHeader>
+        {open && selectedEmployee && (
+        <DrawerBody>
+        <div>
+          <div style={{marginLeft:"3vw", marginTop:"2vh",display:"flex",width:"100%"}}>
+            <Avatar color="brand" initials="BR" name="brand color avatar" size={96}/>
+            <div style={{display:"flex",marginLeft:"2vw", flexDirection:"column",justifyContent:"center",width:"60%"}}>
+            <Text  size={700} style={{marginBottom:"2vh"}}> {selectedEmployee.name}</Text>
+            <div style={{display:"flex" ,width:"100%",justifyContent: "space-between"}}>
+            <Text  size={400}> {selectedEmployee.empid} </Text>
+            <div style={{display:"flex"}}>
+            <Timer20Regular style={{color:'rgb(1,105,185)'}}/>
+            <Text  size={400} style={{marginLeft:"3px"}}> Yet to fill the employee form</Text>
+            </div>
+            <div style={{display:"flex"}}>
+            <Calendar20Regular style={{color:'rgb(1,105,185)'}}/>
+            <Text  size={400} style={{marginLeft:"3px"}}> 1 May 2024</Text>
+            </div>
+            </div>
+            </div>
+            </div>
+            <TabList
+                defaultSelectedValue="tab2"
+                appearance="subtle"
+                // onTabSelect={handleTabChange}
+                style={{marginLeft:"3vw", marginTop:"3vh"}}
+            >
+                <Tab value="tab1">Employee Info</Tab>
+                <Tab value="tab2">Employee Form</Tab>
+                
+                
+            </TabList>
+            
+        <div className={styles.container}>
+          <div className={styles.section}>
+            <div className={styles.heading}>Name and Emp ID :</div>
+            <div>{selectedEmployee.name}</div>
+            <div>{selectedEmployee.empid}</div>
+
+            <div className={styles.gridrow}>
+              <div className={styles.heading}>Email</div>
+              <div>{selectedEmployee.email}</div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.heading}>Current Status</div>
+              <div>{selectedEmployee.status}</div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.heading}>Role</div>
+              <div>{selectedEmployee.role}</div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.heading}>Department</div>
+              <div>{selectedEmployee.dept}</div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.editDetails}>
+                <EditRegular className={styles.editIcon} />
+                <span>Edit Details</span>
+              </div>
+            </div>
+          </div>
+          <div className={styles.section}>
+            <div className={styles.heading}>Manager Info</div>
+            <div>{selectedEmployee.manager}</div>
+            <div>{selectedEmployee.managerId}</div>
+            <div className={styles.gridrow}>
+              <div className={styles.row}>
+                <div className={styles.heading}>Date of Joining</div>
+                <div>{selectedEmployee.doj}</div>
+              </div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.row}>
+                <div className={styles.heading}>Date of Starting</div>
+                <div>{selectedEmployee.dos}</div>
+              </div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.row}>
+                <div className={styles.heading}>Appraisal Date</div>
+                <div>{selectedEmployee.appraisal}</div>
+              </div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.row}>
+                <div className={styles.heading}>Total Experience</div>
+                <div>{selectedEmployee.totalExperience}</div>
+              </div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.row}>
+                <div className={styles.heading}>Experience in FocusR</div>
+                <div>{selectedEmployee.focusRExperience}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+     
+        </div>
+        </DrawerBody>
+         )}
+      </OverlayDrawer>
         {/* <div style={{position:'fixed', backgroundColor:'white', zIndex:1000, width:'vw'}}> */}
         {/* <div style={{ position: 'fixed', backgroundColor: 'white', zIndex: 1000, width: '100%' }}> */}
  
-        <h2 style={{paddingLeft:''}}>Manager</h2>
+        <h2 style={themestate?{color:'white'}:{}}>Manager</h2>
       <TabList
-        defaultSelectedValue="tab2"
+        defaultSelectedValue="tab1"
         appearance="subtle"
         onTabSelect={handleTabChange}
+        style={themestate?{color:'white'}:{}}
       >
-        <Tab value="tab1">Yet to be filled</Tab>
-        <Tab value="tab2">Filled</Tab>
+        <Tab    className={themestate ? "tab dark" : "tab"} style= {{border:'1px solid transparent'}} value="tab1">Yet to be filled</Tab>
+        <Tab  className={themestate ? "tab dark" : "tab"} style= {{border:'1px solid transparent'}} value="tab2">Filled</Tab>
+        {/* <Tab className={themestate ? "tab dark" : "tab"} style= {{border:'1px solid transparent'}} value="tab3">Review pending</Tab> */}
         {/* <Tab value="tab3">Employee</Tab> */}
         
       </TabList>
       <div className={styles.controls}>
-        <Button style={{border:'1px solid transparent', borderRadius:0}} onClick={handleAddEmployee}><ChartMultipleFilled className={styles.iconLarge}/>Statistics</Button>
-        <Button style={{border:'1px solid transparent', borderRadius:0}} onClick={handleDeleteEmployee}><PersonDeleteRegular className={styles.iconLarge}/>Delete Employee</Button>
-        <Button style={{border:'1px solid transparent', borderRadius:0}} onClick={handleEditEmployee}><EditRegular className={styles.iconLarge}/>Edit Employee</Button>
-        <SearchBox
+      <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleAddEmployee}><ChartMultipleRegular className={styles.iconLarge}/>Statistics</Button>
+         <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleDeleteEmployee}><PersonDeleteRegular className={styles.iconLarge}/>Delete Employee</Button>
+        <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleEditEmployee}><EditRegular className={styles.iconLarge}/>Edit Employee</Button>
+       
+      {/* <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleAddEmployee}><ArrowClockwiseRegular className={styles.iconLarge}/>Refresh</Button>
+        <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleDeleteEmployee}><ArrowDownRegular  className={styles.iconLarge}/>Export</Button> */}
+         <SearchBox
               placeholder="Search..."
-            //   style={getSearchBoxStyle()}
-            //   className={themestate && "searchboxicon searchboxinputtext searchboxinputplaceholder"}
+            style={ {backgroundColor: themestate ? "rgb(41,41,41)" : "#fff"}}
+            className={themestate && "searchboxicon searchboxinputtext searchboxinputplaceholder"}
+
               size='medium'
               appearance='filled-darker'
             />
-        <Button style={{border:'1px solid transparent', borderRadius:'0px'}} onClick={handleToggleFilters}><FilterRegular className={styles.iconLarge}/>
+        <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleToggleFilters}><FilterRegular className={styles.iconLarge}/>
           {showFilters ? "Hide Filters" : "Show Filters"}
         </Button>
       </div>
       {showFilters && (
         // <Modal header="Filters" onClose={handleFilterToggle}>
-          <div className={styles.filterPanel}>
-            <Checkbox label="Employee Fill" onChange={()=>newSelectedFilters.push('Employee Fill')}/>
-            <Checkbox label="Manager Fill" onChange={()=>newSelectedFilters.push('Employee Fill')}/>
-            <Checkbox label="Reviewer Fill" onChange={()=>newSelectedFilters.push('Employee Fill')}/>
-            <Checkbox label="Revised Fill" onChange={()=>newSelectedFilters.push('Employee Fill')}/>
-            <Checkbox label="Appraisal" onChange={()=>newSelectedFilters.push('Employee Fill')}/>
-            <Checkbox label="Choose Dept" onChange={()=>newSelectedFilters.push('Employee Fill')}/>
-            <Checkbox label="Choose Manager" onChange={()=>newSelectedFilters.push('Employee Fill')}/>
-            <Checkbox label="Choose Reviewer" onChange={()=>newSelectedFilters.push('Employee Fill')}/>
-            <Checkbox label="Date Cap" onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+        <div className={styles.filterPanel}>
+        <div style={{display:'flex'}}>
+        <Checkbox label="Employee Fill" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+             <Checkbox label="Manager Fill" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+            <Checkbox label="Reviewer Fill" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+             <Checkbox label="Revised Fill" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+             <Checkbox label="Appraisal Done" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+             <Checkbox label="Choose Dept" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+             <Checkbox label="Choose Manager" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+             <Checkbox label="Choose Reviewer" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+             <Checkbox label="Date Cap" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+            
+        </div>
+        <div style={{display:'flex'}}>
+        <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}}onClick={handleApplyFilters}> Apply </Button>
+       <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleRemoveFilters}> Remove all</Button>
+   </div>
+        </div>
+//           <div className={styles.filterPanel} >
+//             <Checkbox label="Employee Fill" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+//             <Checkbox label="Manager Fill" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+//             <Checkbox label="Reviewer Fill" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+//             <Checkbox label="Revised Fill" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+//             <Checkbox label="Appraisal" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+//             <Checkbox label="Choose Dept" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+//             <Checkbox label="Choose Manager" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+//             <Checkbox label="Choose Reviewer" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+//             <Checkbox label="Date Cap" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
             
              
-            <Button style={{border:'1px solid transparent', marginTop:'10px', borderRadius:0}} onClick={handleApplyFilters}> Apply </Button>
-            <Button style={{border:'1px solid transparent', marginTop:'10px', borderRadius:0}} onClick={handleRemoveFilters}> Remove all</Button>
-          </div>
+//             <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}}onClick={handleApplyFilters}> Apply </Button>
+// <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleRemoveFilters}> Remove all</Button>
+//    </div>
         // </Modal>
       )}
       {/* {selectedFilters.length > 0 && (
@@ -328,10 +533,10 @@ const HRManager = () => {
             </div>
           )} */}
      {/* </div> */}
-     <div style={{ maxHeight: '70vh', overflowY: 'auto' }}>
+     <div style={{ maxHeight: '72vh', overflowY: 'auto' }}>
   <Table>
     <TableHeader>
-      <TableRow>
+      <TableRow style={themestate?{color:'white',borderBottomColor:'#383838'}:{}}>
         <TableHeaderCell></TableHeaderCell>
         <TableHeaderCell style={{ fontWeight: 'bold' }}>Emp ID</TableHeaderCell>
         <TableHeaderCell style={{ fontWeight: 'bold' }}>Name</TableHeaderCell>
@@ -343,17 +548,17 @@ const HRManager = () => {
     </TableHeader>
     <TableBody>
       {filteredData.map((item) => (
-        <TableRow key={item.empid}>
+        <TableRow key={item.empid}
+        onClick={() => handleRowClick(item)} style={themestate?{color:'white', }:{}}  className={themestate?"hovereffect dark":"hovereffect"}>
           <TableSelectionCell
             checked={!!selectedItems[item.empid]}
             onChange={(event) => {
           
-              //  event.stopPropagation(); // Prevents the row click event from being triggered
-               handleSelectionChange(item.empid);
-              //  setOpen(false)
-             }}
-          />
-          <TableCell>{item.empid}</TableCell>
+                //  event.stopPropagation(); // Prevents the row click event from being triggered
+                 handleSelectionChange(item.empid);
+                 setOpen(false)
+               }}  />
+          <TableCell >{item.empid}</TableCell>
           <TableCell>{item.name}</TableCell>
           <TableCell>{item.dept}</TableCell>
           <TableCell>{item.doj}</TableCell>
@@ -370,3 +575,4 @@ const HRManager = () => {
 };
 
 export default HRManager;
+

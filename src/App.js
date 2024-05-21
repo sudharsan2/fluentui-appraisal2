@@ -25,7 +25,7 @@ function App() {
       <Routes>
         <Route path='' element={<Login/>}/>
         {/* <Route path='dashboard'  element={<CustomLayout><Dashboard/></CustomLayout>}/> */}
-        <Route path='dashboard'  element={<CustomLayout><NavDrawerDefault><Dashboard/></NavDrawerDefault></CustomLayout>}/>
+        <Route path='hrdashboard'  element={<CustomLayout><NavDrawerDefault><Dashboard/></NavDrawerDefault></CustomLayout>}/>
         <Route path='hremployee' element={<CustomLayout><NavDrawerDefault><HREmployee/></NavDrawerDefault></CustomLayout>}/>
         <Route path='hrmanager' element={<CustomLayout><NavDrawerDefault><HRManager/></NavDrawerDefault></CustomLayout>}/>
         <Route path='hrreviewer' element={<CustomLayout><NavDrawerDefault><HRReviewer/></NavDrawerDefault></CustomLayout>}/>

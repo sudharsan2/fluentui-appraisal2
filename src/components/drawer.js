@@ -1112,19 +1112,19 @@ const NavDrawerDefault = (props) => {
   const someClickHandler = (nav) => {
     switch (nav) {
         case 'dashboard':
-            navigate("/dashboard");
+            navigate("/HRdashboard");
             break;
         case 'employee':
-            navigate("/employee");
+            navigate("/HRemployee");
             break;
         case 'manager':
-            navigate("/manager");
+            navigate("/HRmanager");
             break;   
         case 'reviewer':
-            navigate("/reviewer");
+            navigate("/HRreviewer");
             break;  
         case 'summary':
-        navigate("/summary");
+        navigate("/HRsummary");
         break;
         default:
             console.error("Unknown navigation target:", nav);

@@ -475,7 +475,7 @@ const HRManager = () => {
         <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleDeleteEmployee}><ArrowDownRegular  className={styles.iconLarge}/>Export</Button> */}
          <SearchBox
               placeholder="Search..."
-            style={ {backgroundColor: themestate ? "rgb(41,41,41)" : "#fff"}}
+            style={ {backgroundColor: themestate ? "rgb(41,41,41)" : ""}}
             className={themestate && "searchboxicon searchboxinputtext searchboxinputplaceholder"}
 
               size='medium'
@@ -484,6 +484,7 @@ const HRManager = () => {
         <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleToggleFilters}><FilterRegular className={styles.iconLarge}/>
           {showFilters ? "Hide Filters" : "Show Filters"}
         </Button>
+
       </div>
       {showFilters && (
         // <Modal header="Filters" onClose={handleFilterToggle}>

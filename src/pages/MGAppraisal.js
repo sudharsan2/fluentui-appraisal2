@@ -325,6 +325,39 @@ const MGAppraisal = () => {
     item.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
+
+  const sortedData = React.useMemo(() => {
+      let sortableData = [...filteredData];
+      if (sortConfig.key) {
+          sortableData.sort((a, b) => {
+              if (a[sortConfig.key] < b[sortConfig.key]) {
+                  return sortConfig.direction === 'asc' ? -1 : 1;
+              }
+              if (a[sortConfig.key] > b[sortConfig.key]) {
+                  return sortConfig.direction === 'asc' ? 1 : -1;
+              }
+              return 0;
+          });
+      }
+      return sortableData;
+  }, [filteredData, sortConfig]);
+
+  const requestSort = (key) => {
+      let direction = 'asc';
+      if (sortConfig.key === key && sortConfig.direction === 'asc') {
+          direction = 'desc';
+      }
+      setSortConfig({ key, direction });
+  };
+
+  const getHeaderStyle = (key) => ({
+      fontWeight: 'bold',
+      cursor: 'pointer',
+      textDecoration: sortConfig.key === key ? 'underline' : 'none',
+  });
+
+
   return (
     <div className={styles.root}>
           <OverlayDrawer
@@ -531,39 +564,42 @@ const MGAppraisal = () => {
      {/* </div> */}
      <div style={{ maxHeight: '72vh', overflowY: 'auto' }}>
   <Table>
-    <TableHeader>
-      <TableRow style={themestate?{color:'white',borderBottomColor:'#383838'}:{}}>
-        <TableHeaderCell></TableHeaderCell>
-        <TableHeaderCell style={{ fontWeight: 'bold' }}>Emp ID</TableHeaderCell>
-        <TableHeaderCell style={{ fontWeight: 'bold' }}>Name</TableHeaderCell>
-        <TableHeaderCell style={{ fontWeight: 'bold' }}>Dept</TableHeaderCell>
-        <TableHeaderCell style={{ fontWeight: 'bold' }}>Date of Joining</TableHeaderCell>
-        <TableHeaderCell style={{ fontWeight: 'bold' }}>Appraisal</TableHeaderCell>
-        <TableHeaderCell style={{ fontWeight: 'bold' }}>Manager</TableHeaderCell>
-      </TableRow>
-    </TableHeader>
-    <TableBody>
-      {filteredData.map((item) => (
-        <TableRow key={item.empid}
-        onClick={() => handleRowClick(item)} style={themestate?{color:'white', }:{}}  className={themestate?"hovereffect dark":"hovereffect"}>
-          <TableSelectionCell
-            checked={!!selectedItems[item.empid]}
-            onChange={(event) => {
-          
-                //  event.stopPropagation(); // Prevents the row click event from being triggered
-                 handleSelectionChange(item.empid);
-                 setOpen(false)
-               }}  />
-          <TableCell >{item.empid}</TableCell>
-          <TableCell>{item.name}</TableCell>
-          <TableCell>{item.dept}</TableCell>
-          <TableCell>{item.doj}</TableCell>
-          <TableCell>{item.appraisal}</TableCell>
-          <TableCell>{item.manager}</TableCell>
-        </TableRow>
-      ))}
-    </TableBody>
-  </Table>
+  <TableHeader>
+                <TableRow style={themestate ? { color: 'white', borderBottomColor: '#383838' } : {}}>
+                    <TableHeaderCell></TableHeaderCell>
+                    <TableHeaderCell style={getHeaderStyle('empid')} onClick={() => requestSort('empid')}>Emp ID</TableHeaderCell>
+                    <TableHeaderCell style={getHeaderStyle('name')} onClick={() => requestSort('name')}>Name</TableHeaderCell>
+                    <TableHeaderCell style={getHeaderStyle('dept')} onClick={() => requestSort('dept')}>Dept</TableHeaderCell>
+                    <TableHeaderCell style={getHeaderStyle('doj')} onClick={() => requestSort('doj')}>Date of Joining</TableHeaderCell>
+                    <TableHeaderCell style={getHeaderStyle('appraisal')} onClick={() => requestSort('appraisal')}>Appraisal</TableHeaderCell>
+                    <TableHeaderCell style={getHeaderStyle('manager')} onClick={() => requestSort('manager')}>Manager</TableHeaderCell>
+                </TableRow>
+            </TableHeader>
+            <TableBody>
+                {sortedData.map((item) => (
+                    <TableRow
+                        key={item.empid}
+                        onClick={() => handleRowClick(item)}
+                        style={themestate ? { color: 'white' } : {}}
+                        className={themestate ? "hovereffect dark" : "hovereffect"}
+                    >
+                        <TableSelectionCell
+                            checked={!!selectedItems[item.empid]}
+                            onChange={(event) => {
+                                event.stopPropagation(); // Prevents the row click event from being triggered
+                                handleSelectionChange(item.empid);
+                            }}
+                        />
+                        <TableCell>{item.empid}</TableCell>
+                        <TableCell>{item.name}</TableCell>
+                        <TableCell>{item.dept}</TableCell>
+                        <TableCell>{item.doj}</TableCell>
+                        <TableCell>{item.appraisal}</TableCell>
+                        <TableCell>{item.manager}</TableCell>
+                    </TableRow>
+                ))}
+            </TableBody>
+        </Table>
 </div>
 
     </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,  } from 'react';
 import {
   Table,
   TableHeader,
@@ -25,7 +25,7 @@ import {
   Link,
 } from '@fluentui/react-components';
 import { AddRegular, EditRegular, PersonDeleteRegular, FilterRegular, Dismiss24Regular, Timer20Regular, Calendar20Regular, ArrowDown16Filled, ShareMultiple24Filled, Add24Filled, ShareIos24Filled } from '@fluentui/react-icons';
-
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles({
   root: {
@@ -716,12 +716,12 @@ const HREmployee = () => {
     <TableHeader>
       <TableRow>
         <TableHeaderCell />
-        <TableHeaderCell {...headerSortProps('empid')}>Emp ID</TableHeaderCell>
-        <TableHeaderCell {...headerSortProps('name')}>Name</TableHeaderCell>
-        <TableHeaderCell {...headerSortProps('dept')}>Dept</TableHeaderCell>
-        <TableHeaderCell {...headerSortProps('doj')}>DOJ</TableHeaderCell>
-        <TableHeaderCell {...headerSortProps('appraisal')}>Appraisal</TableHeaderCell>
-        <TableHeaderCell {...headerSortProps('manager')}>Manager</TableHeaderCell>
+        <TableHeaderCell {...headerSortProps('empid')}style={{ fontWeight: 'bold' }}>Emp ID</TableHeaderCell>
+        <TableHeaderCell {...headerSortProps('name')}style={{ fontWeight: 'bold' }}>Name</TableHeaderCell>
+        <TableHeaderCell {...headerSortProps('dept')}style={{ fontWeight: 'bold' }}>Dept</TableHeaderCell>
+        <TableHeaderCell {...headerSortProps('doj')}style={{ fontWeight: 'bold' }}>DOJ</TableHeaderCell>
+        <TableHeaderCell {...headerSortProps('appraisal')}style={{ fontWeight: 'bold' }}>Appraisal</TableHeaderCell>
+        <TableHeaderCell {...headerSortProps('manager')}style={{ fontWeight: 'bold' }}>Manager</TableHeaderCell>
       </TableRow>
     </TableHeader>
     <TableBody>

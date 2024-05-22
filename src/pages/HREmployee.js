@@ -25,7 +25,7 @@ import {
   Link,
 } from '@fluentui/react-components';
 import { AddRegular, EditRegular, PersonDeleteRegular, FilterRegular, Dismiss24Regular, Timer20Regular, Calendar20Regular, ArrowDown16Filled, ShareMultiple24Filled, Add24Filled, ShareIos24Filled } from '@fluentui/react-icons';
-
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles({
   root: {
@@ -649,7 +649,7 @@ const HREmployee = () => {
       
       {/* <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleAddEmployee}><ArrowClockwiseRegular className={styles.iconLarge}/>Refresh</Button>
         <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleDeleteEmployee}><ArrowDownRegular  className={styles.iconLarge}/>Export</Button> */}
-         <SearchBox
+         {/* <SearchBox
               placeholder="Search..."
               // style={getSearchBoxStyle()}
               // className={themestate && "searchboxicon searchboxinputtext searchboxinputplaceholder"}
@@ -661,7 +661,22 @@ const HREmployee = () => {
         
         <Button style={{border:'1px solid transparent', borderRadius:'0px'}} onClick={handleToggleFilters}><FilterRegular className={styles.iconLarge}/>
           {showFilters ? "Hide Filters" : "Show Filters"}
+        </Button> */}
+
+<SearchBox
+              placeholder="Search..."
+            style={ {backgroundColor: themestate ? "rgb(41,41,41)" : ""}}
+            className={themestate && "searchboxicon searchboxinputtext searchboxinputplaceholder"}
+            onChange={handleSearchChange}
+              value={searchQuery}
+              size='medium'
+              appearance='filled-darker'
+            />
+        <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleToggleFilters}><FilterRegular className={styles.iconLarge}/>
+          {showFilters ? "Hide Filters" : "Show Filters"}
         </Button>
+
+
       </div>
       {showFilters && (
         // <Modal header="Filters" onClose={handleFilterToggle}>
@@ -714,19 +729,19 @@ const HREmployee = () => {
      <div style={{ maxHeight: '72vh', overflowY: 'auto' }}>
   <Table>
     <TableHeader>
-      <TableRow>
+    <TableRow style={themestate?{color:'white',borderBottomColor:'#383838'}:{}}>
         <TableHeaderCell />
-        <TableHeaderCell {...headerSortProps('empid')}>Emp ID</TableHeaderCell>
-        <TableHeaderCell {...headerSortProps('name')}>Name</TableHeaderCell>
-        <TableHeaderCell {...headerSortProps('dept')}>Dept</TableHeaderCell>
-        <TableHeaderCell {...headerSortProps('doj')}>DOJ</TableHeaderCell>
-        <TableHeaderCell {...headerSortProps('appraisal')}>Appraisal</TableHeaderCell>
-        <TableHeaderCell {...headerSortProps('manager')}>Manager</TableHeaderCell>
+        <TableHeaderCell style={{ fontWeight: 'bold' }} {...headerSortProps('empid')}>Emp ID</TableHeaderCell>
+        <TableHeaderCell style={{ fontWeight: 'bold' }} {...headerSortProps('name')}>Name</TableHeaderCell>
+        <TableHeaderCell style={{ fontWeight: 'bold' }} {...headerSortProps('dept')}>Dept</TableHeaderCell>
+        <TableHeaderCell style={{ fontWeight: 'bold' }} {...headerSortProps('doj')}>DOJ</TableHeaderCell>
+        <TableHeaderCell style={{ fontWeight: 'bold' }} {...headerSortProps('appraisal')}>Appraisal</TableHeaderCell>
+        <TableHeaderCell style={{ fontWeight: 'bold' }} {...headerSortProps('manager')}>Manager</TableHeaderCell>
       </TableRow>
     </TableHeader>
     <TableBody>
       {sortedData.map((item) => (
-       <TableRow key={item.empid} onClick={() => handleRowClick(item)} >
+       <TableRow key={item.empid} style={themestate?{color:'white', }:{}}  className={themestate?"hovereffect dark":"hovereffect"} onClick={() => handleRowClick(item)} >
        <TableSelectionCell
          checked={!!selectedItems[item.empid]}
          style={{zIndex:1000}}

@@ -74,6 +74,18 @@
 .searchboxinputplaceholder input::placeholder{
     color: rgb(173,173,173);
 }
+
+.searchboxicon_li span svg path {
+    color: rgb(89, 89, 89); /* Change 'red' to your desired color */
+  }
+ 
+.searchboxinputtext_li input{
+    color: rgb(88, 88, 88);
+}
+
+.searchboxinputplaceholder_li input::placeholder{
+    color: rgb(89, 89, 89);
+}
  
 .menu-item {
    

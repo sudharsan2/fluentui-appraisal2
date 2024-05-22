@@ -1,4 +1,5 @@
 import React,{useState} from "react";
+import {useSelector, useDispatch} from 'react-redux';
 import {
   makeStyles,
   shorthands,
@@ -25,6 +26,8 @@ import {
   Text,
 } from "@fluentui/react-components";
 import {AddRegular, PersonDeleteRegular , EditRegular, SearchRegular, FilterRegular, FilterDismissRegular, FilterAddRegular, ChartMultipleFilled,Dismiss24Regular ,Timer20Regular,Calendar20Regular, ArrowDownRegular, ArrowClockwiseRegular   } from "@fluentui/react-icons"; // Import the icons
+import './page.css';
+
 
 const useStyles = makeStyles({
   root: {
@@ -254,6 +257,9 @@ const MGAppraisal = () => {
   const [searchQuery, setSearchQuery] = React.useState("");
   const [showFilters, setShowFilters] = React.useState(false);
   const [selectedFilters, setSelectedFilters] = React.useState([]);
+  const lighttheme = useSelector((state) => state.theme.light);
+  const darktheme = useSelector((state) => state.theme.dark);
+  const themestate = useSelector((state) => state.theme.theme);
   const newSelectedFilters = [];
   const [open, setOpen] = React.useState(false);
 
@@ -307,6 +313,10 @@ const MGAppraisal = () => {
   const handleFilterToggle = () => {
     setShowFilters((prev) => !prev);
   };
+
+  
+
+
 
   
 
@@ -443,50 +453,69 @@ const MGAppraisal = () => {
         {/* <div style={{position:'fixed', backgroundColor:'white', zIndex:1000, width:'vw'}}> */}
         {/* <div style={{ position: 'fixed', backgroundColor: 'white', zIndex: 1000, width: '100%' }}> */}
  
-        <h2 style={{paddingLeft:''}}>Appraisal</h2>
+        <h2 style={themestate?{color:'white'}:{}}>Appraisal</h2>
       <TabList
-        defaultSelectedValue="tab2"
+        defaultSelectedValue="tab1"
         appearance="subtle"
         onTabSelect={handleTabChange}
+        style={themestate?{color:'white'}:{}}
       >
-        <Tab value="tab1">To Do</Tab>
-        <Tab value="tab2">Waiting for HR</Tab>
-        <Tab value="tab3">Review Pending</Tab>
+        <Tab    className={themestate ? "tab dark" : "tab"} style= {{border:'1px solid transparent'}} value="tab1">To do</Tab>
+        <Tab  className={themestate ? "tab dark" : "tab"} style= {{border:'1px solid transparent'}} value="tab2">Waiting for HR</Tab>
+        <Tab className={themestate ? "tab dark" : "tab"} style= {{border:'1px solid transparent'}} value="tab3">Review pending</Tab>
         {/* <Tab value="tab3">Employee</Tab> */}
         
       </TabList>
       <div className={styles.controls}>
-        <Button style={{border:'1px solid transparent', borderRadius:0}} onClick={handleAddEmployee}><ArrowClockwiseRegular className={styles.iconLarge}/>Refresh</Button>
-        <Button style={{border:'1px solid transparent', borderRadius:0}} onClick={handleDeleteEmployee}><ArrowDownRegular  className={styles.iconLarge}/>Export</Button>
-        {/* <Button style={{border:'1px solid transparent', borderRadius:0}} onClick={handleEditEmployee}><EditRegular className={styles.iconLarge}/>Edit Employee</Button> */}
-        <SearchBox
+      <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleAddEmployee}><ArrowClockwiseRegular className={styles.iconLarge}/>Refresh</Button>
+        <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleDeleteEmployee}><ArrowDownRegular  className={styles.iconLarge}/>Export</Button>
+         <SearchBox
               placeholder="Search..."
-            //   style={getSearchBoxStyle()}
-            //   className={themestate && "searchboxicon searchboxinputtext searchboxinputplaceholder"}
+            style={ {backgroundColor: themestate ? "rgb(41,41,41)" : ""}}
+            className={themestate ?"searchboxicon searchboxinputtext searchboxinputplaceholder":"searchboxicon_li searchboxinputtext_li searchboxinputplaceholder_li"}
+
               size='medium'
               appearance='filled-darker'
             />
-        <Button style={{border:'1px solid transparent', borderRadius:'0px'}} onClick={handleToggleFilters}><FilterRegular className={styles.iconLarge}/>
+        <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleToggleFilters}><FilterRegular className={styles.iconLarge}/>
           {showFilters ? "Hide Filters" : "Show Filters"}
         </Button>
       </div>
       {showFilters && (
         // <Modal header="Filters" onClose={handleFilterToggle}>
-          <div className={styles.filterPanel}>
-            <Checkbox label="Employee Fill" onChange={()=>newSelectedFilters.push('Employee Fill')}/>
-            <Checkbox label="Manager Fill" onChange={()=>newSelectedFilters.push('Employee Fill')}/>
-            <Checkbox label="Reviewer Fill" onChange={()=>newSelectedFilters.push('Employee Fill')}/>
-            <Checkbox label="Revised Fill" onChange={()=>newSelectedFilters.push('Employee Fill')}/>
-            <Checkbox label="Appraisal" onChange={()=>newSelectedFilters.push('Employee Fill')}/>
-            <Checkbox label="Choose Dept" onChange={()=>newSelectedFilters.push('Employee Fill')}/>
-            <Checkbox label="Choose Manager" onChange={()=>newSelectedFilters.push('Employee Fill')}/>
-            <Checkbox label="Choose Reviewer" onChange={()=>newSelectedFilters.push('Employee Fill')}/>
-            <Checkbox label="Date Cap" onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+        <div className={styles.filterPanel}>
+        <div style={{display:'flex'}}>
+        <Checkbox label="Employee Fill" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+             <Checkbox label="Manager Fill" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+            <Checkbox label="Reviewer Fill" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+             <Checkbox label="Revised Fill" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+             <Checkbox label="Appraisal Done" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+             <Checkbox label="Choose Dept" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+             <Checkbox label="Choose Manager" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+             <Checkbox label="Choose Reviewer" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+             <Checkbox label="Date Cap" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+            
+        </div>
+        <div style={{display:'flex'}}>
+        <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}}onClick={handleApplyFilters}> Apply </Button>
+       <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleRemoveFilters}> Remove all</Button>
+   </div>
+        </div>
+//           <div className={styles.filterPanel} >
+//             <Checkbox label="Employee Fill" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+//             <Checkbox label="Manager Fill" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+//             <Checkbox label="Reviewer Fill" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+//             <Checkbox label="Revised Fill" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+//             <Checkbox label="Appraisal" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+//             <Checkbox label="Choose Dept" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+//             <Checkbox label="Choose Manager" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+//             <Checkbox label="Choose Reviewer" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
+//             <Checkbox label="Date Cap" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
             
              
-            <Button style={{border:'1px solid transparent', marginTop:'10px', borderRadius:0}} onClick={handleApplyFilters}> Apply </Button>
-            <Button style={{border:'1px solid transparent', marginTop:'10px', borderRadius:0}} onClick={handleRemoveFilters}> Remove all</Button>
-          </div>
+//             <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}}onClick={handleApplyFilters}> Apply </Button>
+// <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleRemoveFilters}> Remove all</Button>
+//    </div>
         // </Modal>
       )}
       {/* {selectedFilters.length > 0 && (
@@ -500,10 +529,10 @@ const MGAppraisal = () => {
             </div>
           )} */}
      {/* </div> */}
-     <div style={{ maxHeight: '70vh', overflowY: 'auto' }}>
+     <div style={{ maxHeight: '72vh', overflowY: 'auto' }}>
   <Table>
     <TableHeader>
-      <TableRow>
+      <TableRow style={themestate?{color:'white',borderBottomColor:'#383838'}:{}}>
         <TableHeaderCell></TableHeaderCell>
         <TableHeaderCell style={{ fontWeight: 'bold' }}>Emp ID</TableHeaderCell>
         <TableHeaderCell style={{ fontWeight: 'bold' }}>Name</TableHeaderCell>
@@ -516,7 +545,7 @@ const MGAppraisal = () => {
     <TableBody>
       {filteredData.map((item) => (
         <TableRow key={item.empid}
-        onClick={() => handleRowClick(item)}>
+        onClick={() => handleRowClick(item)} style={themestate?{color:'white', }:{}}  className={themestate?"hovereffect dark":"hovereffect"}>
           <TableSelectionCell
             checked={!!selectedItems[item.empid]}
             onChange={(event) => {
@@ -525,7 +554,7 @@ const MGAppraisal = () => {
                  handleSelectionChange(item.empid);
                  setOpen(false)
                }}  />
-          <TableCell>{item.empid}</TableCell>
+          <TableCell >{item.empid}</TableCell>
           <TableCell>{item.name}</TableCell>
           <TableCell>{item.dept}</TableCell>
           <TableCell>{item.doj}</TableCell>

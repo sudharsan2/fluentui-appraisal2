@@ -1,31 +1,31 @@
-import React,{useState} from "react";
+import React, { useState } from 'react';
 import {
-  makeStyles,
-  shorthands,
-  Tab,
-  TabList,
   Table,
-  TableBody,
-  TableCell,
   TableHeader,
   TableHeaderCell,
+  TableBody,
   TableRow,
+  TableCell,
   TableSelectionCell,
+  makeStyles,
+  shorthands,
+  createTableColumn,
+  useTableFeatures,
+  useTableSort,
+} from '@fluentui/react-components';
+import { OverlayDrawer, DrawerHeader, DrawerHeaderTitle, DrawerBody } from '@fluentui/react-drawer';
+import {
   Button,
-  Input,
-  SearchBox,
   Checkbox,
-  Modal,
-  OverlayDrawer,
-  DrawerBody,
-  DrawerHeader,
-  DrawerHeaderTitle,
-  DrawerProps,
-  Avatar,
+  SearchBox,
   Text,
-} from "@fluentui/react-components";
-import {AddRegular, PersonDeleteRegular , EditRegular, SearchRegular, FilterRegular, FilterDismissRegular, FilterAddRegular, ChartMultipleFilled,Dismiss24Regular ,Timer20Regular,Calendar20Regular    } from "@fluentui/react-icons"; // Import the icons
-import zIndex from "@mui/material/styles/zIndex";
+  TabList,
+  Tab,
+  Avatar,
+  Link,
+} from '@fluentui/react-components';
+import { AddRegular, EditRegular, PersonDeleteRegular, FilterRegular, Dismiss24Regular, Timer20Regular, Calendar20Regular, ArrowDown16Filled, ShareMultiple24Filled, Add24Filled, ShareIos24Filled } from '@fluentui/react-icons';
+
 
 const useStyles = makeStyles({
   root: {
@@ -88,6 +88,9 @@ const useStyles = makeStyles({
   },
   editIcon: {
     marginRight: '5px',
+  },
+  uploadIcon: {
+    marginRight: '5px'
   },
 
   filterPanel:{
@@ -255,6 +258,7 @@ const data = {
 const HREmployee = () => {
   const styles = useStyles();
   const [selectedTab, setSelectedTab] = React.useState("tab1");
+  const [selectedTab1, setSelectedTab1] = React.useState("tab1")
   const [selectedItems, setSelectedItems] = React.useState({});
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [searchQuery, setSearchQuery] = React.useState("");
@@ -262,13 +266,21 @@ const HREmployee = () => {
   const [selectedFilters, setSelectedFilters] = React.useState([]);
   const newSelectedFilters = [];
   const [open, setOpen] = React.useState(false);
+  const [sortState, setSortState] = useState({
+    sortDirection: 'ascending',
+    sortColumn: 'empid',
+  });
+
+  const handleTabSelect = (event, data) => {
+    setSelectedTab1(data.value);
+  }
 
   const handleTabChange = (event, data) => {
     setSelectedTab(data.value);
-    setSelectedItems({}); // Reset selection when tab changes
+    setSelectedItems({});
   };
 
-  const handleSelectionChange = (id) => {
+  const handleItemsChange = (id) => {
     setSelectedItems((prev) => ({
       ...prev,
       [id]: !prev[id],
@@ -281,8 +293,9 @@ const HREmployee = () => {
   };
 
   const handleSearchChange = (event) => {
-    setSearchQuery(event.target.value);
+    setSearchQuery(event.target.value || '');
   };
+
 
   const handleToggleFilters = () => {
     setShowFilters(!showFilters);
@@ -297,6 +310,53 @@ const HREmployee = () => {
   const handleApplyFilters = () => {
     setSelectedFilters(newSelectedFilters); // Update selected filters state
   };
+
+  const columns = [
+    createTableColumn({
+      columnId: 'empid',
+      compare: (a, b) => a.empid - b.empid,
+    }),
+    createTableColumn({
+      columnId: 'name',
+      compare: (a, b) => a.name.localeCompare(b.name),
+    }),
+    createTableColumn({
+      columnId: 'dept',
+      compare: (a, b) => a.dept.localeCompare(b.dept),
+    }),
+    createTableColumn({
+      columnId: 'doj',
+      compare: (a, b) => new Date(a.doj).getTime() - new Date(b.doj).getTime(),
+    }),
+    createTableColumn({
+      columnId: 'appraisal',
+      compare: (a, b) => a.appraisal.localeCompare(b.appraisal),
+    }),
+    createTableColumn({
+      columnId: 'manager',
+      compare: (a, b) => a.manager.localeCompare(b.manager),
+    })
+  ];
+
+  const {
+    sort: { getSortDirection, toggleColumnSort },
+  } = useTableFeatures(
+    {
+      columns, 
+      items: data[selectedTab],
+    },
+    [
+      useTableSort({
+        sortState,
+        onSortChange: (e, nextSortState) => setSortState(nextSortState),
+      }),
+    ]
+  );
+
+  const headerSortProps = (columnId) => ({
+    onClick: (e) => toggleColumnSort(e, columnId),
+    sortDirection: getSortDirection(columnId),
+  });
 
   
   const handleAddEmployee = () => {
@@ -314,68 +374,39 @@ const HREmployee = () => {
     setShowFilters((prev) => !prev);
   };
 
-  
 
+  const filteredData = searchQuery
+    ? data[selectedTab].filter((item) =>
+        (item.name && item.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        (item.empid && item.empid.toString().includes(searchQuery)) ||
+        (item.dept && item.dept.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        (item.doj && item.doj.includes(searchQuery)) || 
+        (item.appraisal && item.appraisal.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        (item.manager && item.manager.toLowerCase().includes(searchQuery.toLowerCase()))
+      )
+    :data[selectedTab];
 
-  const filteredData = data[selectedTab].filter((item) =>
-    item.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+    const sortedData = [...filteredData].sort((a, b) => {
+      const aValue = a[sortState.sortColumn];
+      const bValue = b[sortState.sortColumn];
+    
+      // Check if the values are strings and perform locale comparison
+      if (typeof aValue === 'string' && typeof bValue === 'string') {
+        return sortState.sortDirection === 'ascending'
+          ? aValue.localeCompare(bValue)
+          : bValue.localeCompare(aValue);
+      }
+    
+      // If the values are not strings, compare them directly
+      return sortState.sortDirection === 'ascending' ? aValue - bValue : bValue - aValue;
+    });
 
-  return (
-    <div className={styles.root}>
-          <OverlayDrawer
-        size="large"
-        position="end"
-        open={open}
-        onOpenChange={(_, state) => setOpen(state.open)}
-        style={{height:'calc(100vh - 48px)',marginTop:"48px"}}
-      >
-        <DrawerHeader>
-          <DrawerHeaderTitle
-            action={
-              <Button
-                appearance="subtle"
-                aria-label="Close"
-                icon={<Dismiss24Regular />}
-                onClick={() => setOpen(false)}
-              />
-            }
-          >
-             
-          </DrawerHeaderTitle>
-        </DrawerHeader>
-        {open && selectedEmployee && (
-        <DrawerBody>
-        <div>
-          <div style={{marginLeft:"3vw", marginTop:"2vh",display:"flex",width:"100%"}}>
-            <Avatar color="brand" initials="BR" name="brand color avatar" size={96}/>
-            <div style={{display:"flex",marginLeft:"2vw", flexDirection:"column",justifyContent:"center",width:"60%"}}>
-            <Text  size={700} style={{marginBottom:"2vh"}}> {selectedEmployee.name}</Text>
-            <div style={{display:"flex" ,width:"100%",justifyContent: "space-between"}}>
-            <Text  size={400}> {selectedEmployee.empid} </Text>
-            <div style={{display:"flex"}}>
-            <Timer20Regular style={{color:'rgb(1,105,185)'}}/>
-            <Text  size={400} style={{marginLeft:"3px"}}> Yet to fill the employee form</Text>
-            </div>
-            <div style={{display:"flex"}}>
-            <Calendar20Regular style={{color:'rgb(1,105,185)'}}/>
-            <Text  size={400} style={{marginLeft:"3px"}}> 1 May 2024</Text>
-            </div>
-            </div>
-            </div>
-            </div>
-            <TabList
-                defaultSelectedValue="tab2"
-                appearance="subtle"
-                // onTabSelect={handleTabChange}
-                style={{marginLeft:"3vw", marginTop:"3vh"}}
-            >
-                <Tab value="tab1">Employee Info</Tab>
-                <Tab value="tab2">Employee Form</Tab>
-                
-                
-            </TabList>
-            
+    
+ 
+
+  const renderTabContent = () => {
+    if (selectedTab1 === 'tab1') {
+      return (
         <div className={styles.container}>
           <div className={styles.section}>
             <div className={styles.heading}>Name and Emp ID :</div>
@@ -441,6 +472,152 @@ const HREmployee = () => {
             </div>
           </div>
         </div>
+      );
+    } else if (selectedTab1 === 'tab2') {
+      return (
+        <div className={styles.container}>
+          <div className={styles.section}>
+            <div className={styles.heading}>Name and Emp ID :</div>
+            <div>{selectedEmployee.name}</div>
+            <div>{selectedEmployee.empid}</div>
+
+            <div className={styles.gridrow}>
+              <div className={styles.heading}>Email</div>
+              <div>{selectedEmployee.email}</div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.heading}>Current Status</div>
+              <div>{selectedEmployee.status}</div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.heading}>Role</div>
+              <div>{selectedEmployee.role}</div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.heading}>Department</div>
+              <div>{selectedEmployee.dept}</div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.editDetails}>
+                <EditRegular className={styles.editIcon} />
+                <span>Edit Details</span>
+              </div>
+            </div>
+          </div>
+          <div className={styles.section}>
+            <div className={styles.editDetails}>
+              <ArrowDown16Filled style={{color:'rgb(1,105,185)'}}/>
+              <Link style={{marginLeft:"10px"}}>Upload CSV template</Link>
+            </div>
+            <div className={styles.section}>
+              <div className={styles.editDetails}>
+                <ShareMultiple24Filled style={{color:'rgb(1,105,185)'}}/>
+                <Link style={{marginLeft:"10px"}}>Share Form Link</Link>
+              </div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.row}>
+                <div className={styles.heading}>Date of Joining</div>
+                <div>{selectedEmployee.doj}</div>
+              </div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.row}>
+                <div className={styles.heading}>Date of Starting</div>
+                <div>{selectedEmployee.dos}</div>
+              </div>
+            </div>
+            <div className={styles.gridrow}>
+              <div className={styles.row}>
+                <div className={styles.heading}>Appraisal Date</div>
+                <div>{selectedEmployee.appraisal}</div>
+              </div>
+            </div>
+            <div className={styles.gridrow}>
+                    <div className={styles.row}>
+                    <div className={styles.heading}>
+                  <div style={{display:"flex"}}>
+                    <Add24Filled style={{color:'rgb(1,105,185)'}}/>
+                    <Link style={{marginLeft:"10px"}}>Add Reviewer</Link>
+                    </div>
+                  
+                  </div>
+                      <div style={{marginLeft:"10px"}}>{selectedEmployee.totalExperience}</div>
+                    </div>
+                  </div>
+                  <div className={styles.gridrow}>
+                    <div className={styles.row}>
+                    <div className={styles.heading}>
+                  <div style={{display:"flex"}}>
+                    <ShareIos24Filled style={{color:'rgb(1,105,185)'}}/>
+                    <Link style={{marginLeft:"10px"}}>Share to Thangamani</Link>
+                    </div>
+                  
+                  </div>
+                      <div style={{marginLeft:"10px"}}>{selectedEmployee.focusRExperience}</div>
+                    </div>
+                  </div>
+                </div>
+          </div>
+      );
+    }
+  };
+
+  return (
+    <div className={styles.root}>
+          <OverlayDrawer
+        size="large"
+        position="end"
+        open={open}
+        onOpenChange={(_, state) => setOpen(state.open)}
+        style={{height:'calc(100vh - 48px)',marginTop:"48px"}}
+      >
+        <DrawerHeader>
+          <DrawerHeaderTitle
+            action={
+              <Button
+                appearance="subtle"
+                aria-label="Close"
+                icon={<Dismiss24Regular />}
+                onClick={() => setOpen(false)}
+              />
+            }
+          >
+             
+          </DrawerHeaderTitle>
+        </DrawerHeader>
+        {open && selectedEmployee && (
+        <DrawerBody>
+        <div>
+          <div style={{marginLeft:"3vw", marginTop:"2vh",display:"flex",width:"100%"}}>
+            <Avatar color="brand" initials="BR" name="brand color avatar" size={96}/>
+            <div style={{display:"flex",marginLeft:"2vw", flexDirection:"column",justifyContent:"center",width:"60%"}}>
+            <Text  size={700} style={{marginBottom:"2vh"}}> {selectedEmployee.name}</Text>
+            <div style={{display:"flex" ,width:"100%",justifyContent: "space-between"}}>
+            <Text  size={400}> {selectedEmployee.empid} </Text>
+            <div style={{display:"flex"}}>
+            <Timer20Regular style={{color:'rgb(1,105,185)'}}/>
+            <Text  size={400} style={{marginLeft:"3px"}}> Yet to fill the employee form</Text>
+            </div>
+            <div style={{display:"flex"}}>
+            <Calendar20Regular style={{color:'rgb(1,105,185)'}}/>
+            <Text  size={400} style={{marginLeft:"3px"}}> 1 May 2024</Text>
+            </div>
+            </div>
+            </div>
+            </div>
+            <TabList
+                defaultSelectedValue='tab1'
+                appearance="subtle"
+                onTabSelect={handleTabSelect}
+                style={{marginLeft:"3vw", marginTop:"3vh"}}
+            >
+                <Tab value="tab1">Employee Info</Tab>
+                <Tab value="tab2">Employee Form</Tab>
+                
+                
+            </TabList>
+            {renderTabContent()}
      
         </div>
         </DrawerBody>
@@ -451,7 +628,7 @@ const HREmployee = () => {
  
         <h2 style={{paddingLeft:''}}>Employee</h2>
       <TabList
-        defaultSelectedValue="tab2"
+        selectedValue={selectedTab}
         appearance="subtle"
         onTabSelect={handleTabChange}
       >
@@ -467,11 +644,14 @@ const HREmployee = () => {
         <Button style={{border:'1px solid transparent', borderRadius:0}} onClick={handleEditEmployee}><EditRegular className={styles.iconLarge}/>Edit Employee</Button>
         <SearchBox
               placeholder="Search..."
-            //   style={getSearchBoxStyle()}
-            //   className={themestate && "searchboxicon searchboxinputtext searchboxinputplaceholder"}
+              // style={getSearchBoxStyle()}
+              // className={themestate && "searchboxicon searchboxinputtext searchboxinputplaceholder"}
               size='medium'
               appearance='filled-darker'
+              onChange={handleSearchChange}
+              value={searchQuery}
             />
+        
         <Button style={{border:'1px solid transparent', borderRadius:'0px'}} onClick={handleToggleFilters}><FilterRegular className={styles.iconLarge}/>
           {showFilters ? "Hide Filters" : "Show Filters"}
         </Button>
@@ -512,17 +692,17 @@ const HREmployee = () => {
   <Table>
     <TableHeader>
       <TableRow>
-        <TableHeaderCell></TableHeaderCell>
-        <TableHeaderCell style={{ fontWeight: 'bold' }}>Emp ID</TableHeaderCell>
-        <TableHeaderCell style={{ fontWeight: 'bold' }}>Name</TableHeaderCell>
-        <TableHeaderCell style={{ fontWeight: 'bold' }}>Dept</TableHeaderCell>
-        <TableHeaderCell style={{ fontWeight: 'bold' }}>Date of Joining</TableHeaderCell>
-        <TableHeaderCell style={{ fontWeight: 'bold' }}>Appraisal</TableHeaderCell>
-        <TableHeaderCell style={{ fontWeight: 'bold' }}>Manager</TableHeaderCell>
+        <TableHeaderCell />
+        <TableHeaderCell {...headerSortProps('empid')}>Emp ID</TableHeaderCell>
+        <TableHeaderCell {...headerSortProps('name')}>Name</TableHeaderCell>
+        <TableHeaderCell {...headerSortProps('dept')}>Dept</TableHeaderCell>
+        <TableHeaderCell {...headerSortProps('doj')}>DOJ</TableHeaderCell>
+        <TableHeaderCell {...headerSortProps('appraisal')}>Appraisal</TableHeaderCell>
+        <TableHeaderCell {...headerSortProps('manager')}>Manager</TableHeaderCell>
       </TableRow>
     </TableHeader>
     <TableBody>
-      {filteredData.map((item) => (
+      {sortedData.map((item) => (
        <TableRow key={item.empid} onClick={() => handleRowClick(item)} >
        <TableSelectionCell
          checked={!!selectedItems[item.empid]}
@@ -530,7 +710,7 @@ const HREmployee = () => {
          onChange={(event) => {
           
           //  event.stopPropagation(); // Prevents the row click event from being triggered
-           handleSelectionChange(item.empid);
+           handleItemsChange(item.empid);
            setOpen(false)
          }}
          

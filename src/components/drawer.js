@@ -1114,16 +1114,16 @@ const NavDrawerDefault = (props) => {
             navigate("/HRdashboard");
             break;
         case 'employee':
-            navigate("/employee");
+            navigate("/hremployee");
             break;
         case 'manager':
-            navigate("/manager");
+            navigate("/hrmanager");
             break;   
         case 'reviewer':
-            navigate("/reviewer");
+            navigate("/hrreviewer");
             break;  
         case 'summary':
-        navigate("/summary");
+        navigate("/hrsummary");
         break;
         default:
             console.error("Unknown navigation target:", nav);

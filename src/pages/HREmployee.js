@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 import {
   Table,
   TableHeader,
@@ -12,6 +13,9 @@ import {
   createTableColumn,
   useTableFeatures,
   useTableSort,
+  Avatar,
+  TabList,
+  Tab
 } from '@fluentui/react-components';
 import { OverlayDrawer, DrawerHeader, DrawerHeaderTitle, DrawerBody } from '@fluentui/react-drawer';
 import {
@@ -256,7 +260,7 @@ const data = {
 const HREmployee = () => {
   const styles = useStyles();
   const [selectedTab, setSelectedTab] = React.useState("tab1");
-  const [selectedTab1, setSelectedTab1] = React.useState("tab1")
+  // const [selectedTab1, setSelectedTab1] = React.useState("tab1")
   const [selectedItems, setSelectedItems] = React.useState({});
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [searchQuery, setSearchQuery] = React.useState("");
@@ -268,6 +272,11 @@ const HREmployee = () => {
   const newSelectedFilters = [];
   const [open, setOpen] = React.useState(false);
   const [selectedTab1, setSelectedTab1] = React.useState('tab1');
+
+  const [sortState, setSortState] = useState({
+    sortDirection: 'ascending',
+    sortColumn: 'empid',
+  });
 
   const handleTabSelect = (event,data) => {
     setSelectedTab1(data.value);

@@ -407,164 +407,164 @@ const HREmployee = () => {
     
  
 
-  const renderTabContent = () => {
-    if (selectedTab1 === 'tab1') {
-      return (
-        <div className={styles.container}>
-          <div className={styles.section}>
-            <div className={styles.heading}>Name and Emp ID :</div>
-            <div>{selectedEmployee.name}</div>
-            <div>{selectedEmployee.empid}</div>
+  // const renderTabContent = () => {
+  //   if (selectedTab1 === 'tab1') {
+  //     return (
+  //       <div className={styles.container}>
+  //         <div className={styles.section}>
+  //           <div className={styles.heading}>Name and Emp ID :</div>
+  //           <div>{selectedEmployee.name}</div>
+  //           <div>{selectedEmployee.empid}</div>
 
-            <div className={styles.gridrow}>
-              <div className={styles.heading}>Email</div>
-              <div>{selectedEmployee.email}</div>
-            </div>
-            <div className={styles.gridrow}>
-              <div className={styles.heading}>Current Status</div>
-              <div>{selectedEmployee.status}</div>
-            </div>
-            <div className={styles.gridrow}>
-              <div className={styles.heading}>Role</div>
-              <div>{selectedEmployee.role}</div>
-            </div>
-            <div className={styles.gridrow}>
-              <div className={styles.heading}>Department</div>
-              <div>{selectedEmployee.dept}</div>
-            </div>
-            <div className={styles.gridrow}>
-              <div className={styles.editDetails}>
-                <EditRegular className={styles.editIcon} />
-                <span>Edit Details</span>
-              </div>
-            </div>
-          </div>
-          <div className={styles.section}>
-            <div className={styles.heading}>Manager Info</div>
-            <div>{selectedEmployee.manager}</div>
-            <div>{selectedEmployee.managerId}</div>
-            <div className={styles.gridrow}>
-              <div className={styles.row}>
-                <div className={styles.heading}>Date of Joining</div>
-                <div>{selectedEmployee.doj}</div>
-              </div>
-            </div>
-            <div className={styles.gridrow}>
-              <div className={styles.row}>
-                <div className={styles.heading}>Date of Starting</div>
-                <div>{selectedEmployee.dos}</div>
-              </div>
-            </div>
-            <div className={styles.gridrow}>
-              <div className={styles.row}>
-                <div className={styles.heading}>Appraisal Date</div>
-                <div>{selectedEmployee.appraisal}</div>
-              </div>
-            </div>
-            <div className={styles.gridrow}>
-              <div className={styles.row}>
-                <div className={styles.heading}>Total Experience</div>
-                <div>{selectedEmployee.totalExperience}</div>
-              </div>
-            </div>
-            <div className={styles.gridrow}>
-              <div className={styles.row}>
-                <div className={styles.heading}>Experience in FocusR</div>
-                <div>{selectedEmployee.focusRExperience}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      );
-    } else if (selectedTab1 === 'tab2') {
-      return (
-        <div className={styles.container}>
-          <div className={styles.section}>
-            <div className={styles.heading}>Name and Emp ID :</div>
-            <div>{selectedEmployee.name}</div>
-            <div>{selectedEmployee.empid}</div>
+  //           <div className={styles.gridrow}>
+  //             <div className={styles.heading}>Email</div>
+  //             <div>{selectedEmployee.email}</div>
+  //           </div>
+  //           <div className={styles.gridrow}>
+  //             <div className={styles.heading}>Current Status</div>
+  //             <div>{selectedEmployee.status}</div>
+  //           </div>
+  //           <div className={styles.gridrow}>
+  //             <div className={styles.heading}>Role</div>
+  //             <div>{selectedEmployee.role}</div>
+  //           </div>
+  //           <div className={styles.gridrow}>
+  //             <div className={styles.heading}>Department</div>
+  //             <div>{selectedEmployee.dept}</div>
+  //           </div>
+  //           <div className={styles.gridrow}>
+  //             <div className={styles.editDetails}>
+  //               <EditRegular className={styles.editIcon} />
+  //               <span>Edit Details</span>
+  //             </div>
+  //           </div>
+  //         </div>
+  //         <div className={styles.section}>
+  //           <div className={styles.heading}>Manager Info</div>
+  //           <div>{selectedEmployee.manager}</div>
+  //           <div>{selectedEmployee.managerId}</div>
+  //           <div className={styles.gridrow}>
+  //             <div className={styles.row}>
+  //               <div className={styles.heading}>Date of Joining</div>
+  //               <div>{selectedEmployee.doj}</div>
+  //             </div>
+  //           </div>
+  //           <div className={styles.gridrow}>
+  //             <div className={styles.row}>
+  //               <div className={styles.heading}>Date of Starting</div>
+  //               <div>{selectedEmployee.dos}</div>
+  //             </div>
+  //           </div>
+  //           <div className={styles.gridrow}>
+  //             <div className={styles.row}>
+  //               <div className={styles.heading}>Appraisal Date</div>
+  //               <div>{selectedEmployee.appraisal}</div>
+  //             </div>
+  //           </div>
+  //           <div className={styles.gridrow}>
+  //             <div className={styles.row}>
+  //               <div className={styles.heading}>Total Experience</div>
+  //               <div>{selectedEmployee.totalExperience}</div>
+  //             </div>
+  //           </div>
+  //           <div className={styles.gridrow}>
+  //             <div className={styles.row}>
+  //               <div className={styles.heading}>Experience in FocusR</div>
+  //               <div>{selectedEmployee.focusRExperience}</div>
+  //             </div>
+  //           </div>
+  //         </div>
+  //       </div>
+  //     );
+  //   } else if (selectedTab1 === 'tab2') {
+  //     return (
+  //       <div className={styles.container}>
+  //         <div className={styles.section}>
+  //           <div className={styles.heading}>Name and Emp ID :</div>
+  //           <div>{selectedEmployee.name}</div>
+  //           <div>{selectedEmployee.empid}</div>
 
-            <div className={styles.gridrow}>
-              <div className={styles.heading}>Email</div>
-              <div>{selectedEmployee.email}</div>
-            </div>
-            <div className={styles.gridrow}>
-              <div className={styles.heading}>Current Status</div>
-              <div>{selectedEmployee.status}</div>
-            </div>
-            <div className={styles.gridrow}>
-              <div className={styles.heading}>Role</div>
-              <div>{selectedEmployee.role}</div>
-            </div>
-            <div className={styles.gridrow}>
-              <div className={styles.heading}>Department</div>
-              <div>{selectedEmployee.dept}</div>
-            </div>
-            <div className={styles.gridrow}>
-              <div className={styles.editDetails}>
-                <EditRegular className={styles.editIcon} />
-                <span>Edit Details</span>
-              </div>
-            </div>
-          </div>
-          <div className={styles.section}>
-            <div className={styles.editDetails}>
-              <ArrowDown16Filled style={{color:'rgb(1,105,185)'}}/>
-              <Link style={{marginLeft:"10px"}}>Upload CSV template</Link>
-            </div>
-            <div className={styles.section}>
-              <div className={styles.editDetails}>
-                <ShareMultiple24Filled style={{color:'rgb(1,105,185)'}}/>
-                <Link style={{marginLeft:"10px"}}>Share Form Link</Link>
-              </div>
-            </div>
-            <div className={styles.gridrow}>
-              <div className={styles.row}>
-                <div className={styles.heading}>Date of Joining</div>
-                <div>{selectedEmployee.doj}</div>
-              </div>
-            </div>
-            <div className={styles.gridrow}>
-              <div className={styles.row}>
-                <div className={styles.heading}>Date of Starting</div>
-                <div>{selectedEmployee.dos}</div>
-              </div>
-            </div>
-            <div className={styles.gridrow}>
-              <div className={styles.row}>
-                <div className={styles.heading}>Appraisal Date</div>
-                <div>{selectedEmployee.appraisal}</div>
-              </div>
-            </div>
-            <div className={styles.gridrow}>
-                    <div className={styles.row}>
-                    <div className={styles.heading}>
-                  <div style={{display:"flex"}}>
-                    <Add24Filled style={{color:'rgb(1,105,185)'}}/>
-                    <Link style={{marginLeft:"10px"}}>Add Reviewer</Link>
-                    </div>
+  //           <div className={styles.gridrow}>
+  //             <div className={styles.heading}>Email</div>
+  //             <div>{selectedEmployee.email}</div>
+  //           </div>
+  //           <div className={styles.gridrow}>
+  //             <div className={styles.heading}>Current Status</div>
+  //             <div>{selectedEmployee.status}</div>
+  //           </div>
+  //           <div className={styles.gridrow}>
+  //             <div className={styles.heading}>Role</div>
+  //             <div>{selectedEmployee.role}</div>
+  //           </div>
+  //           <div className={styles.gridrow}>
+  //             <div className={styles.heading}>Department</div>
+  //             <div>{selectedEmployee.dept}</div>
+  //           </div>
+  //           <div className={styles.gridrow}>
+  //             <div className={styles.editDetails}>
+  //               <EditRegular className={styles.editIcon} />
+  //               <span>Edit Details</span>
+  //             </div>
+  //           </div>
+  //         </div>
+  //         <div className={styles.section}>
+  //           <div className={styles.editDetails}>
+  //             <ArrowDown16Filled style={{color:'rgb(1,105,185)'}}/>
+  //             <Link style={{marginLeft:"10px"}}>Upload CSV template</Link>
+  //           </div>
+  //           <div className={styles.section}>
+  //             <div className={styles.editDetails}>
+  //               <ShareMultiple24Filled style={{color:'rgb(1,105,185)'}}/>
+  //               <Link style={{marginLeft:"10px"}}>Share Form Link</Link>
+  //             </div>
+  //           </div>
+  //           <div className={styles.gridrow}>
+  //             <div className={styles.row}>
+  //               <div className={styles.heading}>Date of Joining</div>
+  //               <div>{selectedEmployee.doj}</div>
+  //             </div>
+  //           </div>
+  //           <div className={styles.gridrow}>
+  //             <div className={styles.row}>
+  //               <div className={styles.heading}>Date of Starting</div>
+  //               <div>{selectedEmployee.dos}</div>
+  //             </div>
+  //           </div>
+  //           <div className={styles.gridrow}>
+  //             <div className={styles.row}>
+  //               <div className={styles.heading}>Appraisal Date</div>
+  //               <div>{selectedEmployee.appraisal}</div>
+  //             </div>
+  //           </div>
+  //           <div className={styles.gridrow}>
+  //                   <div className={styles.row}>
+  //                   <div className={styles.heading}>
+  //                 <div style={{display:"flex"}}>
+  //                   <Add24Filled style={{color:'rgb(1,105,185)'}}/>
+  //                   <Link style={{marginLeft:"10px"}}>Add Reviewer</Link>
+  //                   </div>
                   
-                  </div>
-                      <div style={{marginLeft:"10px"}}>{selectedEmployee.totalExperience}</div>
-                    </div>
-                  </div>
-                  <div className={styles.gridrow}>
-                    <div className={styles.row}>
-                    <div className={styles.heading}>
-                  <div style={{display:"flex"}}>
-                    <ShareIos24Filled style={{color:'rgb(1,105,185)'}}/>
-                    <Link style={{marginLeft:"10px"}}>Share to Thangamani</Link>
-                    </div>
+  //                 </div>
+  //                     <div style={{marginLeft:"10px"}}>{selectedEmployee.totalExperience}</div>
+  //                   </div>
+  //                 </div>
+  //                 <div className={styles.gridrow}>
+  //                   <div className={styles.row}>
+  //                   <div className={styles.heading}>
+  //                 <div style={{display:"flex"}}>
+  //                   <ShareIos24Filled style={{color:'rgb(1,105,185)'}}/>
+  //                   <Link style={{marginLeft:"10px"}}>Share to Thangamani</Link>
+  //                   </div>
                   
-                  </div>
-                      <div style={{marginLeft:"10px"}}>{selectedEmployee.focusRExperience}</div>
-                    </div>
-                  </div>
-                </div>
-          </div>
-      );
-    }
-  };
+  //                 </div>
+  //                     <div style={{marginLeft:"10px"}}>{selectedEmployee.focusRExperience}</div>
+  //                   </div>
+  //                 </div>
+  //               </div>
+  //         </div>
+  //     );
+  //   }
+  // };
 
   return (
     <div className={styles.root}>
@@ -620,7 +620,168 @@ const HREmployee = () => {
                 
                 
             </TabList>
-            {renderTabContent()}
+            {selectedTab1 === 'tab1' && (
+        <div className={styles.container}>
+        
+              
+                <div className={styles.section}>
+                  <div className={styles.heading}>Name and Emp ID :</div>
+                  <div>{selectedEmployee.name}</div>
+                  <div>{selectedEmployee.empid}</div>
+ 
+                  <div className={styles.gridrow}>
+                    <div className={styles.heading}>Email</div>
+                    <div>{selectedEmployee.email}</div>
+                  </div>
+                  <div className={styles.gridrow}>
+                    <div className={styles.heading}>Current Status</div>
+                    <div>{selectedEmployee.status}</div>
+                  </div>
+                  <div className={styles.gridrow}>
+                    <div className={styles.heading}>Role</div>
+                    <div>{selectedEmployee.role}</div>
+                  </div>
+                  <div className={styles.gridrow}>
+                    <div className={styles.heading}>Department</div>
+                    <div>{selectedEmployee.dept}</div>
+                  </div>
+                  <div className={styles.gridrow}>
+                    <div className={styles.editDetails}>
+                      <EditRegular className={styles.editIcon} />
+                      <span>Edit Details</span>
+                    </div>
+                  </div>
+                </div>
+                <div className={styles.section}>
+                  <div className={styles.heading}>Manager Info</div>
+                  <div>{selectedEmployee.manager}</div>
+                  <div>{selectedEmployee.managerId}</div>
+                  <div className={styles.gridrow}>
+                    <div className={styles.row}>
+                      <div className={styles.heading}>Date of Joining</div>
+                      <div style={{marginLeft:"10px"}}>{selectedEmployee.doj}</div>
+                    </div>
+                  </div>
+                  <div className={styles.gridrow}>
+                    <div className={styles.row}>
+                      <div className={styles.heading}>Date of Starting</div>
+                      <div style={{marginLeft:"10px"}}>{selectedEmployee.dos}</div>
+                    </div>
+                  </div>
+                  <div className={styles.gridrow}>
+                    <div className={styles.row}>
+                      <div className={styles.heading}>Appraisal Date</div>
+                      <div style={{marginLeft:"10px"}}>{selectedEmployee.appraisal}</div>
+                    </div>
+                  </div>
+                  <div className={styles.gridrow}>
+                    <div className={styles.row}>
+                      <div className={styles.heading}>Total Experience</div>
+                      <div style={{marginLeft:"10px"}}>{selectedEmployee.totalExperience}</div>
+                    </div>
+                  </div>
+                  <div className={styles.gridrow}>
+                    <div className={styles.row}>
+                      <div className={styles.heading}>Experience in FocusR</div>
+                      <div style={{marginLeft:"10px"}}>{selectedEmployee.focusRExperience}</div>
+                    </div>
+                  </div>
+                </div>
+              
+            
+          
+        </div>
+        )}
+ 
+        {selectedTab1 === 'tab2' && (
+                <div className={styles.container}>
+        
+              
+                <div className={styles.section}>
+                  <div className={styles.heading}>Name and Emp ID :</div>
+                  <div>{selectedEmployee.name}</div>
+                  <div>{selectedEmployee.empid}</div>
+ 
+                  <div className={styles.gridrow}>
+                    <div className={styles.heading}>Email</div>
+                    <div>{selectedEmployee.email}</div>
+                  </div>
+                  <div className={styles.gridrow}>
+                    <div className={styles.heading}>Current Status</div>
+                    <div>{selectedEmployee.status}</div>
+                  </div>
+                  <div className={styles.gridrow}>
+                    <div className={styles.heading}>Role</div>
+                    <div>{selectedEmployee.role}</div>
+                  </div>
+                  <div className={styles.gridrow}>
+                    <div className={styles.heading}>Department</div>
+                    <div>{selectedEmployee.dept}</div>
+                  </div>
+                  <div className={styles.gridrow}>
+                    <div className={styles.editDetails}>
+                      <EditRegular className={styles.editIcon} />
+                      <span>Edit Details</span>
+                    </div>
+                  </div>
+                </div>
+                <div className={styles.section}>
+                  <div className={styles.heading}>
+                  <div style={{display:"flex"}}>
+                    <ShareMultiple24Filled style={{color:'rgb(1,105,185)'}}/>
+                    <Link style={{marginLeft:"10px"}}>Share Form Link</Link>
+                    </div>
+                  
+                  </div>
+                  
+                  <div className={styles.gridrow}>
+                    <div className={styles.row}>
+                      <div className={styles.heading}>Date of Joining</div>
+                      <div style={{marginLeft:"10px"}}>{selectedEmployee.doj}</div>
+                    </div>
+                  </div>
+                  <div className={styles.gridrow}>
+                    <div className={styles.row}>
+                      <div className={styles.heading}>Date of Starting</div>
+                      <div style={{marginLeft:"10px"}}>{selectedEmployee.dos}</div>
+                    </div>
+                  </div>
+                  <div className={styles.gridrow}>
+                    <div className={styles.row}>
+                      <div className={styles.heading}>Appraisal Date</div>
+                      <div style={{marginLeft:"10px"}}>{selectedEmployee.appraisal}</div>
+                    </div>
+                  </div>
+                  <div className={styles.gridrow}>
+                    <div className={styles.row}>
+                    <div className={styles.heading}>
+                  <div style={{display:"flex"}}>
+                    <Add24Filled style={{color:'rgb(1,105,185)'}}/>
+                    <Link style={{marginLeft:"10px"}}>Add Reviewer</Link>
+                    </div>
+                  
+                  </div>
+                      <div style={{marginLeft:"10px"}}>{selectedEmployee.totalExperience}</div>
+                    </div>
+                  </div>
+                  <div className={styles.gridrow}>
+                    <div className={styles.row}>
+                    <div className={styles.heading}>
+                  <div style={{display:"flex"}}>
+                    <ShareIos24Filled style={{color:'rgb(1,105,185)'}}/>
+                    <Link style={{marginLeft:"10px"}}>Share to Thangamani</Link>
+                    </div>
+                  
+                  </div>
+                      <div style={{marginLeft:"10px"}}>{selectedEmployee.focusRExperience}</div>
+                    </div>
+                  </div>
+                </div>
+              
+            
+          
+        </div>
+        )}
      
         </div>
         </DrawerBody>
@@ -731,12 +892,12 @@ const HREmployee = () => {
     <TableHeader>
     <TableRow style={themestate?{color:'white',borderBottomColor:'#383838'}:{}}>
         <TableHeaderCell />
-        <TableHeaderCell style={{ fontWeight: 'bold' }} {...headerSortProps('empid')}>Emp ID</TableHeaderCell>
-        <TableHeaderCell style={{ fontWeight: 'bold' }} {...headerSortProps('name')}>Name</TableHeaderCell>
-        <TableHeaderCell style={{ fontWeight: 'bold' }} {...headerSortProps('dept')}>Dept</TableHeaderCell>
-        <TableHeaderCell style={{ fontWeight: 'bold' }} {...headerSortProps('doj')}>DOJ</TableHeaderCell>
-        <TableHeaderCell style={{ fontWeight: 'bold' }} {...headerSortProps('appraisal')}>Appraisal</TableHeaderCell>
-        <TableHeaderCell style={{ fontWeight: 'bold' }} {...headerSortProps('manager')}>Manager</TableHeaderCell>
+        <TableHeaderCell style={{ fontWeight: 'bold', cursor:'pointer' }} {...headerSortProps('empid')}>Emp ID</TableHeaderCell>
+        <TableHeaderCell style={{ fontWeight: 'bold' , cursor:'pointer'}} {...headerSortProps('name')}>Name</TableHeaderCell>
+        <TableHeaderCell style={{ fontWeight: 'bold', cursor:'pointer' }} {...headerSortProps('dept')}>Dept</TableHeaderCell>
+        <TableHeaderCell style={{ fontWeight: 'bold', cursor:'pointer' }} {...headerSortProps('doj')}>DOJ</TableHeaderCell>
+        <TableHeaderCell style={{ fontWeight: 'bold', cursor:'pointer' }} {...headerSortProps('appraisal')}>Appraisal</TableHeaderCell>
+        <TableHeaderCell style={{ fontWeight: 'bold', cursor:'pointer' }} {...headerSortProps('manager')}>Manager</TableHeaderCell>
       </TableRow>
     </TableHeader>
     <TableBody>

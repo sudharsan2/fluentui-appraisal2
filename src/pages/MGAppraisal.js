@@ -24,6 +24,9 @@ import {
   DrawerProps,
   Avatar,
   Text,
+  createTableColumn,
+  useTableFeatures,
+  useTableSort,
 } from "@fluentui/react-components";
 import {AddRegular, PersonDeleteRegular , EditRegular, SearchRegular, FilterRegular, FilterDismissRegular, FilterAddRegular, ChartMultipleFilled,Dismiss24Regular ,Timer20Regular,Calendar20Regular, ArrowDownRegular, ArrowClockwiseRegular   } from "@fluentui/react-icons"; // Import the icons
 import './page.css';
@@ -253,7 +256,7 @@ const MGAppraisal = () => {
   const styles = useStyles();
   const [selectedTab, setSelectedTab] = React.useState("tab1");
   const [selectedItems, setSelectedItems] = React.useState({});
-  const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [selectedEmployee, setSelectedEmployee] = React.useState(null);
   const [searchQuery, setSearchQuery] = React.useState("");
   const [showFilters, setShowFilters] = React.useState(false);
   const [selectedFilters, setSelectedFilters] = React.useState([]);
@@ -262,28 +265,41 @@ const MGAppraisal = () => {
   const themestate = useSelector((state) => state.theme.theme);
   const newSelectedFilters = [];
   const [open, setOpen] = React.useState(false);
-
+  const [selectedTab1, setSelectedTab1] = React.useState('tab1');
+  const [sortState, setSortState] = useState({
+    sortDirection: 'ascending',
+    sortColumn: 'empid',
+  });
+ 
+  const handleTabSelect = (event,data) => {
+    setSelectedTab1(data.value);
+  };
+ 
+  const handleTabSelect1 = (value) => {
+    setSelectedTab1(value);
+  };
+ 
   const handleTabChange = (event, data) => {
     setSelectedTab(data.value);
     setSelectedItems({}); // Reset selection when tab changes
   };
-
+ 
   const handleSelectionChange = (id) => {
     setSelectedItems((prev) => ({
       ...prev,
       [id]: !prev[id],
     }));
   };
-
-  const handleRowClick = (employee) => {
-    setSelectedEmployee(employee);
-    setOpen(true);
-  };
-
+ 
+  // const handleRowClick = (employee) => {
+  //   setSelectedEmployee(employee);
+  //   setOpen(true);
+  // };
+ 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
-
+ 
   const handleToggleFilters = () => {
     setShowFilters(!showFilters);
   };
@@ -293,20 +309,25 @@ const MGAppraisal = () => {
     // Handle resetting other filter options as needed
   };
   
-
+ 
   const handleApplyFilters = () => {
     setSelectedFilters(newSelectedFilters); // Update selected filters state
   };
-
+ 
   
   const handleAddEmployee = () => {
     alert("Add Employee functionality to be implemented");
   };
-
+ 
+  const handleRowClick = (employee) => {
+    setSelectedEmployee(employee);
+    setOpen(true);
+  };
+ 
   const handleDeleteEmployee = () => {
     alert("Delete Employee functionality to be implemented");
   };
-
+ 
   const handleEditEmployee = () => {
     alert("Edit Employee functionality to be implemented");
   };
@@ -314,50 +335,90 @@ const MGAppraisal = () => {
     setShowFilters((prev) => !prev);
   };
 
-  
 
 
+  const handleItemsChange = (id) => {
+    setSelectedItems((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
+ 
+  const columns = [
+    createTableColumn({
+      columnId: 'empid',
+      compare: (a, b) => a.empid - b.empid,
+    }),
+    createTableColumn({
+      columnId: 'name',
+      compare: (a, b) => a.name.localeCompare(b.name),
+    }),
+    createTableColumn({
+      columnId: 'dept',
+      compare: (a, b) => a.dept.localeCompare(b.dept),
+    }),
+    createTableColumn({
+      columnId: 'doj',
+      compare: (a, b) => new Date(a.doj).getTime() - new Date(b.doj).getTime(),
+    }),
+    createTableColumn({
+      columnId: 'appraisal',
+      compare: (a, b) => a.appraisal.localeCompare(b.appraisal),
+    }),
+    createTableColumn({
+      columnId: 'manager',
+      compare: (a, b) => a.manager.localeCompare(b.manager),
+    })
+  ];
 
-  
-
-
-  const filteredData = data[selectedTab].filter((item) =>
-    item.name.toLowerCase().includes(searchQuery.toLowerCase())
+  const {
+    sort: { getSortDirection, toggleColumnSort },
+  } = useTableFeatures(
+    {
+      columns, 
+      items: data[selectedTab],
+    },
+    [
+      useTableSort({
+        sortState,
+        onSortChange: (e, nextSortState) => setSortState(nextSortState),
+      }),
+    ]
   );
 
-  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
-
-  const sortedData = React.useMemo(() => {
-      let sortableData = [...filteredData];
-      if (sortConfig.key) {
-          sortableData.sort((a, b) => {
-              if (a[sortConfig.key] < b[sortConfig.key]) {
-                  return sortConfig.direction === 'asc' ? -1 : 1;
-              }
-              if (a[sortConfig.key] > b[sortConfig.key]) {
-                  return sortConfig.direction === 'asc' ? 1 : -1;
-              }
-              return 0;
-          });
-      }
-      return sortableData;
-  }, [filteredData, sortConfig]);
-
-  const requestSort = (key) => {
-      let direction = 'asc';
-      if (sortConfig.key === key && sortConfig.direction === 'asc') {
-          direction = 'desc';
-      }
-      setSortConfig({ key, direction });
-  };
-
-  const getHeaderStyle = (key) => ({
-      fontWeight: 'bold',
-      cursor: 'pointer',
-      textDecoration: sortConfig.key === key ? 'underline' : 'none',
+  const headerSortProps = (columnId) => ({
+    onClick: (e) => toggleColumnSort(e, columnId),
+    sortDirection: getSortDirection(columnId),
   });
 
 
+  const filteredData = searchQuery
+  ? data[selectedTab].filter((item) =>
+      (item.name && item.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (item.empid && item.empid.toString().includes(searchQuery)) ||
+      (item.dept && item.dept.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (item.doj && item.doj.includes(searchQuery)) || 
+      (item.appraisal && item.appraisal.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (item.manager && item.manager.toLowerCase().includes(searchQuery.toLowerCase()))
+    )
+  :data[selectedTab];
+
+  const sortedData = [...filteredData].sort((a, b) => {
+    const aValue = a[sortState.sortColumn];
+    const bValue = b[sortState.sortColumn];
+  
+    // Check if the values are strings and perform locale comparison
+    if (typeof aValue === 'string' && typeof bValue === 'string') {
+      return sortState.sortDirection === 'ascending'
+        ? aValue.localeCompare(bValue)
+        : bValue.localeCompare(aValue);
+    }
+  
+    // If the values are not strings, compare them directly
+    return sortState.sortDirection === 'ascending' ? aValue - bValue : bValue - aValue;
+  });
+
+ 
   return (
     <div className={styles.root}>
           <OverlayDrawer
@@ -502,14 +563,16 @@ const MGAppraisal = () => {
       <div className={styles.controls}>
       <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleAddEmployee}><ArrowClockwiseRegular className={styles.iconLarge}/>Refresh</Button>
         <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleDeleteEmployee}><ArrowDownRegular  className={styles.iconLarge}/>Export</Button>
-         <SearchBox
+        <SearchBox
               placeholder="Search..."
             style={ {backgroundColor: themestate ? "rgb(41,41,41)" : ""}}
-            className={themestate ?"searchboxicon searchboxinputtext searchboxinputplaceholder":"searchboxicon_li searchboxinputtext_li searchboxinputplaceholder_li"}
-
+            className={themestate && "searchboxicon searchboxinputtext searchboxinputplaceholder"}
+            onChange={handleSearchChange}
+              value={searchQuery}
               size='medium'
               appearance='filled-darker'
             />
+
         <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleToggleFilters}><FilterRegular className={styles.iconLarge}/>
           {showFilters ? "Hide Filters" : "Show Filters"}
         </Button>
@@ -564,42 +627,41 @@ const MGAppraisal = () => {
      {/* </div> */}
      <div style={{ maxHeight: '72vh', overflowY: 'auto' }}>
   <Table>
-  <TableHeader>
-                <TableRow style={themestate ? { color: 'white', borderBottomColor: '#383838' } : {}}>
-                    <TableHeaderCell></TableHeaderCell>
-                    <TableHeaderCell style={getHeaderStyle('empid')} onClick={() => requestSort('empid')}>Emp ID</TableHeaderCell>
-                    <TableHeaderCell style={getHeaderStyle('name')} onClick={() => requestSort('name')}>Name</TableHeaderCell>
-                    <TableHeaderCell style={getHeaderStyle('dept')} onClick={() => requestSort('dept')}>Dept</TableHeaderCell>
-                    <TableHeaderCell style={getHeaderStyle('doj')} onClick={() => requestSort('doj')}>Date of Joining</TableHeaderCell>
-                    <TableHeaderCell style={getHeaderStyle('appraisal')} onClick={() => requestSort('appraisal')}>Appraisal</TableHeaderCell>
-                    <TableHeaderCell style={getHeaderStyle('manager')} onClick={() => requestSort('manager')}>Manager</TableHeaderCell>
-                </TableRow>
-            </TableHeader>
-            <TableBody>
-                {sortedData.map((item) => (
-                    <TableRow
-                        key={item.empid}
-                        onClick={() => handleRowClick(item)}
-                        style={themestate ? { color: 'white' } : {}}
-                        className={themestate ? "hovereffect dark" : "hovereffect"}
-                    >
-                        <TableSelectionCell
-                            checked={!!selectedItems[item.empid]}
-                            onChange={(event) => {
-                                event.stopPropagation(); // Prevents the row click event from being triggered
-                                handleSelectionChange(item.empid);
-                            }}
-                        />
-                        <TableCell>{item.empid}</TableCell>
-                        <TableCell>{item.name}</TableCell>
-                        <TableCell>{item.dept}</TableCell>
-                        <TableCell>{item.doj}</TableCell>
-                        <TableCell>{item.appraisal}</TableCell>
-                        <TableCell>{item.manager}</TableCell>
-                    </TableRow>
-                ))}
-            </TableBody>
-        </Table>
+    <TableHeader>
+      <TableRow style={themestate?{color:'white',borderBottomColor:'#383838'}:{}}>
+      <TableHeaderCell />
+        <TableHeaderCell style={{ fontWeight: 'bold', cursor:'pointer' }} {...headerSortProps('empid')}>Emp ID</TableHeaderCell>
+        <TableHeaderCell style={{ fontWeight: 'bold' , cursor:'pointer'}} {...headerSortProps('name')}>Name</TableHeaderCell>
+        <TableHeaderCell style={{ fontWeight: 'bold', cursor:'pointer' }} {...headerSortProps('dept')}>Dept</TableHeaderCell>
+        <TableHeaderCell style={{ fontWeight: 'bold', cursor:'pointer' }} {...headerSortProps('doj')}>DOJ</TableHeaderCell>
+        <TableHeaderCell style={{ fontWeight: 'bold', cursor:'pointer' }} {...headerSortProps('appraisal')}>Appraisal</TableHeaderCell>
+        <TableHeaderCell style={{ fontWeight: 'bold', cursor:'pointer' }} {...headerSortProps('manager')}>Manager</TableHeaderCell>
+      </TableRow>
+    </TableHeader>
+    <TableBody>
+    {sortedData.map((item) => (
+       <TableRow key={item.empid} style={themestate?{color:'white', }:{}}  className={themestate?"hovereffect dark":"hovereffect"} onClick={() => handleRowClick(item)} >
+       <TableSelectionCell
+         checked={!!selectedItems[item.empid]}
+         style={{zIndex:1000}}
+         onChange={(event) => {
+          
+          //  event.stopPropagation(); // Prevents the row click event from being triggered
+           handleItemsChange(item.empid);
+           setOpen(false)
+         }}
+         
+       />
+          <TableCell >{item.empid}</TableCell>
+          <TableCell>{item.name}</TableCell>
+          <TableCell>{item.dept}</TableCell>
+          <TableCell>{item.doj}</TableCell>
+          <TableCell>{item.appraisal}</TableCell>
+          <TableCell>{item.manager}</TableCell>
+        </TableRow>
+      ))}
+    </TableBody>
+  </Table>
 </div>
 
     </div>

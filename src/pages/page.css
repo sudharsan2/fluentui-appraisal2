@@ -40,6 +40,23 @@
     color: white; /* Font color when in dark mode */
     transition: 0.3s ease-in-out;
   }
+
+  .tab.dark.drawer {
+    background-color: rgb(51, 51, 51);
+    color: white; /* Font color when in dark mode */
+    transition: 0.3s ease-in-out;
+  }
+
+  .tab.dark.drawer:hover{
+    /* color: white; */
+    background-color: rgb(40, 40, 40);
+  }
+
+  .tab.light.drawer:hover{
+    /* color: white; */
+    background-color: rgb(200, 200, 200);
+  }
+
  .tab.dark span{
     color: white; /* Font color when in dark mode */
     transition: 0.3s ease-in-out;

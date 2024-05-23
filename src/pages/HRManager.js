@@ -32,7 +32,7 @@ import {
 } from "@fluentui/react-components";
 import {AddRegular, PersonDeleteRegular , EditRegular, SearchRegular, FilterRegular, FilterDismissRegular, FilterAddRegular, ChartMultipleRegular,Dismiss24Regular ,Timer20Regular,Calendar20Regular ,ShareMultiple24Filled ,Add24Filled,ShareIos24Filled } from "@fluentui/react-icons"; // Import the icons
 import './page.css';
- 
+
 const useStyles = makeStyles({
   root: {
     alignItems: "flex-start",
@@ -95,7 +95,7 @@ const useStyles = makeStyles({
   editIcon: {
     marginRight: '5px',
   },
- 
+
   filterPanel:{
     display:'flex',
     flexDirection:'column',
@@ -360,12 +360,12 @@ const HRManager = () => {
       [id]: !prev[id],
     }));
   };
- 
+
   // const handleRowClick = (employee) => {
   //   setSelectedEmployee(employee);
   //   setOpen(true);
   // };
- 
+
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
@@ -388,12 +388,12 @@ const HRManager = () => {
   const handleAddEmployee = () => {
     alert("Add Employee functionality to be implemented");
   };
- 
+
   const handleRowClick = (employee) => {
     setSelectedEmployee(employee);
     setOpen(true);
   };
- 
+
   const handleDeleteEmployee = () => {
     alert("Delete Employee functionality to be implemented");
   };
@@ -497,7 +497,7 @@ const HRManager = () => {
  
   return (
     <div className={styles.root}>
-          <OverlayDrawer
+          {/* <OverlayDrawer
         size="large"
         position="end"
         open={open}
@@ -524,16 +524,16 @@ const HRManager = () => {
           <div style={{marginLeft:"3vw", marginTop:"2vh",display:"flex",width:"100%"}}>
             <Avatar color="brand" initials="BR" name="brand color avatar" size={96}/>
             <div style={{display:"flex",marginLeft:"2vw", flexDirection:"column",justifyContent:"center",width:"60%"}}>
-            <Text  size={700} style={{marginBottom:"2vh"}}> {selectedEmployee.name}</Text>
+            <Text  size={700} style={{marginBottom:"2vh",color:themestate?"white":""}}> {selectedEmployee.name}</Text>
             <div style={{display:"flex" ,width:"100%",justifyContent: "space-between"}}>
-            <Text  size={400}> {selectedEmployee.empid} </Text>
+            <Text  size={400} > {selectedEmployee.empid} </Text>
             <div style={{display:"flex"}}>
             <Timer20Regular style={{color:'rgb(1,105,185)'}}/>
-            <Text  size={400} style={{marginLeft:"3px"}}> Yet to fill the employee form</Text>
+            <Text  size={400} style={{marginLeft:"3px",color:themestate?"white":""}}> Yet to fill the employee form</Text>
             </div>
             <div style={{display:"flex"}}>
             <Calendar20Regular style={{color:'rgb(1,105,185)'}}/>
-            <Text  size={400} style={{marginLeft:"3px"}}> 1 May 2024</Text>
+            <Text  size={400} style={{marginLeft:"3px",color:themestate?"white":""}}> 1 May 2024</Text>
             </div>
             </div>
             </div>
@@ -619,7 +619,7 @@ const HRManager = () => {
         </div>
         </DrawerBody>
          )}
-      </OverlayDrawer>
+      </OverlayDrawer> */}
         {/* <div style={{position:'fixed', backgroundColor:'white', zIndex:1000, width:'vw'}}> */}
         {/* <div style={{ position: 'fixed', backgroundColor: 'white', zIndex: 1000, width: '100%' }}> */}
         <OverlayDrawer
@@ -630,7 +630,7 @@ const HRManager = () => {
           setOpen(state.open);
           handleTabSelect1('tab1');
         }}
-        style={{height:'calc(100vh - 48px)',marginTop:"48px"}}
+        style={{height:'calc(100vh - 48px)',marginTop:"48px", backgroundColor:themestate?"rgb(51, 51, 51)":""}}
       >
         <DrawerHeader>
           <DrawerHeaderTitle
@@ -652,16 +652,16 @@ const HRManager = () => {
           <div style={{marginLeft:"3vw", marginTop:"2vh",display:"flex",width:"100%"}}>
             <Avatar color="brand" initials="BR" name="brand color avatar" size={96}/>
             <div style={{display:"flex",marginLeft:"2vw", flexDirection:"column",justifyContent:"center",width:"60%"}}>
-            <Text  size={700} style={{marginBottom:"2vh", fontWeight:"bold"}}> {selectedEmployee.name}</Text>
+            <Text  size={700} style={{marginBottom:"2vh", fontWeight:"bold",color:themestate?"white":""}}> {selectedEmployee.name}</Text>
             <div style={{display:"flex" ,width:"100%",justifyContent: "space-between"}}>
-            <Text  size={250} style={{fontWeight:"bold"}}> {selectedEmployee.empid} </Text>
+            <Text  size={250} style={{fontWeight:"bold",color:themestate?"white":""}}> {selectedEmployee.empid} </Text>
             <div style={{display:"flex"}}>
             <Timer20Regular style={{color:'rgb(1,105,185)'}}/>
-            <Text  size={250} style={{marginLeft:"3px",fontWeight:"bold"}}> Yet to fill the employee form</Text>
+            <Text  size={250} style={{marginLeft:"3px",fontWeight:"bold",color:themestate?"white":""}}> Yet to fill the employee form</Text>
             </div>
             <div style={{display:"flex"}}>
             <Calendar20Regular style={{color:'rgb(1,105,185)'}}/>
-            <Text  size={250} style={{marginLeft:"3px", fontWeight:"bold"}}> 1 May 2024</Text>
+            <Text  size={250} style={{marginLeft:"3px", fontWeight:"bold",color:themestate?"white":""}}> 1 May 2024</Text>
             </div>
             </div>
             </div>
@@ -672,9 +672,9 @@ const HRManager = () => {
                 onTabSelect={handleTabSelect}
                 style={{marginLeft:"3vw", marginTop:"3vh"}}
             >
-                <Tab value="tab1">Employee Info</Tab>
-                <Tab value="tab2">Employee Form</Tab>
-                <Tab value="tab3">Manager Form</Tab>
+                <Tab value="tab1" className={themestate ? "tab dark drawer" : "tab light drawer"} style= {{border:'1px solid transparent'}}>Employee Info</Tab>
+                <Tab value="tab2" className={themestate ? "tab dark drawer" : "tab light drawer"} style= {{border:'1px solid transparent'}}>Employee Form</Tab>
+                <Tab value="tab3" className={themestate ? "tab dark drawer" : "tab light drawer"} style= {{border:'1px solid transparent'}}>Manager Form</Tab>
                 
                 
             </TabList>
@@ -683,25 +683,25 @@ const HRManager = () => {
         
               
                 <div className={styles.section}>
-                  <div className={styles.heading}>Name and Emp ID :</div>
-                  <div>{selectedEmployee.name}</div>
-                  <div>{selectedEmployee.empid}</div>
- 
+                  <div className={styles.heading} style={{color:themestate?"white":""}}>Name and Emp ID :</div>
+                  <div style={{color:themestate?"white":""}}>{selectedEmployee.name}</div>
+                  <div style={{color:themestate?"white":""}}>{selectedEmployee.empid}</div>
+
                   <div className={styles.gridrow}>
-                    <div className={styles.heading}>Email</div>
-                    <div>{selectedEmployee.email}</div>
+                    <div className={styles.heading} style={{color:themestate?"white":""}}>Email</div>
+                    <div style={{color:themestate?"white":""}}>{selectedEmployee.email}</div>
                   </div>
                   <div className={styles.gridrow}>
-                    <div className={styles.heading}>Current Status</div>
-                    <div>{selectedEmployee.status}</div>
+                    <div className={styles.heading} style={{color:themestate?"white":""}}>Current Status</div>
+                    <div style={{color:themestate?"white":""}}>{selectedEmployee.status}</div>
                   </div>
                   <div className={styles.gridrow}>
-                    <div className={styles.heading}>Role</div>
-                    <div>{selectedEmployee.role}</div>
+                    <div className={styles.heading} style={{color:themestate?"white":""}}>Role</div>
+                    <div style={{color:themestate?"white":""}}>{selectedEmployee.role}</div>
                   </div>
                   <div className={styles.gridrow}>
-                    <div className={styles.heading}>Department</div>
-                    <div>{selectedEmployee.dept}</div>
+                    <div className={styles.heading} style={{color:themestate?"white":""}}>Department</div>
+                    <div style={{color:themestate?"white":""}}>{selectedEmployee.dept}</div>
                   </div>
                   <div className={styles.gridrow}>
                     <div className={styles.editDetails}>
@@ -711,37 +711,37 @@ const HRManager = () => {
                   </div>
                 </div>
                 <div className={styles.section}>
-                  <div className={styles.heading}>Manager Info</div>
-                  <div>{selectedEmployee.manager}</div>
-                  <div>{selectedEmployee.managerId}</div>
+                  <div className={styles.heading} style={{color:themestate?"white":""}}>Manager Info</div>
+                  <div style={{color:themestate?"white":""}}>{selectedEmployee.manager}</div>
+                  <div style={{color:themestate?"white":""}}>{selectedEmployee.managerId}</div>
                   <div className={styles.gridrow}>
                     <div className={styles.row}>
-                      <div className={styles.heading}>Date of Joining</div>
-                      <div style={{marginLeft:"10px"}}>{selectedEmployee.doj}</div>
+                      <div className={styles.heading} style={{color:themestate?"white":""}}>Date of Joining</div>
+                      <div style={{marginLeft:"10px",color:themestate?"white":""}}>{selectedEmployee.doj}</div>
                     </div>
                   </div>
                   <div className={styles.gridrow}>
                     <div className={styles.row}>
-                      <div className={styles.heading}>Date of Starting</div>
-                      <div style={{marginLeft:"10px"}}>{selectedEmployee.dos}</div>
+                      <div className={styles.heading} style={{color:themestate?"white":""}}>Date of Starting</div>
+                      <div style={{marginLeft:"10px",color:themestate?"white":""}}>{selectedEmployee.dos}</div>
                     </div>
                   </div>
                   <div className={styles.gridrow}>
                     <div className={styles.row}>
-                      <div className={styles.heading}>Appraisal Date</div>
-                      <div style={{marginLeft:"10px"}}>{selectedEmployee.appraisal}</div>
+                      <div className={styles.heading} style={{color:themestate?"white":""}}>Appraisal Date</div>
+                      <div style={{marginLeft:"10px",color:themestate?"white":""}}>{selectedEmployee.appraisal}</div>
                     </div>
                   </div>
                   <div className={styles.gridrow}>
                     <div className={styles.row}>
-                      <div className={styles.heading}>Total Experience</div>
-                      <div style={{marginLeft:"10px"}}>{selectedEmployee.totalExperience}</div>
+                      <div className={styles.heading} style={{color:themestate?"white":""}}>Total Experience</div>
+                      <div style={{marginLeft:"10px",color:themestate?"white":""}}>{selectedEmployee.totalExperience}</div>
                     </div>
                   </div>
                   <div className={styles.gridrow}>
                     <div className={styles.row}>
-                      <div className={styles.heading}>Experience in FocusR</div>
-                      <div style={{marginLeft:"10px"}}>{selectedEmployee.focusRExperience}</div>
+                      <div className={styles.heading} style={{color:themestate?"white":""}}>Experience in FocusR</div>
+                      <div style={{marginLeft:"10px",color:themestate?"white":""}}>{selectedEmployee.focusRExperience}</div>
                     </div>
                   </div>
                 </div>
@@ -750,31 +750,31 @@ const HRManager = () => {
           
         </div>
         )}
- 
+
         {selectedTab1 === 'tab2' && (
                 <div className={styles.container}>
         
               
                 <div className={styles.section}>
-                  <div className={styles.heading}>Name and Emp ID :</div>
-                  <div>{selectedEmployee.name}</div>
-                  <div>{selectedEmployee.empid}</div>
- 
+                  <div className={styles.heading} style={{color:themestate?"white":""}}>Name and Emp ID :</div>
+                  <div style={{color:themestate?"white":""}}>{selectedEmployee.name}</div>
+                  <div style={{color:themestate?"white":""}}>{selectedEmployee.empid}</div>
+
                   <div className={styles.gridrow}>
-                    <div className={styles.heading}>Email</div>
-                    <div>{selectedEmployee.email}</div>
+                    <div className={styles.heading} style={{color:themestate?"white":""}}>Email</div>
+                    <div style={{color:themestate?"white":""}}>{selectedEmployee.email}</div>
                   </div>
                   <div className={styles.gridrow}>
-                    <div className={styles.heading}>Current Status</div>
-                    <div>{selectedEmployee.status}</div>
+                    <div className={styles.heading} style={{color:themestate?"white":""}}>Current Status</div>
+                    <div style={{color:themestate?"white":""}}>{selectedEmployee.status}</div>
                   </div>
                   <div className={styles.gridrow}>
-                    <div className={styles.heading}>Role</div>
-                    <div>{selectedEmployee.role}</div>
+                    <div className={styles.heading} style={{color:themestate?"white":""}}>Role</div>
+                    <div style={{color:themestate?"white":""}}>{selectedEmployee.role}</div>
                   </div>
                   <div className={styles.gridrow}>
-                    <div className={styles.heading}>Department</div>
-                    <div>{selectedEmployee.dept}</div>
+                    <div className={styles.heading} style={{color:themestate?"white":""}}>Department</div>
+                    <div style={{color:themestate?"white":""}}>{selectedEmployee.dept}</div>
                   </div>
                   <div className={styles.gridrow}>
                     <div className={styles.editDetails}>
@@ -784,30 +784,30 @@ const HRManager = () => {
                   </div>
                 </div>
                 <div className={styles.section}>
-                  <div className={styles.heading}>
+                  <div className={styles.heading} style={{color:themestate?"white":""}}>
                   <div style={{display:"flex"}}>
                     <ShareMultiple24Filled style={{color:'rgb(1,105,185)'}}/>
                     <Link style={{marginLeft:"10px",fontWeight:"bold",color:'rgb(1,105,185)'}}>Share Form Link</Link>
-                    </div>
+                    </div> 
                   
                   </div>
                   
                   <div className={styles.gridrow}>
                     <div className={styles.row}>
-                      <div className={styles.heading}>Date of Joining</div>
-                      <div style={{marginLeft:"10px"}}>{selectedEmployee.doj}</div>
+                      <div className={styles.heading} style={{color:themestate?"white":""}}>Date of Joining</div>
+                      <div style={{marginLeft:"10px",color:themestate?"white":""}}>{selectedEmployee.doj}</div>
                     </div>
                   </div>
                   <div className={styles.gridrow}>
                     <div className={styles.row}>
-                      <div className={styles.heading}>Date of Starting</div>
-                      <div style={{marginLeft:"10px"}}>{selectedEmployee.dos}</div>
+                      <div className={styles.heading} style={{color:themestate?"white":""}}>Date of Starting</div>
+                      <div style={{marginLeft:"10px",color:themestate?"white":""}}>{selectedEmployee.dos}</div>
                     </div>
                   </div>
                   <div className={styles.gridrow}>
                     <div className={styles.row}>
-                      <div className={styles.heading}>Appraisal Date</div>
-                      <div style={{marginLeft:"10px"}}>{selectedEmployee.appraisal}</div>
+                      <div className={styles.heading} style={{color:themestate?"white":""}}>Appraisal Date</div>
+                      <div style={{marginLeft:"10px",color:themestate?"white":""}}>{selectedEmployee.appraisal}</div>
                     </div>
                   </div>
                   <div className={styles.gridrow}>
@@ -816,10 +816,10 @@ const HRManager = () => {
                   <div style={{display:"flex"}}>
                     <Add24Filled style={{color:'rgb(1,105,185)'}}/>
                     <Link style={{marginLeft:"10px",fontWeight:"bold",color:'rgb(1,105,185)'}}>Add Reviewer</Link>
-                    </div>
+                    </div> 
                   
                   </div>
-                      <div style={{marginLeft:"10px"}}>{selectedEmployee.totalExperience}</div>
+                      <div style={{marginLeft:"10px",color:themestate?"white":""}}>{selectedEmployee.totalExperience}</div>
                     </div>
                   </div>
                   <div className={styles.gridrow}>
@@ -828,10 +828,10 @@ const HRManager = () => {
                   <div style={{display:"flex"}}>
                     <ShareIos24Filled style={{color:'rgb(1,105,185)'}}/>
                     <Link style={{marginLeft:"10px",fontWeight:"bold",color:'rgb(1,105,185)'}}>Share to Thangamani</Link>
-                    </div>
+                    </div> 
                   
                   </div>
-                      <div style={{marginLeft:"10px"}}>{selectedEmployee.focusRExperience}</div>
+                      <div style={{marginLeft:"10px",color:themestate?"white":""}}>{selectedEmployee.focusRExperience}</div>
                     </div>
                   </div>
                 </div>
@@ -840,31 +840,31 @@ const HRManager = () => {
           
         </div>
         )}
- 
+
         {selectedTab1 === 'tab3' && (
                 <div className={styles.container}>
         
               
                 <div className={styles.section}>
-                  <div className={styles.heading}>Name and Emp ID :</div>
-                  <div>{selectedEmployee.name}</div>
-                  <div>{selectedEmployee.empid}</div>
- 
+                  <div className={styles.heading} style={{color:themestate?"white":""}}>Name and Emp ID :</div>
+                  <div style={{color:themestate?"white":""}}>{selectedEmployee.name}</div>
+                  <div style={{color:themestate?"white":""}}>{selectedEmployee.empid}</div>
+
                   <div className={styles.gridrow}>
-                    <div className={styles.heading}>Email</div>
-                    <div>{selectedEmployee.email}</div>
+                    <div className={styles.heading} style={{color:themestate?"white":""}}>Email</div>
+                    <div style={{color:themestate?"white":""}}>{selectedEmployee.email}</div>
                   </div>
                   <div className={styles.gridrow}>
-                    <div className={styles.heading}>Current Status</div>
-                    <div>{selectedEmployee.status}</div>
+                    <div className={styles.heading} style={{color:themestate?"white":""}}>Current Status</div>
+                    <div style={{color:themestate?"white":""}}>{selectedEmployee.status}</div>
                   </div>
                   <div className={styles.gridrow}>
-                    <div className={styles.heading}>Role</div>
-                    <div>{selectedEmployee.role}</div>
+                    <div className={styles.heading} style={{color:themestate?"white":""}}>Role</div>
+                    <div style={{color:themestate?"white":""}}>{selectedEmployee.role}</div>
                   </div>
                   <div className={styles.gridrow}>
-                    <div className={styles.heading}>Department</div>
-                    <div>{selectedEmployee.dept}</div>
+                    <div className={styles.heading} style={{color:themestate?"white":""}}>Department</div>
+                    <div style={{color:themestate?"white":""}}>{selectedEmployee.dept}</div>
                   </div>
                   <div className={styles.gridrow}>
                     <div className={styles.editDetails}>
@@ -878,26 +878,26 @@ const HRManager = () => {
                   <div style={{display:"flex"}}>
                     {/* <ShareMultiple24Filled style={{color:'rgb(1,105,185)'}}/>
                     <Link style={{marginLeft:"10px"}}>Share Form Link</Link> */}
-                    </div>
+                    </div> 
                   
                   </div>
                   
                   <div className={styles.gridrow}>
                     <div className={styles.row}>
-                      <div className={styles.heading}>Date of Joining</div>
-                      <div style={{marginLeft:"10px"}}>{selectedEmployee.doj}</div>
+                      <div className={styles.heading} style={{color:themestate?"white":""}}>Date of Joining</div>
+                      <div style={{marginLeft:"10px",color:themestate?"white":""}}>{selectedEmployee.doj}</div>
                     </div>
                   </div>
                   <div className={styles.gridrow}>
                     <div className={styles.row}>
-                      <div className={styles.heading}>Date of Starting</div>
-                      <div style={{marginLeft:"10px"}}>{selectedEmployee.dos}</div>
+                      <div className={styles.heading} style={{color:themestate?"white":""}}>Date of Starting</div>
+                      <div style={{marginLeft:"10px",color:themestate?"white":""}}>{selectedEmployee.dos}</div>
                     </div>
                   </div>
                   <div className={styles.gridrow}>
                     <div className={styles.row}>
-                      <div className={styles.heading}>Appraisal Date</div>
-                      <div style={{marginLeft:"10px"}}>{selectedEmployee.appraisal}</div>
+                      <div className={styles.heading} style={{color:themestate?"white":""}}>Appraisal Date</div>
+                      <div style={{marginLeft:"10px",color:themestate?"white":""}}>{selectedEmployee.appraisal}</div>
                     </div>
                   </div>
                   <div className={styles.gridrow}>
@@ -906,7 +906,7 @@ const HRManager = () => {
                   <div style={{display:"flex"}}>
                     {/* <Add24Filled style={{color:'rgb(1,105,185)'}}/>
                     <Link style={{marginLeft:"10px",fontWeight:"bold",color:'rgb(1,105,185)'}}>Add Reviewer</Link> */}
-                    </div>
+                    </div> 
                   
                   </div>
                       <div style={{marginLeft:"10px"}}>{selectedEmployee.totalExperience}</div>
@@ -918,10 +918,10 @@ const HRManager = () => {
                   <div style={{display:"flex"}}>
                     <ShareIos24Filled style={{color:'rgb(1,105,185)'}}/>
                     <Link style={{marginLeft:"10px",fontWeight:"bold",color:'rgb(1,105,185)'}}>Share to Murugiah</Link>
-                    </div>
+                    </div> 
                   
                   </div>
-                      <div style={{marginLeft:"10px"}}>{selectedEmployee.focusRExperience}</div>
+                      <div style={{marginLeft:"10px",color:themestate?"white":""}}>{selectedEmployee.focusRExperience}</div>
                     </div>
                   </div>
                 </div>

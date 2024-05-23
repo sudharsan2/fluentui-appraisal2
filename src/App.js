@@ -2,6 +2,8 @@ import logo from './logo.svg';
 import './App.css';
 import CustomLayout from './components/layout';
 import NavDrawerDefault from './components/drawer';
+import MGNavDrawerDefault from './components/mgdrawer';
+import RVNavDrawerDefault from './components/rvdrawer';
 import Sample from './components/sample';
 // import NavDrawerDefault from './components/drawer';
 
@@ -30,9 +32,9 @@ function App() {
         <Route path='hrmanager' element={<CustomLayout><NavDrawerDefault><HRManager/></NavDrawerDefault></CustomLayout>}/>
         <Route path='hrreviewer' element={<CustomLayout><NavDrawerDefault><HRReviewer/></NavDrawerDefault></CustomLayout>}/>
         <Route path='hrsummary' element={<CustomLayout><NavDrawerDefault><HRSummary/></NavDrawerDefault></CustomLayout>}/>
-        <Route path='mgappraisal' element={<CustomLayout><NavDrawerDefault><MGAppraisal/></NavDrawerDefault></CustomLayout>}/>
-        <Route path='mgreviewer' element={<CustomLayout><NavDrawerDefault><MGReviewer/></NavDrawerDefault></CustomLayout>}/>
-        <Route path='rvreviewer' element={<CustomLayout><NavDrawerDefault><RVReviewer/></NavDrawerDefault></CustomLayout>}/>
+        <Route path='mgappraisal' element={<CustomLayout><MGNavDrawerDefault><MGAppraisal/></MGNavDrawerDefault></CustomLayout>}/>
+        <Route path='mgreviewer' element={<CustomLayout><MGNavDrawerDefault><MGReviewer/></MGNavDrawerDefault></CustomLayout>}/>
+        <Route path='rvreviewer' element={<CustomLayout><RVNavDrawerDefault><RVReviewer/></RVNavDrawerDefault></CustomLayout>}/>
       
         <Route path='form/:token' element={<EmployeeForm/>}/>
         

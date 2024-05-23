@@ -18,6 +18,7 @@ import {
   Modal,
 } from "@fluentui/react-components";
 import {AddRegular, PersonDeleteRegular , EditRegular, SearchRegular, FilterRegular, FilterDismissRegular, FilterAddRegular    } from "@fluentui/react-icons"; // Import the icons
+import {useSelector, useDispatch} from 'react-redux';
 
 const useStyles = makeStyles({
   root: {
@@ -254,6 +255,7 @@ const HRSummary = () => {
   const handleApplyFilters = () => {
     alert("Apply Filters functionality to be implemented");
   };
+  const themestate = useSelector((state) => state.theme.theme);
 
 
   const filteredData = data[selectedTab].filter((item) =>
@@ -265,7 +267,7 @@ const HRSummary = () => {
         {/* <div style={{position:'fixed', backgroundColor:'white', zIndex:1000, width:'vw'}}> */}
         {/* <div style={{ position: 'fixed', backgroundColor: 'white', zIndex: 1000, width: '100%' }}> */}
  
-        <h2 style={{paddingLeft:''}}>Employee</h2>
+        <h2 style={themestate?{color:'white'}:{}}>Manager</h2>
       {/* <TabList
         defaultSelectedValue="tab2"
         appearance="subtle"

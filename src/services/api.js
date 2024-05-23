@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const BASE_URL = "https://aceapi.focusrtech.com:82/"; // Replace with your API base URL
+const BASE_URL = "https://aceapi.focusrtech.com:82/"; // Replace with your API base URL
 
 
 const api = axios.create({

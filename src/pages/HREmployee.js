@@ -26,7 +26,7 @@ import {
   BreadcrumbButton,
   BreadcrumbDivider,
   BreadcrumbProps,
-  
+ 
   PopoverTrigger, PopoverSurface, Popover,
  
 } from '@fluentui/react-components';
@@ -43,7 +43,7 @@ import zIndex from "@mui/material/styles/zIndex";
 import { Link } from "@fluentui/react";
 import axios from 'axios';
 import {Modal, Form, Input, DatePicker, Select,  Row, Col, message } from 'antd';
-
+ 
 const useStyles = makeStyles({
   root: {
     alignItems: 'flex-start',
@@ -174,34 +174,37 @@ const useStyles = makeStyles({
  
 });
  
-
-
-
+ 
+ 
+ 
 const HREmployee = () => {
   const styles = useStyles();
   const [selectedTab, setSelectedTab] = React.useState("tab1");
+  // const [selectedTab1, setSelectedTab1] = React.useState("tab1")
   const [selectedItems, setSelectedItems] = React.useState({});
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [searchQuery, setSearchQuery] = React.useState("");
   const [showFilters, setShowFilters] = React.useState(false);
   const [selectedFilters, setSelectedFilters] = React.useState([]);
+  const lighttheme = useSelector((state) => state.theme.light);
+  const darktheme = useSelector((state) => state.theme.dark);
   const themestate = useSelector((state) => state.theme.theme);
   const newSelectedFilters = [];
   const [open, setOpen] = React.useState(false);
   const [selectedTab1, setSelectedTab1] = React.useState('tab1');
   const [selectedTab2, setSelectedTab2] = React.useState('tab1');
-
+ 
   const [sortState, setSortState] = useState({
     sortDirection: 'ascending',
     sortColumn: 'empid',
   });
  const [data, setData] = useState([])
-
+ 
  const [currentMonthEmployees, setCurrentMonthEmployees] = useState([]);
   const [nextMonthEmployees, setNextMonthEmployees] = useState([]);
   const [itemSelected, setItemSelected] = useState([]);
   const [edit,setEdit] = useState(false);
-
+ 
   const [modalVisible, setModalVisible] = useState(false);
   const [form] = Form.useForm();
  
@@ -209,7 +212,7 @@ const HREmployee = () => {
   //   const currentDate = new Date();
   //   const currentMonth = currentDate.getMonth(); // 0-based index, January is 0
   //   const nextMonth = (currentMonth + 1) % 12;
-  
+ 
   //   axios.get('http://172.235.21.99:5051/user/employee/list')
   //     .then(response => {
   //       setData(response.data);
@@ -222,9 +225,9 @@ const HREmployee = () => {
   //     const joiningDate = parseISO(employee.date_of_joining);
   //     return joiningDate.getMonth() === currentMonth;
   //   });
-    
-    
-    
+   
+   
+   
   //   const nextMonthList = data.filter(employee => {
   //     const joiningDate = parseISO(employee.date_of_joining);
   //     return joiningDate.getMonth() === nextMonth;
@@ -232,14 +235,14 @@ const HREmployee = () => {
  
   //   setCurrentMonthEmployees(currentMonthList);
   //   setNextMonthEmployees(nextMonthList);
-
-
+ 
+ 
   // }, []);
-  
+ 
   useEffect(() => {
     fetchEmployeeData();
   }, []);
-
+ 
   const fetchEmployeeData = () => {
     axios.get('http://172.235.21.99:5051/user/employee/list')
       .then(response => {
@@ -249,28 +252,28 @@ const HREmployee = () => {
         console.error('There was an error fetching the data!', error);
       });
   };
-
+ 
   useEffect(() => {
     if (data.length > 0) {
       const currentDate = new Date();
       const currentMonth = currentDate.getMonth(); // 0-based index, January is 0
       const nextMonth = (currentMonth + 1) % 12;
-
+ 
       const currentMonthList = data.filter(employee => {
         const joiningDate = parseISO(employee.date_of_joining);
         return joiningDate.getMonth() === currentMonth;
       });
-
+ 
       const nextMonthList = data.filter(employee => {
         const joiningDate = parseISO(employee.date_of_joining);
         return joiningDate.getMonth() === nextMonth;
       });
-
+ 
       setCurrentMonthEmployees(currentMonthList);
       setNextMonthEmployees(nextMonthList);
     }
   }, [data]);
-
+ 
   // useEffect(() => {
   //   axios.get('http://172.235.21.99:5051/user/employee/list')
   //     .then(response => {
@@ -280,19 +283,19 @@ const HREmployee = () => {
   //       console.error('There wevent, data1as an error fetching the data!', error);
   //     });
   // }, []);
-
-
+ 
+ 
   const handleTabSelect = (event,data) => {
     setSelectedTab1(data.value);
   };
-
-
-
-
+ 
+ 
+ 
+ 
   const handleModalClose = () => {
     setModalVisible(false);
   };
-
+ 
  
   const handleTabSelect2 = (event,data) => {
     console.log({"currentmonth":currentMonthEmployees})
@@ -301,65 +304,65 @@ const HREmployee = () => {
   const handleTabSelect1 = (value) => {
     setSelectedTab1(value);
   };
-
+ 
   const handleTabChange = () => {
     setSelectedTab(data.value);
     setSelectedItems({});
-    
-    
+   
+   
   };
-
-  
+ 
+ 
   const handleItemsChange = (id) => {
     setSelectedItems((prev) => {
       const newSelectedItems = {
         ...prev,
         [id]: !prev[id],
       };
-  
+ 
       // Update the array of true selected IDs based on the new selectedItems state
       const newTrueSelectedIds = Object.keys(newSelectedItems).filter(
         (key) => newSelectedItems[key] === true
       );
-  
+ 
       // Update the itemSelected state with the new array of true selected IDs
       setItemSelected(newTrueSelectedIds);
-  
+ 
       return newSelectedItems;
     });
   };
-
-  
-
-
+ 
+ 
+ 
+ 
   const handleItemSelect = (id) => {
     {setItemSelected((prev) => ([...prev], [id]));}
   }
-
+ 
   const handleRowClick = (employee) => {
     setSelectedEmployee(employee);
     setOpen(true);
   };
-
+ 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value || '');
   };
-
-
+ 
+ 
   const handleToggleFilters = () => {
     setShowFilters(!showFilters);
   };
-  
+ 
   const handleRemoveFilters = () => {
     setSearchQuery("");
     // Handle resetting other filter options as needed
   };
-  
-
+ 
+ 
   const handleApplyFilters = () => {
     setSelectedFilters(newSelectedFilters); // Update selected filters state
   };
-
+ 
   const columns = [
     createTableColumn({
       columnId: 'employee_id',
@@ -386,12 +389,12 @@ const HREmployee = () => {
       compare: (a, b) => a.reporting_manager.localeCompare(b.reporting_manager),
     })
   ];
-
+ 
   const {
     sort: { getSortDirection, toggleColumnSort },
   } = useTableFeatures(
     {
-      columns, 
+      columns,
       items: data,
     },
     [
@@ -401,21 +404,21 @@ const HREmployee = () => {
       }),
     ]
   );
-
+ 
   const headerSortProps = (columnId) => ({
     onClick: (e) => toggleColumnSort(e, columnId),
     sortDirection: getSortDirection(columnId),
   });
-
-  
+ 
+ 
   const handleEditEmployee = () => {
     alert("Add Employee functionality to be implemented");
   };
-
+ 
   // const handleDeleteEmployee = () => {
   //   alert("Delete Employee functionality to be implemented");
   // };
-
+ 
   const handleDeleteEmployee = async () => {
     console.log(JSON.stringify({ ids: itemSelected }));
     try {
@@ -426,9 +429,9 @@ const HREmployee = () => {
         },
         body: JSON.stringify({ ids: itemSelected }),
       });
-  
+ 
       if (response.ok) {
-        
+       
         // Clear the selectedItems state
         setSelectedItems({});
         // Optionally clear the itemSelected state
@@ -442,9 +445,9 @@ const HREmployee = () => {
       // alert('An error occurred while deleting employees');
     }
   };
-
-
-
+ 
+ 
+ 
   const handleAddEmployee = async (values) => {
     console.log('Form values:', values);
     try {
@@ -453,7 +456,7 @@ const HREmployee = () => {
           'Content-Type': 'application/json',
         },
       });
-
+ 
       if (response.status === 200 || response.status === 201) {
         message.success('Employee added successfully');
         setModalVisible(false); // Close modal after submission
@@ -466,17 +469,17 @@ const HREmployee = () => {
       message.error('An error occurred');
     }
   };
-    
-  
-
-
-
-
+   
+ 
+ 
+ 
+ 
+ 
   const handleFilterToggle = () => {
     setShowFilters((prev) => !prev);
   };
-
-
+ 
+ 
   const filteredData = searchQuery
   ? (data || []).filter((item) =>
       (item.employee_name && item.employee_name.toLowerCase().includes(searchQuery.toLowerCase())) ||
@@ -488,22 +491,22 @@ const HREmployee = () => {
       (item.reporting_manager && item.reporting_manager.toLowerCase().includes(searchQuery.toLowerCase()))
     )
   : (data || []);
-
+ 
 const sortedData = [...filteredData].sort((a, b) => {
   const aValue = a[sortState.sortColumn];
   const bValue = b[sortState.sortColumn];
-  
+ 
   // Check if the values are strings and perform locale comparison
   if (typeof aValue === 'string' && typeof bValue === 'string') {
     return sortState.sortDirection === 'ascending'
       ? aValue.localeCompare(bValue)
       : bValue.localeCompare(aValue);
   }
-  
+ 
   // If the values are not strings, compare them directly
   return sortState.sortDirection === 'ascending' ? aValue - bValue : bValue - aValue;
 });
-
+ 
 const filteredcmData = searchQuery
   ? (currentMonthEmployees || []).filter((item) =>
       (item.employee_name && item.employee_name.toLowerCase().includes(searchQuery.toLowerCase())) ||
@@ -515,22 +518,22 @@ const filteredcmData = searchQuery
       (item.reporting_manager && item.reporting_manager.toLowerCase().includes(searchQuery.toLowerCase()))
     )
   : (currentMonthEmployees || []);
-
+ 
 const sortedcmData = [...filteredcmData].sort((a, b) => {
   const aValue = a[sortState.sortColumn];
   const bValue = b[sortState.sortColumn];
-  
+ 
   // Check if the values are strings and perform locale comparison
   if (typeof aValue === 'string' && typeof bValue === 'string') {
     return sortState.sortDirection === 'ascending'
       ? aValue.localeCompare(bValue)
       : bValue.localeCompare(aValue);
   }
-  
+ 
   // If the values are not strings, compare them directly
   return sortState.sortDirection === 'ascending' ? aValue - bValue : bValue - aValue;
 });
-
+ 
 const filterednmData = searchQuery
   ? (nextMonthEmployees || []).filter((item) =>
       (item.employee_name && item.employee_name.toLowerCase().includes(searchQuery.toLowerCase())) ||
@@ -542,33 +545,33 @@ const filterednmData = searchQuery
       (item.reporting_manager && item.reporting_manager.toLowerCase().includes(searchQuery.toLowerCase()))
     )
   : (nextMonthEmployees || []);
-
+ 
 const sortednmData = [...filterednmData].sort((a, b) => {
   const aValue = a[sortState.sortColumn];
   const bValue = b[sortState.sortColumn];
-  
+ 
   // Check if the values are strings and perform locale comparison
   if (typeof aValue === 'string' && typeof bValue === 'string') {
     return sortState.sortDirection === 'ascending'
       ? aValue.localeCompare(bValue)
       : bValue.localeCompare(aValue);
   }
-  
+ 
   // If the values are not strings, compare them directly
   return sortState.sortDirection === 'ascending' ? aValue - bValue : bValue - aValue;
 });
-
-
-
-
-  
-    
+ 
+ 
+ 
+ 
+ 
+   
 return (
     <div className={styles.root}>
-
+ 
         {/* <div style={{position:'fixed', backgroundColor:'white', zIndex:1000, width:'vw'}}> */}
         {/* <div style={{ position: 'fixed', backgroundColor: 'white', zIndex: 1000, width: '100%' }}> */}
-        
+       
         <OverlayDrawer
         size="large"
         position="end"
@@ -821,8 +824,8 @@ return (
         </DrawerBody>
          )}
       </OverlayDrawer>
-
-
+ 
+ 
         <Breadcrumb aria-label="breadcrumb">
     <BreadcrumbItem>
       <Link href="" className="custom-link">HR</Link>
@@ -845,7 +848,7 @@ return (
         <Tab  className={themestate ? "tab dark" : "tab"} style= {{border:'1px solid transparent'}} value="tab2">Next month</Tab>
         <Tab className={themestate ? "tab dark" : "tab"} style= {{border:'1px solid transparent'}} value="tab3">Employee</Tab>
         {/* <Tab value="tab3">Employee</Tab> */}
-        
+       
       </TabList>
       <div className={styles.controls}>
       <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={() => setModalVisible(true)}><AddRegular className={styles.iconLarge}/>Add Employee</Button>
@@ -866,7 +869,7 @@ return (
               <Form.Item
                 label="Employee ID"
                 name="employee_id"
-                
+               
               >
                 <Input
                   style={{
@@ -875,8 +878,8 @@ return (
                     border: 0,
                     borderBottom: '1px solid rgb(180,180,180)',
                   }}
-
-                  
+ 
+                 
                 />
               </Form.Item>
             </Col>
@@ -884,7 +887,7 @@ return (
               <Form.Item
                 label="Employee Name"
                 name="employee_name"
-                
+               
               >
                 <Input style={{
                     borderRadius: 0,
@@ -899,7 +902,7 @@ return (
               <Form.Item
                 label="Employee Mail"
                 name="employee_mail"
-                
+               
               >
                 <Input style={{
                     borderRadius: 0,
@@ -917,7 +920,7 @@ return (
                   }}/>
               </Form.Item>
             </Col>
-
+ 
             <Col span={12}>
               <Form.Item label="Appraisal date" name="appraisal_date" >
                 <DatePicker style={{ width: '100%' }} style={{
@@ -927,8 +930,8 @@ return (
                   }}/>
               </Form.Item>
             </Col>
-
-
+ 
+ 
           </Row>
           <Row gutter={16}>
             <Col span={12}>
@@ -940,7 +943,7 @@ return (
                   }}/>
               </Form.Item>
             </Col>
-
+ 
             <Col span={12}>
               <Form.Item label="Manager" name="manager" >
                 <Input style={{
@@ -950,13 +953,13 @@ return (
                   }}/>
               </Form.Item>
             </Col>
-
-
+ 
+ 
             <Col span={12}>
               <Form.Item
                 label="Reporting Manager"
                 name="reporting_manager"
-                
+               
               >
                 <Input style={{
                     borderRadius: 0,
@@ -999,7 +1002,7 @@ return (
               <Form.Item
                 label="Experience Before Focusr"
                 name="experience_in_domain_before_focusr"
-                
+               
               >
                 <Input type="number" style={{
                     borderRadius: 0,
@@ -1041,9 +1044,9 @@ return (
         </Form>
       </Modal>
     </div>
-
-
-
+ 
+ 
+ 
 <SearchBox
               placeholder="Search..."
             style={ {backgroundColor: themestate ? "rgb(41,41,41)" : ""}}
@@ -1056,8 +1059,8 @@ return (
         <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleToggleFilters}><FilterRegular className={styles.iconLarge}/>
           {showFilters ? "Hide Filters" : "Show Filters"}
         </Button>
-
-
+ 
+ 
       </div>
       {showFilters && (
         // <Modal header="Filters" onClose={handleFilterToggle}>
@@ -1072,16 +1075,16 @@ return (
              <Checkbox label="Choose Manager" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
              <Checkbox label="Choose Reviewer" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
              <Checkbox label="Date Cap" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
-            
+           
         </div>
         <div style={{display:'flex'}}>
         <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}}onClick={handleApplyFilters}> Apply </Button>
        <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleRemoveFilters}> Remove all</Button>
    </div>
         </div>
-
+ 
       )}
-      
+     
      <div style={{ maxHeight: '72vh', overflowY: 'auto' }}>
      <Table>
       <TableHeader>
@@ -1115,7 +1118,7 @@ return (
             <TableCell>{item.reporting_manager}</TableCell>
           </TableRow>
         )))}
-      
+     
         {selectedTab2==='tab2'&&(sortednmData.map((item) => (
           <TableRow key={item.employee_id} style={themestate ? { color: 'white' } : {}} className={themestate ? "hovereffect dark" : "hovereffect"} onClick={() => handleRowClick(item)}>
             <TableSelectionCell
@@ -1135,7 +1138,7 @@ return (
             <TableCell>{item.reporting_manager}</TableCell>
           </TableRow>
         )))}
-
+ 
 {selectedTab2==='tab3'&&(sortedData.map((item) => (
           <TableRow key={item.employee_id} style={themestate ? { color: 'white' } : {}} className={themestate ? "hovereffect dark" : "hovereffect"} onClick={() => handleRowClick(item)}>
             <TableSelectionCell
@@ -1158,9 +1161,17 @@ return (
       </TableBody>
     </Table>
 </div>
-
+ 
     </div>
   );
 };
-
+ 
 export default HREmployee;
+ 
+ 
+ 
+ 
+//  <div style={{display:"flex"}}>
+//                     <Add24Filled style={{color:'rgb(1,105,185)'}}/>
+//                     <Link style={{marginLeft:"10px"}}>Add Reviewer</Link>
+//                     </div>

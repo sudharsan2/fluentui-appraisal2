@@ -24,12 +24,19 @@ import {
   DrawerProps,
   Avatar,
   Text,
+  Link,
   createTableColumn,
   useTableFeatures,
   useTableSort,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbButton,
+  BreadcrumbDivider,
+  BreadcrumbProps
 } from "@fluentui/react-components";
-import {AddRegular, PersonDeleteRegular , EditRegular, SearchRegular, FilterRegular, FilterDismissRegular, FilterAddRegular, ChartMultipleFilled,Dismiss24Regular ,Timer20Regular,Calendar20Regular, ArrowDownRegular, ArrowClockwiseRegular   } from "@fluentui/react-icons"; // Import the icons
+import {AddRegular, PersonDeleteRegular , EditRegular, SearchRegular, FilterRegular, FilterDismissRegular, FilterAddRegular, ChartMultipleFilled,ChartMultipleRegular,Dismiss24Regular ,Timer20Regular,Calendar20Regular, ArrowDownRegular, ArrowClockwiseRegular,ShareMultiple24Filled ,Add24Filled,ShareIos24Filled  } from "@fluentui/react-icons"; // Import the icons
 import './page.css';
+import { Link } from "@fluentui/react";
 
 
 const useStyles = makeStyles({
@@ -38,7 +45,7 @@ const useStyles = makeStyles({
     display: "flex",
     flexDirection: "column",
     justifyContent: "flex-start",
-    ...shorthands.padding("50px", "20px"),
+    padding: ("50px", "20px"),
     rowGap: "20px",
   },
   controls: {
@@ -62,8 +69,7 @@ const useStyles = makeStyles({
   },
   container: {
     display: 'grid',
-    gridTemplateColumns: '1fr 1fr',
-    gap: '20px',
+    gap: '15px',
     // padding: '20px',
     marginTop:"3vh",
     fontFamily: 'Arial, sans-serif',
@@ -74,8 +80,10 @@ const useStyles = makeStyles({
     flexDirection: 'column',
     gap: '10px',
   },
-  gridrow:{
-    marginTop:"3vw"
+  gridrow: {
+    display: 'flex',
+    alignItems: 'center',
+    marginBottom: '10px',
   },
   heading: {
     fontWeight: 'bold',
@@ -94,6 +102,120 @@ const useStyles = makeStyles({
   editIcon: {
     marginRight: '5px',
   },
+  formDetails: {
+    display: 'flex',
+    alignItems: 'center',
+    cursor: 'pointer',
+    color: '#0078d4',
+  },
+  formLink: {
+      display: 'flex',
+      alignItems: 'center',
+      cursor: 'pointer',
+      color: '#0169b9'
+  },
+  reviewerLink: {
+    display: 'flex',
+    alignItems: 'center',
+    cursor: 'pointer',
+    color:'#0169b9'
+  },
+  reviewerDetails: {
+    display: 'flex',
+    alignItems: 'center',
+    cursor: 'pointer',
+    color: '#0078d4',
+  },
+  shareLink: {
+    display: 'flex',
+    alignItems: 'center',
+    cursor: 'pointer',
+    color:'rgb(1,105,185)'
+  },
+  shareDetails: {
+    display: 'flex',
+    alignItems: 'center',
+    cursor: 'pointer',
+    color: '#0078d4',
+  },
+  uploadIcon: {
+    marginRight: '5px',
+  },
+  gridrow:{
+    display: 'flex',
+    alignItems: 'center',
+    marginBottom: '10px',
+  },
+  heading: {
+    fontWeight: 'bold',
+  },
+  row: {
+    display: 'flex',
+    // justifyContent: 'space-between',
+    width: '100%',
+  },
+  editDetails: {
+    display: 'flex',
+    alignItems: 'center',
+    cursor: 'pointer',
+    color: '#0078d4', // Change this to your preferred color
+  },
+  editIcon: {
+    marginRight: '5px',
+  },
+  filterPanel: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  gridTemplate1: {
+    gridTemplateColumns: '1fr 1fr',
+    gridTemplateAreas: `
+      "nameAndId managerInfo"
+      "name empid"
+      "email doj"
+      "status dos"
+      "role appraisal"
+      "dept totalExperience"
+      "editDetails focusRExperience"
+    `,
+  },
+  gridTemplate2: {
+    gridTemplateColumns: '1fr 1fr',
+    gridTemplateAreas: `
+      "nameAndId formLink"
+      "email doj"
+      "status dos"
+      "role appraisal"
+      "dept reviewer"
+      "editDetails share"
+    `,
+  },
+  gridTemplate3: {
+    gridTemplateColumns: '1fr 1fr',
+    gridTemplateAreas: `
+      "nameAndId empForm"
+      "email doj"
+      "status dos"
+      "role appraisal"
+      "dept dept"
+    `
+  },
+  gridTemplate4: {
+    gridTemplateColumns: '1fr 1fr',
+    gridTemplateAreas: `
+    "nameAndId empForm"
+    "email doj"
+    "status dos"
+    "role appraisal"
+    "dept share"
+    
+    `
+  },
+
+  content: {
+    fontSize: '13px',
+    marginLeft: '10px'
+  }
 });
 
 const data = {
@@ -426,8 +548,11 @@ const RVReviewer = () => {
         size="large"
         position="end"
         open={open}
-        onOpenChange={(_, state) => setOpen(state.open)}
-        style={{height:'calc(100vh - 48px)',marginTop:"48px"}}
+        onOpenChange={(_, state) => {
+          setOpen(state.open);
+          handleTabSelect1('tab1');
+        }}
+        style={{height:'calc(100vh - 48px)',marginTop:"48px", backgroundColor:themestate?"rgb(51, 51, 51)":""}}
       >
         <DrawerHeader>
           <DrawerHeaderTitle
@@ -435,7 +560,7 @@ const RVReviewer = () => {
               <Button
                 appearance="subtle"
                 aria-label="Close"
-                icon={<Dismiss24Regular />}
+                icon={<Dismiss24Regular style={{color: themestate?"white":""}}/>}
                 onClick={() => setOpen(false)}
               />
             }
@@ -446,111 +571,410 @@ const RVReviewer = () => {
         {open && selectedEmployee && (
         <DrawerBody>
         <div>
-          <div style={{marginLeft:"3vw", marginTop:"2vh",display:"flex",width:"100%"}}>
+        <div style={{marginLeft:"3vw", marginTop:"2vh",display:"flex",width:"100%"}}>
             <Avatar color="brand" initials="BR" name="brand color avatar" size={96}/>
             <div style={{display:"flex",marginLeft:"2vw", flexDirection:"column",justifyContent:"center",width:"60%"}}>
-            <Text  size={700} style={{marginBottom:"2vh"}}> {selectedEmployee.name}</Text>
+            <Text  size={700} style={{marginBottom:"2vh", fontWeight:"bold",color:themestate?"white":""}}> {selectedEmployee.name}</Text>
             <div style={{display:"flex" ,width:"100%",justifyContent: "space-between"}}>
-            <Text  size={400}> {selectedEmployee.empid} </Text>
+            <Text  size={250} style={{fontWeight:"bold",color:themestate?"white":""}}> {selectedEmployee.empid} </Text>
             <div style={{display:"flex"}}>
             <Timer20Regular style={{color:'rgb(1,105,185)'}}/>
-            <Text  size={400} style={{marginLeft:"3px"}}> Yet to fill the employee form</Text>
+            <Text  size={250} style={{marginLeft:"3px",fontWeight:"bold",color:themestate?"white":""}}> Yet to fill the employee form</Text>
             </div>
             <div style={{display:"flex"}}>
             <Calendar20Regular style={{color:'rgb(1,105,185)'}}/>
-            <Text  size={400} style={{marginLeft:"3px"}}> 1 May 2024</Text>
+            <Text  size={250} style={{marginLeft:"3px", fontWeight:"bold",color:themestate?"white":""}}> 1 May 2024</Text>
             </div>
             </div>
             </div>
             </div>
             <TabList
-                defaultSelectedValue="tab2"
+                defaultSelectedValue="tab1"
                 appearance="subtle"
-                // onTabSelect={handleTabChange}
+                onTabSelect={handleTabSelect}
                 style={{marginLeft:"3vw", marginTop:"3vh"}}
             >
-                <Tab value="tab1">Employee Info</Tab>
-                <Tab value="tab2">Employee Form</Tab>
+                <Tab value="tab1" className={themestate ? "tab dark drawer" : "tab"} style= {{border:'1px solid transparent'}}>Employee Info</Tab>
+                <Tab value="tab2" className={themestate ? "tab dark drawer" : "tab"} style= {{border:'1px solid transparent'}}>Employee Comments</Tab>
+                <Tab value="tab3" className={themestate ? "tab dark drawer" : "tab"} style= {{border:'1px solid transparent'}}>Manager Comments</Tab>
+                <Tab value="tab4" className={themestate ? "tab dark drawer" : "tab"} style= {{border:'1px solid transparent'}}>Reviewer Comments</Tab>
                 
                 
             </TabList>
             
-        <div className={styles.container}>
-          <div className={styles.section}>
-            <div className={styles.heading}>Name and Emp ID :</div>
-            <div>{selectedEmployee.name}</div>
-            <div>{selectedEmployee.empid}</div>
+            {selectedTab1 === 'tab1' && (
+              <div className={`${styles.container} ${styles.gridTemplate1}`}>
+        {/* <div className={styles.gridrow} style={{ gridArea: 'nameAndId' }}> */}
+          <div className={`${styles.section} ${styles.nameAndId}`}>
+            <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Name and Emp ID :</div>
+            <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.name}</div>
+            <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.empid}</div>
+          {/* </div> */}
+        </div>
 
-            <div className={styles.gridrow}>
-              <div className={styles.heading}>Email</div>
-              <div>{selectedEmployee.email}</div>
-            </div>
-            <div className={styles.gridrow}>
-              <div className={styles.heading}>Current Status</div>
-              <div>{selectedEmployee.status}</div>
-            </div>
-            <div className={styles.gridrow}>
-              <div className={styles.heading}>Role</div>
-              <div>{selectedEmployee.role}</div>
-            </div>
-            <div className={styles.gridrow}>
-              <div className={styles.heading}>Department</div>
-              <div>{selectedEmployee.dept}</div>
-            </div>
-            <div className={styles.gridrow}>
-              <div className={styles.editDetails}>
-                <EditRegular className={styles.editIcon} />
-                <span>Edit Details</span>
-              </div>
-            </div>
+        {/* <div className={styles.gridrow} style={{ gridArea: 'managerInfo' }}> */}
+          <div className={`${styles.section} ${styles.managerInfo}`}>
+            <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Manager Info:</div>
+            <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.manager}</div>
+            <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.managerId}</div>
           </div>
-          <div className={styles.section}>
-            <div className={styles.heading}>Manager Info</div>
-            <div>{selectedEmployee.manager}</div>
-            <div>{selectedEmployee.managerId}</div>
-            <div className={styles.gridrow}>
-              <div className={styles.row}>
-                <div className={styles.heading}>Date of Joining</div>
-                <div>{selectedEmployee.doj}</div>
-              </div>
-            </div>
-            <div className={styles.gridrow}>
-              <div className={styles.row}>
-                <div className={styles.heading}>Date of Starting</div>
-                <div>{selectedEmployee.dos}</div>
-              </div>
-            </div>
-            <div className={styles.gridrow}>
-              <div className={styles.row}>
-                <div className={styles.heading}>Appraisal Date</div>
-                <div>{selectedEmployee.appraisal}</div>
-              </div>
-            </div>
-            <div className={styles.gridrow}>
-              <div className={styles.row}>
-                <div className={styles.heading}>Total Experience</div>
-                <div>{selectedEmployee.totalExperience}</div>
-              </div>
-            </div>
-            <div className={styles.gridrow}>
-              <div className={styles.row}>
-                <div className={styles.heading}>Experience in FocusR</div>
-                <div>{selectedEmployee.focusRExperience}</div>
-              </div>
-            </div>
+        {/* </div> */}
+
+        {/* <div className={styles.gridrow} style={{ gridArea: 'email' }}> */}
+          <div className={`${styles.section} ${styles.email}`}>
+            <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Email</div>
+            <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.email}</div>
+          </div>
+        {/* </div> */}
+
+      {/* <div className={styles.gridrow} style={{ gridArea: 'doj' }}> */}
+      <div className={`${styles.section} ${styles.doj}`}>
+          <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Date of Joining:</div>
+          <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.doj}</div>
+          {/* <div style={{marginLeft:"10px",color:themestate?"white":""}}>{selectedEmployee.doj}</div> */}
+      </div>
+      {/* </div> */}
+      
+      {/* <div className={styles.gridrow} style={{ gridArea: 'status' }}> */}
+      <div className={`${styles.section} ${styles.status}`}>
+        <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Current Status:</div>
+        <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.status}</div>
+      </div>
+      {/* </div> */}
+
+      {/* <div className={styles.gridrow} style={{ gridArea: 'dos' }}> */}
+      <div className={`${styles.section} ${styles.dos}`}>
+          <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Date of Starting:</div>
+          <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.dos}</div>
+      </div>
+      {/* </div> */}
+
+      {/* <div className={styles.gridrow} style={{ gridArea: 'role' }}> */}
+      <div className={`${styles.section} ${styles.role}`}>
+        <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Role:</div>
+        <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.role}</div>
+      </div>
+      {/* </div> */}
+
+      {/* <div className={styles.gridrow} style={{ gridArea: 'appraisal' }}> */}
+      <div className={`${styles.section} ${styles.appraisal}`}>
+          <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Appraisal Date:</div>
+          <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.appraisal}</div>
+      </div>
+      {/* </div> */}
+
+      <div className={styles.gridrow} style={{ gridArea: 'dept' }}>
+      <div className={`${styles.section} ${styles.dept}`}>
+        <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Department:</div>
+        <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.dept}</div>
+      </div>
+      </div>
+
+      <div className={styles.gridrow} style={{ gridArea: 'totalExperience' }}>
+      <div className={`${styles.section} ${styles.totalExperience}`}>
+          <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Total Experience:</div>
+          <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.totalExperience}</div>
+      </div>
+      </div>
+
+      <div className={styles.gridrow} style={{ gridArea: 'editDetails' }}>
+      <div className={`${styles.section} ${styles.editDetails}`}>
+        <div className={styles.editDetails}>
+          <EditRegular className={styles.editIcon} />
+          <span>Edit Details</span>
+        </div>
+      </div>
+      </div>
+
+      <div className={styles.gridrow} style={{ gridArea: 'focusRExperience' }}>
+      <div className={`${styles.section} ${styles.focusRExperience}`}>
+          <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Experience in FocusR:</div>
+          <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.focusRExperience}</div>
+      </div>
+      </div>
+    </div>
+        )}
+        {selectedTab1 === 'tab2' && (
+              <div className={`${styles.container} ${styles.gridTemplate2}`}>
+        {/* <div className={styles.gridrow} style={{ gridArea: 'nameAndId' }}> */}
+          <div className={`${styles.section} ${styles.nameAndId}`}>
+            <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Name and Emp ID :</div>
+            <div className={styles.name} style={{color:themestate?"white":""}}>{selectedEmployee.name}</div>
+            <div className={styles.empid} style={{color:themestate?"white":""}}>{selectedEmployee.empid}</div>
+          {/* </div> */}
+        </div>
+
+        {/* <div className={styles.gridrow} style={{ gridArea: 'managerInfo' }}> */}
+          <div className={`${styles.section} ${styles.managerInfo}`}>
+            <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Manager Info:</div>
+            <div className={styles.manager} style={{color:themestate?"white":""}}>{selectedEmployee.manager}</div>
+            <div className={styles.managerId} style={{color:themestate?"white":""}}>{selectedEmployee.managerId}</div>
+          </div>
+        {/* </div> */}
+
+        {/* <div className={styles.gridrow} style={{ gridArea: 'email' }}> */}
+          <div className={`${styles.section} ${styles.email}`}>
+            <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Email</div>
+            <div style={{color:themestate?"white":""}}>{selectedEmployee.email}</div>
+          </div>
+        {/* </div> */}
+
+      {/* <div className={styles.gridrow} style={{ gridArea: 'doj' }}> */}
+      <div className={`${styles.section} ${styles.doj}`}>
+          <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Date of Joining:</div>
+          <div className={styles.doj} style={{color:themestate?"white":""}}>{selectedEmployee.doj}</div>
+          {/* <div style={{marginLeft:"10px",color:themestate?"white":""}}>{selectedEmployee.doj}</div> */}
+      </div>
+      {/* </div> */}
+      
+      {/* <div className={styles.gridrow} style={{ gridArea: 'status' }}> */}
+      <div className={`${styles.section} ${styles.status}`}>
+        <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Current Status:</div>
+        <div style={{color:themestate?"white":""}}>{selectedEmployee.status}</div>
+      </div>
+      {/* </div> */}
+
+      {/* <div className={styles.gridrow} style={{ gridArea: 'dos' }}> */}
+      <div className={`${styles.section} ${styles.dos}`}>
+          <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Date of Starting:</div>
+          <div style={{color:themestate?"white":""}}>{selectedEmployee.dos}</div>
+      </div>
+      {/* </div> */}
+
+      {/* <div className={styles.gridrow} style={{ gridArea: 'role' }}> */}
+      <div className={`${styles.section} ${styles.role}`}>
+        <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Role:</div>
+        <div style={{color:themestate?"white":""}}>{selectedEmployee.role}</div>
+      </div>
+      {/* </div> */}
+
+      {/* <div className={styles.gridrow} style={{ gridArea: 'appraisal' }}> */}
+      <div className={`${styles.section} ${styles.appraisal}`}>
+          <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Appraisal Date:</div>
+          <div style={{color:themestate?"white":""}}>{selectedEmployee.appraisal}</div>
+      </div>
+      {/* </div> */}
+
+      <div className={styles.gridrow} style={{ gridArea: 'dept' }}>
+      <div className={`${styles.section} ${styles.dept}`}>
+        <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Department:</div>
+        <div style={{color:themestate?"white":""}}>{selectedEmployee.dept}</div>
+      </div>
+      </div>
+
+      <div className={styles.gridrow} style={{ gridArea: 'totalExperience' }}>
+      <div className={`${styles.section} ${styles.totalExperience}`}>
+          <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Total Experience:</div>
+          <div style={{color:themestate?"white":""}}>{selectedEmployee.totalExperience}</div>
+      </div>
+      </div>
+
+      <div className={styles.gridrow} style={{ gridArea: 'editDetails' }}>
+      <div className={`${styles.section} ${styles.editDetails}`}>
+        <div className={styles.editDetails}>
+          <EditRegular className={styles.editIcon} />
+          <span>Edit Details</span>
+        </div>
+      </div>
+      </div>
+
+      <div className={styles.gridrow} style={{ gridArea: 'focusRExperience' }}>
+      <div className={`${styles.section} ${styles.focusRExperience}`}>
+          <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Experience in FocusR:</div>
+          <div style={{color:themestate?"white":""}}>{selectedEmployee.focusRExperience}</div>
+      </div>
+      </div>
+    </div>
+        )}
+        {selectedTab1 === 'tab3' && (
+              <div className={`${styles.container} ${styles.gridTemplate3}`}>
+        {/* <div className={styles.gridrow} style={{ gridArea: 'nameAndId' }}> */}
+          <div className={`${styles.section} ${styles.nameAndId}`}>
+            <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Name and Emp ID :</div>
+            <div className={styles.name} style={{color:themestate?"white":""}}>{selectedEmployee.name}</div>
+            <div className={styles.empid} style={{color:themestate?"white":""}}>{selectedEmployee.empid}</div>
+          {/* </div> */}
+        </div>
+
+        {/* <div className={styles.gridrow} style={{ gridArea: 'managerInfo' }}> */}
+          <div className={`${styles.section} ${styles.managerInfo}`}>
+            <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Manager Info:</div>
+            <div className={styles.manager} style={{color:themestate?"white":""}}>{selectedEmployee.manager}</div>
+            <div className={styles.managerId} style={{color:themestate?"white":""}}>{selectedEmployee.managerId}</div>
+          </div>
+        {/* </div> */}
+
+        {/* <div className={styles.gridrow} style={{ gridArea: 'email' }}> */}
+          <div className={`${styles.section} ${styles.email}`}>
+            <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Email</div>
+            <div style={{color:themestate?"white":""}}>{selectedEmployee.email}</div>
+          </div>
+        {/* </div> */}
+
+      {/* <div className={styles.gridrow} style={{ gridArea: 'doj' }}> */}
+      <div className={`${styles.section} ${styles.doj}`}>
+          <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Date of Joining:</div>
+          <div className={styles.doj} style={{color:themestate?"white":""}}>{selectedEmployee.doj}</div>
+          {/* <div style={{marginLeft:"10px",color:themestate?"white":""}}>{selectedEmployee.doj}</div> */}
+      </div>
+      {/* </div> */}
+      
+      {/* <div className={styles.gridrow} style={{ gridArea: 'status' }}> */}
+      <div className={`${styles.section} ${styles.status}`}>
+        <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Current Status:</div>
+        <div style={{color:themestate?"white":""}}>{selectedEmployee.status}</div>
+      </div>
+      {/* </div> */}
+
+      {/* <div className={styles.gridrow} style={{ gridArea: 'dos' }}> */}
+      <div className={`${styles.section} ${styles.dos}`}>
+          <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Date of Starting:</div>
+          <div style={{color:themestate?"white":""}}>{selectedEmployee.dos}</div>
+      </div>
+      {/* </div> */}
+
+      {/* <div className={styles.gridrow} style={{ gridArea: 'role' }}> */}
+      <div className={`${styles.section} ${styles.role}`}>
+        <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Role:</div>
+        <div style={{color:themestate?"white":""}}>{selectedEmployee.role}</div>
+      </div>
+      {/* </div> */}
+
+      {/* <div className={styles.gridrow} style={{ gridArea: 'appraisal' }}> */}
+      <div className={`${styles.section} ${styles.appraisal}`}>
+          <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Appraisal Date:</div>
+          <div style={{color:themestate?"white":""}}>{selectedEmployee.appraisal}</div>
+      </div>
+      {/* </div> */}
+
+      <div className={styles.gridrow} style={{ gridArea: 'dept' }}>
+      <div className={`${styles.section} ${styles.dept}`}>
+        <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Department:</div>
+        <div style={{color:themestate?"white":""}}>{selectedEmployee.dept}</div>
+      </div>
+      </div>
+
+      <div className={styles.gridrow} style={{ gridArea: 'totalExperience' }}>
+      <div className={`${styles.section} ${styles.totalExperience}`}>
+          <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Total Experience:</div>
+          <div style={{color:themestate?"white":""}}>{selectedEmployee.totalExperience}</div>
+      </div>
+      </div>
+
+      <div className={styles.gridrow} style={{ gridArea: 'editDetails' }}>
+      <div className={`${styles.section} ${styles.editDetails}`}>
+        <div className={styles.editDetails}>
+          <EditRegular className={styles.editIcon} />
+          <span>Edit Details</span>
+        </div>
+      </div>
+      </div>
+
+      <div className={styles.gridrow} style={{ gridArea: 'focusRExperience' }}>
+      <div className={`${styles.section} ${styles.focusRExperience}`}>
+          <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Experience in FocusR:</div>
+          <div style={{color:themestate?"white":""}}>{selectedEmployee.focusRExperience}</div>
+      </div>
+      </div>
+    </div>
+        )}
+        {selectedTab1 === 'tab4' && (
+              <div className={`${styles.container} ${styles.gridTemplate4}`}>
+        {/* <div className={styles.gridrow} style={{ gridArea: 'nameAndId' }}> */}
+          <div className={`${styles.section} ${styles.nameAndId}`}>
+            <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Name and Emp ID :</div>
+            <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.name}</div>
+            <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.empid}</div>
+          {/* </div> */}
+        </div>
+
+        {/* <div className={styles.gridrow} style={{ gridArea: 'empForm' }}> */}
+        <div className={`${styles.section} ${styles.empform}`}>
+            <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Employee Filled Form:</div>
+            <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.empForm}</div>
+          </div>
+        {/* </div> */}
+
+        {/* <div className={styles.gridrow} style={{ gridArea: 'email' }}> */}
+          <div className={`${styles.section} ${styles.email}`}>
+            <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Email:</div>
+            <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.email}</div>
+          </div>
+        {/* </div> */}
+
+      {/* <div className={styles.gridrow} style={{ gridArea: 'doj' }}> */}
+      <div className={`${styles.section} ${styles.doj}`}>
+          <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Date of Joining:</div>
+          <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.doj}</div>
+          {/* <div style={{marginLeft:"10px",color:themestate?"white":""}}>{selectedEmployee.doj}</div> */}
+      </div>
+      {/* </div> */}
+      
+      {/* <div className={styles.gridrow} style={{ gridArea: 'status' }}> */}
+      <div className={`${styles.section} ${styles.status}`}>
+        <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Current Status:</div>
+        <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.status}</div>
+      </div>
+      {/* </div> */}
+
+      {/* <div className={styles.gridrow} style={{ gridArea: 'dos' }}> */}
+      <div className={`${styles.section} ${styles.dos}`}>
+          <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Date of Starting:</div>
+          <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.dos}</div>
+      </div>
+      {/* </div> */}
+
+      {/* <div className={styles.gridrow} style={{ gridArea: 'role' }}> */}
+      <div className={`${styles.section} ${styles.role}`}>
+        <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Role:</div>
+        <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.role}</div>
+      </div>
+      {/* </div> */}
+
+      {/* <div className={styles.gridrow} style={{ gridArea: 'appraisal' }}> */}
+      <div className={`${styles.section} ${styles.appraisal}`}>
+          <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Appraisal Date:</div>
+          <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.appraisal}</div>
+      </div>
+      {/* </div> */}
+
+      <div className={styles.gridrow} style={{ gridArea: 'dept' }}>
+      <div className={`${styles.section} ${styles.dept}`}>
+        <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Department:</div>
+        <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.dept}</div>
+      </div>
+      </div>
+
+      <div className={styles.gridrow} style={{ gridArea: 'share' }}>
+        <div className={`${styles.section} ${styles.share}`}>
+          <div className={styles.shareDetails}>
+            <ShareIos24Filled style={{color:'rgb(1,105,185)'}}/>
+            <Link className={styles.shareLink}>Share to HR</Link>
           </div>
         </div>
-     
-        </div>
+      </div>
+    </div>
+        )}
+          </div>
         </DrawerBody>
          )}
       </OverlayDrawer>
         {/* <div style={{position:'fixed', backgroundColor:'white', zIndex:1000, width:'vw'}}> */}
         {/* <div style={{ position: 'fixed', backgroundColor: 'white', zIndex: 1000, width: '100%' }}> */}
- 
+        <Breadcrumb aria-label="breadcrumb">
+    <BreadcrumbItem>
+      <Link href="" className="custom-link">Reviewer</Link>
+    </BreadcrumbItem>
+    <BreadcrumbDivider />
+    <BreadcrumbItem>
+      <Link href="/hremployee" className="custom-link">Review</Link>
+    </BreadcrumbItem>
+    </Breadcrumb>
+
+
         <h2 style={themestate?{color:'white'}:{}}>Review</h2>
       <TabList
-        defaultSelectedValue="tab2"
+        defaultSelectedValue="tab1"
         appearance="subtle"
         onTabSelect={handleTabChange}
         style={themestate?{color:'white'}:{}}

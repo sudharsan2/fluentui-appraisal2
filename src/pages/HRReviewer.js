@@ -29,6 +29,11 @@ import {
   createTableColumn,
   useTableFeatures,
   useTableSort,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbButton,
+  BreadcrumbDivider,
+  BreadcrumbProps
 } from "@fluentui/react-components";
 import {AddRegular, PersonDeleteRegular , EditRegular, SearchRegular, FilterRegular, FilterDismissRegular, FilterAddRegular, ChartMultipleRegular,Dismiss24Regular ,Timer20Regular,Calendar20Regular ,ShareMultiple24Filled ,Add24Filled,ShareIos24Filled } from "@fluentui/react-icons"; // Import the icons
 import './page.css';
@@ -896,6 +901,15 @@ const HRReviewer = () => {
         {/* <div style={{position:'fixed', backgroundColor:'white', zIndex:1000, width:'vw'}}> */}
         {/* <div style={{ position: 'fixed', backgroundColor: 'white', zIndex: 1000, width: '100%' }}> */}
  
+        <Breadcrumb aria-label="breadcrumb2">
+    <BreadcrumbItem>
+      <Link href="" className="custom-link">HR</Link>
+    </BreadcrumbItem>
+    <BreadcrumbDivider />
+    <BreadcrumbItem>
+      <Link href="/hrreviewer" className="custom-link">Reviewer</Link>
+    </BreadcrumbItem>
+    </Breadcrumb>
         <h2 style={themestate?{color:'white'}:{}}>Review</h2>
       <TabList
         defaultSelectedValue="tab1"

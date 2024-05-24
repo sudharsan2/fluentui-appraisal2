@@ -26,13 +26,20 @@ import {
   DrawerProps,
   Avatar,
   Text,
+  Link,
   createTableColumn,
   useTableFeatures,
   useTableSort,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbButton,
+  BreadcrumbDivider,
+  BreadcrumbProps
 } from "@fluentui/react-components";
 import {AddRegular, PersonDeleteRegular , EditRegular, SearchRegular, FilterRegular, FilterDismissRegular, FilterAddRegular, ChartMultipleFilled,ChartMultipleRegular,Dismiss24Regular ,Timer20Regular,Calendar20Regular, ArrowDownRegular, ArrowClockwiseRegular,ShareMultiple24Filled ,Add24Filled,ShareIos24Filled  } from "@fluentui/react-icons"; // Import the icons
 import './page.css';
 import { Link } from "@fluentui/react";
+
 
 
 const useStyles = makeStyles({
@@ -907,6 +914,15 @@ const MGAppraisal = () => {
         {/* <div style={{position:'fixed', backgroundColor:'white', zIndex:1000, width:'vw'}}> */}
         {/* <div style={{ position: 'fixed', backgroundColor: 'white', zIndex: 1000, width: '100%' }}> */}
  
+      <Breadcrumb aria-label="breadcrumb">
+    <BreadcrumbItem>
+      <Link href="" className="custom-link">Manager</Link>
+    </BreadcrumbItem>
+    <BreadcrumbDivider />
+    <BreadcrumbItem>
+      <Link href="/hremployee" className="custom-link">Appraisal</Link>
+    </BreadcrumbItem>
+    </Breadcrumb>
         <h2 style={themestate?{color:'white'}:{}}>Appraisal</h2>
       <TabList
         defaultSelectedValue="tab1"

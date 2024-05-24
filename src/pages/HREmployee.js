@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import {useSelector, useDispatch} from 'react-redux';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import axios from 'axios';
 import {
   Table,
   TableHeader,
@@ -24,7 +26,7 @@ import {
   SearchBox,
   Text,
 } from "@fluentui/react-components";
-import {AddRegular, PersonDeleteRegular , EditRegular, SearchRegular, FilterRegular, FilterDismissRegular, FilterAddRegular, ChartMultipleFilled,ChartMultipleRegular,Dismiss24Regular ,Timer20Regular,Calendar20Regular, ArrowDownRegular, ArrowClockwiseRegular,ShareMultiple24Filled ,Add24Filled,ShareIos24Filled  } from "@fluentui/react-icons"; // Import the icons
+import {AddRegular, PersonDeleteRegular , EditRegular, SearchRegular, FilterRegular, FilterDismissRegular, FilterAddRegular, ChartMultipleFilled,ChartMultipleRegular,Dismiss24Regular ,Timer20Regular,Calendar20Regular, ArrowDownRegular, ArrowClockwiseRegular,ShareMultiple24Filled ,Add24Filled,ShareIos24Filled,CheckmarkCircleFilled  } from "@fluentui/react-icons"; // Import the icons
 import './page.css';
 import zIndex from "@mui/material/styles/zIndex";
 import { Link } from "@fluentui/react";
@@ -98,7 +100,26 @@ const useStyles = makeStyles({
   filterPanel:{
     display:'flex',
     flexDirection:'column',
-  }
+  },
+  copiedContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    backgroundColor: '#e6f4ea',
+    border: '1px solid #c7e2d4',
+    borderRadius: '4px',
+    padding: '10px',
+    marginTop: '10px',
+  },
+  icon: {
+    color: '#34a853',
+    marginRight: '10px',
+    fontSize: '20px',
+  },
+  message: {
+    color: '#202124',
+    fontSize: '16px',
+    fontWeight: 'bold',
+  },
 });
 
 const data = {
@@ -273,6 +294,10 @@ const HREmployee = () => {
   const [open, setOpen] = React.useState(false);
   const [selectedTab1, setSelectedTab1] = React.useState('tab1');
 
+
+  
+  const [copied, setCopied] = React.useState(false);
+
   const [sortState, setSortState] = useState({
     sortDirection: 'ascending',
     sortColumn: 'empid',
@@ -320,6 +345,36 @@ const HREmployee = () => {
 
   const handleApplyFilters = () => {
     setSelectedFilters(newSelectedFilters); // Update selected filters state
+  };
+
+  const handlesharetoManager = async (parameter) => {
+    try {
+      const result = await axios.post('http://127.0.0.1:8000/user/employee/changeFormStatus', {
+        "empId":parameter,"status":"sharedToManager"
+      });
+       // Extract and set the token from the response
+    } catch (error) {
+      console.error('Error sending data to the API', error);
+    }
+  };
+
+  const handleShareLinkClick = async (parameter) => {
+    try {
+      const result = await axios.post('http://172.235.21.99:5051/user/form-links', {
+        "empId": parameter, // Include the parameter in the request data
+      });
+      const token = result.data.token; // Extract the token from the response
+
+      // Copy the token to the clipboard
+      navigator.clipboard.writeText(token).then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000); // Reset copied state after 2 seconds
+      }).catch((error) => {
+        console.error('Error copying text to clipboard', error);
+      });
+    } catch (error) {
+      console.error('Error sending data to the API', error);
+    }
   };
 
   const columns = [
@@ -739,9 +794,25 @@ const HREmployee = () => {
                 </div>
                 <div className={styles.section}>
                   <div className={styles.heading}>
+                    <div>
                   <div style={{display:"flex"}}>
                     <ShareMultiple24Filled style={{color:'rgb(1,105,185)'}}/>
-                    <Link style={{marginLeft:"10px"}}>Share Form Link</Link>
+                    <div>
+                    <Link 
+                      style={{ marginLeft: "10px" }} 
+                      onClick={() => handleShareLinkClick(selectedEmployee.empid)}
+                    >
+                      Share Form Link
+                    </Link>
+                    
+                    </div>
+                    </div>
+                    {copied && (
+                      <div className={styles.copiedContainer}>
+                        <CheckmarkCircleFilled style={{color:"green"}}/>
+                        <span className={styles.message}>Link copied.</span>
+                      </div>
+                    )}
                     </div> 
                   
                   </div>
@@ -781,7 +852,7 @@ const HREmployee = () => {
                     <div className={styles.heading}>
                   <div style={{display:"flex"}}>
                     <ShareIos24Filled style={{color:'rgb(1,105,185)'}}/>
-                    <Link style={{marginLeft:"10px"}}>Share to Thangamani</Link>
+                    <Link style={{marginLeft:"10px"}} onClick={() => handlesharetoManager(selectedEmployee.empid)}>Share to Thangamani</Link>
                     </div> 
                   
                   </div>

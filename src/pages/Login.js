@@ -49,20 +49,23 @@ const Login = () => {
  
   useEffect(() => {
     if (isAuthenticated === 2) {
-      const role = localStorage.getItem("role");
-      switch (role) {
-        case "ROLE_ADMIN":
-          navigate("/admin-page");
-          break;
-        case "ROLE_RECRUITER":
-          navigate("/kanban-recruit");
-          break;
-        case "ROLE_INTERVIEWER":
-          navigate("/kanban-interviewer");
-          break;
-        default:
-          navigate("/dashboard");
+      const rolesString = localStorage.getItem("role");
+     
+  
+      if (rolesString.includes("HR")) {
+        navigate("/hremployee");
+      } else if (rolesString.includes("Manager")) {
+        navigate("/mgappraisal");
+      } else if (rolesString.includes("Reviewer")) {
+        navigate("/kanban-interviewer");
+      } else if (rolesString.includes("Manager") && rolesString.includes("Reviewer")) {
+        
+        
+      }else {
+        navigate("/hrdashboard");
+        // console.log(rolesString)
       }
+  
       notification.success({
         message: "Login Successful",
         description: "You have successfully logged in.",
@@ -74,7 +77,7 @@ const Login = () => {
       });
     }
   }, [isAuthenticated, navigate, isError]);
- 
+  
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
   };

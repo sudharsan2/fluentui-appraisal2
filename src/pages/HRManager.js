@@ -1,6 +1,7 @@
 
 import React,{useState} from "react";
 import {useSelector, useDispatch} from 'react-redux';
+import axios from 'axios';
 import {
   makeStyles,
   shorthands,
@@ -30,7 +31,7 @@ import {
   useTableFeatures,
   useTableSort,
 } from "@fluentui/react-components";
-import {AddRegular, PersonDeleteRegular , EditRegular, SearchRegular, FilterRegular, FilterDismissRegular, FilterAddRegular, ChartMultipleRegular,Dismiss24Regular ,Timer20Regular,Calendar20Regular ,ShareMultiple24Filled ,Add24Filled,ShareIos24Filled } from "@fluentui/react-icons"; // Import the icons
+import {AddRegular, PersonDeleteRegular , EditRegular, SearchRegular, FilterRegular, FilterDismissRegular, FilterAddRegular, ChartMultipleRegular,Dismiss24Regular ,Timer20Regular,Calendar20Regular ,ShareMultiple24Filled ,Add24Filled,ShareIos24Filled,CheckmarkCircleFilled } from "@fluentui/react-icons"; // Import the icons
 import './page.css';
 
 const useStyles = makeStyles({
@@ -336,10 +337,41 @@ const HRManager = () => {
   const newSelectedFilters = [];
   const [open, setOpen] = React.useState(false);
   const [selectedTab1, setSelectedTab1] = React.useState('tab1');
+  const [copied, setCopied] = React.useState(false);
   const [sortState, setSortState] = useState({
     sortDirection: 'ascending',
     sortColumn: 'empid',
   });
+
+  const handlesharetoManager = async (parameter) => {
+    try {
+      const result = await axios.post('http://127.0.0.1:8000/user/employee/changeFormStatus', {
+        "empId":parameter,"status":"sharedToManager"
+      });
+       // Extract and set the token from the response
+    } catch (error) {
+      console.error('Error sending data to the API', error);
+    }
+  };
+
+  const handleShareLinkClick = async (parameter) => {
+    try {
+      const result = await axios.post('http://172.235.21.99:5051/user/form-links', {
+        "empId": parameter, // Include the parameter in the request data
+      });
+      const token = result.data.token; // Extract the token from the response
+
+      // Copy the token to the clipboard
+      navigator.clipboard.writeText(token).then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000); // Reset copied state after 2 seconds
+      }).catch((error) => {
+        console.error('Error copying text to clipboard', error);
+      });
+    } catch (error) {
+      console.error('Error sending data to the API', error);
+    }
+  };
  
   const handleTabSelect = (event,data) => {
     setSelectedTab1(data.value);
@@ -785,11 +817,26 @@ const HRManager = () => {
                 </div>
                 <div className={styles.section}>
                   <div className={styles.heading} style={{color:themestate?"white":""}}>
+                  <div>
                   <div style={{display:"flex"}}>
                     <ShareMultiple24Filled style={{color:'rgb(1,105,185)'}}/>
-                    <Link style={{marginLeft:"10px",fontWeight:"bold",color:'rgb(1,105,185)'}}>Share Form Link</Link>
+                    <div>
+                    <Link 
+                      style={{ marginLeft: "10px" }} 
+                      onClick={() => handleShareLinkClick(selectedEmployee.empid)}
+                    >
+                      Share Form Link
+                    </Link>
+                    
+                    </div>
+                    </div>
+                    {copied && (
+                      <div className={styles.copiedContainer}>
+                        <CheckmarkCircleFilled style={{color:"green"}}/>
+                        <span className={styles.message}>Link copied.</span>
+                      </div>
+                    )}
                     </div> 
-                  
                   </div>
                   
                   <div className={styles.gridrow}>
@@ -827,7 +874,7 @@ const HRManager = () => {
                     <div className={styles.heading}>
                   <div style={{display:"flex"}}>
                     <ShareIos24Filled style={{color:'rgb(1,105,185)'}}/>
-                    <Link style={{marginLeft:"10px",fontWeight:"bold",color:'rgb(1,105,185)'}}>Share to Thangamani</Link>
+                    <Link style={{marginLeft:"10px",fontWeight:"bold",color:'rgb(1,105,185)'}} onClick={() => handlesharetoManager(selectedEmployee.empid)}>Share to Thangamani</Link>
                     </div> 
                   
                   </div>

@@ -29,6 +29,11 @@ import {
   createTableColumn,
   useTableFeatures,
   useTableSort,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbButton,
+  BreadcrumbDivider,
+  BreadcrumbProps
 } from "@fluentui/react-components";
 import {AddRegular, PersonDeleteRegular , EditRegular, SearchRegular, FilterRegular, FilterDismissRegular, FilterAddRegular, ChartMultipleRegular,Dismiss24Regular ,Timer20Regular,Calendar20Regular ,ShareMultiple24Filled ,Add24Filled,ShareIos24Filled } from "@fluentui/react-icons"; // Import the icons
 import './page.css';
@@ -935,6 +940,16 @@ const HRManager = () => {
         </DrawerBody>
          )}
       </OverlayDrawer>
+
+      <Breadcrumb aria-label="breadcrumb">
+    <BreadcrumbItem>
+      <Link href="" className="custom-link">HR</Link>
+    </BreadcrumbItem>
+    <BreadcrumbDivider />
+    <BreadcrumbItem>
+      <Link href="/hrmanager" className="custom-link">Manager</Link>
+    </BreadcrumbItem>
+    </Breadcrumb>
       <h2 style={themestate?{color:'white'}:{}}>Manager</h2>
       <TabList
         defaultSelectedValue="tab1"

@@ -24,9 +24,15 @@ import {
   DrawerProps,
   Avatar,
   Text,
+  Link,
   createTableColumn,
   useTableFeatures,
   useTableSort,
+  BreadcrumbItem,
+  BreadcrumbButton,
+  BreadcrumbDivider,
+  BreadcrumbProps,
+  Breadcrumb
 } from "@fluentui/react-components";
 import {AddRegular, PersonDeleteRegular , EditRegular, SearchRegular, FilterRegular, FilterDismissRegular, FilterAddRegular, ChartMultipleFilled,Dismiss24Regular ,Timer20Regular,Calendar20Regular, ArrowDownRegular, ArrowClockwiseRegular   } from "@fluentui/react-icons"; // Import the icons
 import './page.css';
@@ -547,7 +553,18 @@ const MGReviewer = () => {
       </OverlayDrawer>
         {/* <div style={{position:'fixed', backgroundColor:'white', zIndex:1000, width:'vw'}}> */}
         {/* <div style={{ position: 'fixed', backgroundColor: 'white', zIndex: 1000, width: '100%' }}> */}
- 
+      
+        <Breadcrumb aria-label="breadcrumb">
+    <BreadcrumbItem>
+      <Link href="" className="custom-link">Manager</Link>
+    </BreadcrumbItem>
+    <BreadcrumbDivider />
+    <BreadcrumbItem>
+      <Link href="/hremployee" className="custom-link">Review</Link>
+    </BreadcrumbItem>
+    </Breadcrumb>
+
+    <Breadcrumb/>
         <h2 style={themestate?{color:'white'}:{}}>Review</h2>
       <TabList
         defaultSelectedValue="tab2"

@@ -23,11 +23,15 @@ import {
   Avatar,
   TabList,
   Tab,
+  Link,
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbButton,
   BreadcrumbDivider,
   BreadcrumbProps,
+  Dropdown,
+  Option,
+  useId,
  
   PopoverTrigger, PopoverSurface, Popover,
  
@@ -42,8 +46,8 @@ import {
 import {AddRegular, PersonDeleteRegular , EditRegular, SearchRegular, FilterRegular, FilterDismissRegular, FilterAddRegular, ChartMultipleFilled,ChartMultipleRegular,Dismiss24Regular ,Timer20Regular,Calendar20Regular, ArrowDownRegular, ArrowClockwiseRegular,ShareMultiple24Filled ,Add24Filled,ShareIos24Filled,CheckmarkCircleFilled  } from "@fluentui/react-icons"; // Import the icons
 import './page.css';
 import zIndex from "@mui/material/styles/zIndex";
-import { Link } from "@fluentui/react";
-import axios from 'axios';
+
+
 import {Modal, Form, Input, DatePicker, Select,  Row, Col, message } from 'antd';
  
 const useStyles = makeStyles({
@@ -339,7 +343,7 @@ const data = {
   ],
 };
 
-const HREmployee = () => {
+const HREmployee = (props) => {
   const styles = useStyles();
   const [selectedTab, setSelectedTab] = React.useState("tab1");
   // const [selectedTab1, setSelectedTab1] = React.useState("tab1")
@@ -373,6 +377,11 @@ const HREmployee = () => {
  
   const [modalVisible, setModalVisible] = useState(false);
   const [form] = Form.useForm();
+  const [options, setOptions] = useState([]);
+  const [options1, setOptions1] = useState([]);
+
+  const [activeOptionId, setActiveOptionId] = useState("");
+  const [activeOptionId1, setActiveOptionId1] = useState("");
  
   // useEffect(() => {
   //   const currentDate = new Date();
@@ -404,6 +413,44 @@ const HREmployee = () => {
  
  
   // }, []);
+  const dropdownId = useId("dropdown");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://127.0.0.1:8000/user/managerlist");
+        setOptions(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleChange = (event, data) => {
+    props.form.setFieldsValue({ manager: data.optionValue });
+  };
+
+  
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://127.0.0.1:8000/user/reviewerlist");
+        setOptions1(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleChange1 = (event, data) => {
+    props.form.setFieldsValue({ reviewer: data.optionValue });
+  };
+
  
   useEffect(() => {
     fetchEmployeeData();
@@ -529,6 +576,24 @@ const HREmployee = () => {
     setSelectedFilters(newSelectedFilters); // Update selected filters state
   };
 
+  const onActiveOptionChange = React.useCallback(
+    (_, data) => {
+      setActiveOptionId(data?.nextOption?.value); 
+      // Assuming optionValue is the id
+      console.log({"active":data?.nextOption?.value})
+    },
+    [setActiveOptionId]
+  );
+
+  const onActiveOptionChange1 = React.useCallback(
+    (_, data) => {
+      setActiveOptionId1(data?.nextOption?.value); 
+      // Assuming optionValue is the id
+      console.log({"active":data?.nextOption?.value})
+    },
+    [setActiveOptionId1]
+  );
+
   const handlesharetoManager = async (parameter) => {
     try {
       const result = await axios.post('http://127.0.0.1:8000/user/employee/changeFormStatus', {
@@ -646,13 +711,33 @@ const HREmployee = () => {
  
   const handleAddEmployee = async (values) => {
     console.log('Form values:', values);
+  
+    // Helper function to extract the date part from an ISO string
+    const getDateOnly = (isoString) => {
+      if (typeof isoString === 'string') {
+        return isoString.split('T')[0];
+      } else if (isoString instanceof Date) {
+        return isoString.toISOString().split('T')[0];
+      }
+      console.log(isoString)
+      return isoString; // Return as is if it's neither a string nor a Date
+    };
+  
+    // Update the date fields with the date-only part
+    values.appraisal_date = getDateOnly(values.appraisal_date);
+    values.date_of_joining = getDateOnly(values.date_of_joining);
+    values.date_of_reporting = getDateOnly(values.date_of_reporting);
+    values.dob = getDateOnly(values.dob);
+
+    const empdetails = {...values,"reviewer":activeOptionId, "manager":activeOptionId1}
+  
     try {
-      const response = await axios.post('http://172.235.21.99:5051/user/employee/list', values, {
+      const response = await axios.post('http://127.0.0.1:8000/user/employee/list', empdetails, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
- 
+  
       if (response.status === 200 || response.status === 201) {
         message.success('Employee added successfully');
         setModalVisible(false); // Close modal after submission
@@ -665,6 +750,11 @@ const HREmployee = () => {
       message.error('An error occurred');
     }
   };
+  
+  
+  
+    
+
    
  
  
@@ -1059,185 +1149,188 @@ return (
         style={{ borderRadius: '0px', paddingTop:20,  }}
         bodyStyle={{ borderRadius: 0 }}
       >
-        <Form form={form} onFinish={handleAddEmployee} style={{ borderRadius:0, paddingTop:20,  }}>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                label="Employee ID"
-                name="employee_id"
-               
-              >
-                <Input
-                  style={{
-                    fontWeight:'bold',
-                    borderRadius: 0,
-                    border: 0,
-                    borderBottom: '1px solid rgb(180,180,180)',
-                  }}
- 
-                 
-                />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                label="Employee Name"
-                name="employee_name"
-               
-              >
-                <Input style={{
-                    borderRadius: 0,
-                    border: 0,
-                    borderBottom: '1px solid rgb(180,180,180)',
-                  }}/>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                label="Employee Mail"
-                name="employee_mail"
-               
-              >
-                <Input style={{
-                    borderRadius: 0,
-                    border: 0,
-                    borderBottom: '1px solid rgb(180,180,180)',
-                  }}/>
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item label="Date of Birth" name="dob" >
-                <DatePicker style={{ width: '100%' }} style={{
-                    borderRadius: 0,
-                    border: 0,
-                    borderBottom: '1px solid rgb(180,180,180)',
-                  }}/>
-              </Form.Item>
-            </Col>
- 
-            <Col span={12}>
-              <Form.Item label="Appraisal date" name="appraisal_date" >
-                <DatePicker style={{ width: '100%' }} style={{
-                    borderRadius: 0,
-                    border: 0,
-                    borderBottom: '1px solid rgb(180,180,180)',
-                  }}/>
-              </Form.Item>
-            </Col>
- 
- 
-          </Row>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item label="Designation" name="designation" >
-                <Input style={{
-                    borderRadius: 0,
-                    border: 0,
-                    borderBottom: '1px solid rgb(180,180,180)',
-                  }}/>
-              </Form.Item>
-            </Col>
- 
-            <Col span={12}>
-              <Form.Item label="Manager" name="manager" >
-                <Input style={{
-                    borderRadius: 0,
-                    border: 0,
-                    borderBottom: '1px solid rgb(180,180,180)',
-                  }}/>
-              </Form.Item>
-            </Col>
- 
- 
-            <Col span={12}>
-              <Form.Item
-                label="Reporting Manager"
-                name="reporting_manager"
-               
-              >
-                <Input style={{
-                    borderRadius: 0,
-                    border: 0,
-                    borderBottom: '1px solid rgb(180,180,180)',
-                  }}/>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                label="Date of Joining"
-                name="date_of_joining"
-               
-              >
-                <DatePicker style={{ width: '100%' }} style={{
-                    borderRadius: 0,
-                    border: 0,
-                    borderBottom: '1px solid rgb(180,180,180)',
-                  }}/>
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                label="Date of Reporting"
-                name="date_of_reporting"
-               
-              >
-                <DatePicker style={{ width: '100%' }} style={{
-                    borderRadius: 0,
-                    border: 0,
-                    borderBottom: '1px solid rgb(180,180,180)',
-                  }}/>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                label="Experience Before Focusr"
-                name="experience_in_domain_before_focusr"
-               
-              >
-                <Input type="number" style={{
-                    borderRadius: 0,
-                    border: 0,
-                    borderBottom: '1px solid rgb(180,180,180)',
-                  }}/>
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item label="Manager" name="manager" >
-                <Input style={{
-                    borderRadius: 0,
-                    border: 0,
-                    borderBottom: '1px solid rgb(180,180,180)',
-                  }}/>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item label="Reviewer" name="reviewer">
-                <Input style={{
-                    borderRadius: 0,
-                    border: 0,
-                    borderBottom: '1px solid rgb(180,180,180)',
-                  }}/>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={24}>
-              <Form.Item>
-                <Button type="primary" htmlType="submit">
-                  Submit
-                </Button>
-              </Form.Item>
-            </Col>
-          </Row>
-        </Form>
+        <Form form={form} onFinish={handleAddEmployee} style={{ borderRadius: 0, paddingTop: 20 }}>
+  <Row gutter={16}>
+    <Col span={12}>
+      <Form.Item label="Employee ID" name="employee_id">
+        <Input
+          style={{
+            fontWeight: 'bold',
+            borderRadius: 0,
+            border: 0,
+            borderBottom: '1px solid rgb(180,180,180)',
+          }}
+        />
+      </Form.Item>
+    </Col>
+    <Col span={12}>
+      <Form.Item label="Employee Name" name="employee_name">
+        <Input
+          style={{
+            borderRadius: 0,
+            border: 0,
+            borderBottom: '1px solid rgb(180,180,180)',
+          }}
+        />
+      </Form.Item>
+    </Col>
+  </Row>
+  <Row gutter={16}>
+    <Col span={12}>
+      <Form.Item label="Employee Mail" name="employee_mail">
+        <Input
+          style={{
+            borderRadius: 0,
+            border: 0,
+            borderBottom: '1px solid rgb(180,180,180)',
+          }}
+        />
+      </Form.Item>
+    </Col>
+    <Col span={12}>
+      <Form.Item label="Date of Birth" name="dob">
+        <DatePicker
+          style={{
+            borderRadius: 0,
+            border: 0,
+            borderBottom: '1px solid rgb(180,180,180)',
+          }}
+        />
+      </Form.Item>
+    </Col>
+    <Col span={12}>
+      <Form.Item label="Appraisal date" name="appraisal_date">
+        <DatePicker
+          style={{
+            borderRadius: 0,
+            border: 0,
+            borderBottom: '1px solid rgb(180,180,180)',
+          }}
+        />
+      </Form.Item>
+    </Col>
+  </Row>
+  <Row gutter={16}>
+    <Col span={12}>
+      <Form.Item label="Designation" name="designation">
+        <Input
+          style={{
+            borderRadius: 0,
+            border: 0,
+            borderBottom: '1px solid rgb(180,180,180)',
+          }}
+        />
+      </Form.Item>
+    </Col>
+    <Col span={12}>
+      <Form.Item label="Manager" name="manager">
+        <Input
+          style={{
+            borderRadius: 0,
+            border: 0,
+            borderBottom: '1px solid rgb(180,180,180)',
+          }}
+        />
+      </Form.Item>
+    </Col>
+    <Col span={12}>
+      <Form.Item name="reporting_manager" label="Manager">
+        <Dropdown
+          aria-labelledby={`${dropdownId}-underline`}
+          placeholder="Select a manager"
+          appearance="underline"
+          onActiveOptionChange={onActiveOptionChange}
+          {...props}
+        >
+          {options.map((option) => (
+            <Option key={option.id} text={option.username} value={option.id}>
+              {option.username}
+            </Option>
+          ))}
+        </Dropdown>
+      </Form.Item>
+    </Col>
+  </Row>
+  <Row gutter={16}>
+    <Col span={12}>
+      <Form.Item label="Date of Joining" name="date_of_joining">
+        <DatePicker
+          style={{
+            borderRadius: 0,
+            border: 0,
+            borderBottom: '1px solid rgb(180,180,180)',
+          }}
+        />
+      </Form.Item>
+    </Col>
+    <Col span={12}>
+      <Form.Item label="Date of Reporting" name="date_of_reporting">
+        <DatePicker
+          style={{
+            borderRadius: 0,
+            border: 0,
+            borderBottom: '1px solid rgb(180,180,180)',
+          }}
+        />
+      </Form.Item>
+    </Col>
+  </Row>
+  <Row gutter={16}>
+    <Col span={12}>
+      <Form.Item label="Experience Before Focusr" name="experience_in_domain_before_focusr">
+        <Input
+          type="number"
+          style={{
+            borderRadius: 0,
+            border: 0,
+            borderBottom: '1px solid rgb(180,180,180)',
+          }}
+        />
+      </Form.Item>
+    </Col>
+    <Col span={12}>
+      <Form.Item label="Manager" name="manager">
+        <Input
+          style={{
+            borderRadius: 0,
+            border: 0,
+            borderBottom: '1px solid rgb(180,180,180)',
+          }}
+        />
+      </Form.Item>
+    </Col>
+  </Row>
+  <Row gutter={16}>
+    <Col span={12}>
+      <Form.Item label="Reviewer" name="reviewer">
+        <label id={`${dropdownId}-underline`}>Reviewer</label>
+        <Dropdown
+          aria-labelledby={`${dropdownId}-underline`}
+          placeholder="Select a reviewer"
+          appearance="underline"
+          onActiveOptionChange={onActiveOptionChange1}
+          {...props}
+        >
+          {options1.map((option) => (
+            <Option key={option.id} text={option.username} value={option.id}>
+              {option.username}
+            </Option>
+          ))}
+        </Dropdown>
+      </Form.Item>
+    </Col>
+  </Row>
+  <Row>
+    <Col span={24}>
+      <Form.Item>
+        <Button type="primary" htmlType="submit">
+          Submit
+        </Button>
+      </Form.Item>
+    </Col>
+  </Row>
+</Form>
+
       </Modal>
     </div>
  

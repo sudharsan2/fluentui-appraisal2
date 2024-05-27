@@ -34,11 +34,11 @@ import {
   BreadcrumbItem,
   BreadcrumbButton,
   BreadcrumbDivider,
+  Rating,
   BreadcrumbProps
 } from "@fluentui/react-components";
 import {AddRegular, PersonDeleteRegular , EditRegular, SearchRegular, FilterRegular, FilterDismissRegular, FilterAddRegular, ChartMultipleFilled,ChartMultipleRegular,Dismiss24Regular ,Timer20Regular,Calendar20Regular, ArrowDownRegular, ArrowClockwiseRegular,ShareMultiple24Filled ,Add24Filled,ShareIos24Filled  } from "@fluentui/react-icons"; // Import the icons
 import './page.css';
-import { Link } from "@fluentui/react";
 
 
 
@@ -82,6 +82,13 @@ const useStyles = makeStyles({
     display: 'flex',
     flexDirection: 'column',
     gap: '10px',
+  },
+  sidebar: {
+    width: '205px',
+    display: 'flex',
+    flexDirection: 'column' ,
+    height: '100%',
+    backgroundColor: 'var(--sidebar-bg-color, #f0f0f0)' /* Default sidebar background color */
   },
   formDetails: {
     display: 'flex',
@@ -134,6 +141,25 @@ const useStyles = makeStyles({
     display: 'flex',
     // justifyContent: 'space-between',
     width: '100%',
+  },
+  navItemlight: {
+    marginTop: "10px",
+    left:0,
+   
+    "&:hover": {
+      backgroundColor: "#ccc", // Change background color on hover
+     
+    },
+  },
+  navItemdark: {
+    marginTop: "10px",
+    left:0,
+    backgroundColor:"rgb(33,33,33)",
+   
+    "&:hover": {
+      backgroundColor: "#616161", // Change background color on hover
+     
+    },
   },
   editDetails: {
     display: 'flex',
@@ -344,17 +370,6 @@ const data = {
   ],
 };
 
-const navLinkGroups = [
-  {
-    links: [
-      { name: 'Review of KPI', key: 'option1' },
-      { name: 'Review of other skills', key: 'option2' },
-      { name: 'Organization Feedback', key: 'option3' },
-      { name: 'Training Need Analysis', key: 'option4' },
-
-    ],
-  },
-];
 
 const options = [
   'Outstanding',
@@ -394,20 +409,169 @@ const labels = [
 const MGAppraisal = () => {
   const styles = useStyles();
   const [selectedTab, setSelectedTab] = React.useState("tab1");
-  const [selectedNavKey, setSelectedNavKey] = useState('');
   const [selectedItems, setSelectedItems] = React.useState({});
+  const lighttheme = useSelector((state) => state.theme.light);
+  const darktheme = useSelector((state) => state.theme.dark);
   const [selectedEmployee, setSelectedEmployee] = React.useState(null);
   const [searchQuery, setSearchQuery] = React.useState("");
   const [showFilters, setShowFilters] = React.useState(false);
   const [selectedFilters, setSelectedFilters] = React.useState([]);
   const themestate = useSelector((state) => state.theme.theme);
-  const newSelectedFilters = [];
+  const newSelectedFilters = [];  
   const [open, setOpen] = React.useState(false);
   const [selectedTab1, setSelectedTab1] = React.useState('tab1');
   const [sortState, setSortState] = useState({
     sortDirection: 'ascending',
     sortColumn: 'empid',
   });
+  const [selectedNavKey, setSelectedNavKey] = useState('option1');
+  const [value, setValue] = useState(4);
+
+  const [formData1, setFormData1] = useState({
+    roleResponse: '',
+    accomplishments: '',
+    strengths: '',
+    developmentNeeds: ''
+  });
+
+  const [formData3, setFormData3] = useState({
+    likes: '',
+    dislikes: '',
+    suggestions: '',
+  });
+
+  const [formData4, setFormData4] = useState({
+    works: '',
+    actions: '',
+    skills: '',
+    training: ''
+  });
+
+  const [areFieldsFilled1, setAreFieldsFilled1] = useState(false);
+  const [areFieldsFilled3, setAreFieldsFilled3] = useState(false);
+  const [areFieldsFilled4, setAreFieldsFilled4] = useState(false);
+  const [filledStatus, setFilledStatus] = useState(Array(labels.length).fill(false));
+  const [submitted1, setSubmitted1] = useState(false);
+  const [submitted2, setSubmitted2] = useState(false);
+  const [submitted3, setSubmitted3] = useState(false);
+  const [submitted4, setSubmitted4] = useState(false);
+  const [errorMessage1, setErrorMessage1] = useState('');
+  const [errorMessage2, setErrorMessage2] = useState('');
+  const [errorMessage3, setErrorMessage3] = useState('');
+  const [errorMessage4, setErrorMessage4] = useState('');
+
+
+
+  const navLinkGroups = [
+    {
+      links: [
+        { name: 'Review of KPI', key: 'option1' },
+        { name: 'Review of other skills', key: 'option2' },
+        { name: 'Organization Feedback', key: 'option3' },
+        { name: 'Training Need Analysis', key: 'option4' },
+  
+      ],
+    },
+  ];
+
+  const getNavLinkStyle = (key) => {
+    let backgroundColor = "rgb(51, 51, 51)";
+    if (key === selectedNavKey) {
+      if (key === 'option1') {
+        backgroundColor = submitted1 && !areFieldsFilled1 ? "rgb(51, 51, 51)" : "red";
+      } else if (key === 'option2') {
+        backgroundColor = submitted2 && !filledStatus.some(status => !status) ? "rgb(51, 51, 51)" : "red";
+      } else if (key === 'option3') {
+        backgroundColor = submitted3 && !areFieldsFilled3 ? "rgb(51, 51, 51)" : "red";
+      } else if (key === 'option4') {
+        backgroundColor = submitted4 && !areFieldsFilled4 ? "rgb(51, 51, 51)" : "red";
+      }
+    }
+    return { backgroundColor };
+  };
+
+  const handleFieldChange1 = (fieldName, value) => {
+    setFormData1({
+      ...formData1,
+      [fieldName]: value
+    });
+  };
+
+  const handleFieldChange3 = (fieldName, value) => {
+    setFormData3({
+      ...formData3,
+      [fieldName]: value
+    });
+  };
+
+  const handleFieldChange4 = (fieldName, value) => {
+    setFormData4({
+      ...formData4,
+      [fieldName]: value
+    });
+  };
+
+  const handleSubmit1 = () => {
+    const { roleResponse, accomplishments, strengths, developmentNeeds } = formData1;
+    const areFieldsFilled1 = roleResponse.trim() !== '' && accomplishments.trim() !== '' && strengths.trim() !== '' && developmentNeeds.trim() !== '';
+    setSubmitted1(true);
+    setAreFieldsFilled1(areFieldsFilled1); // Update the state variable
+    if (!areFieldsFilled1) {
+      setErrorMessage1('Please fill all the required fields.');
+    } else {
+      setErrorMessage1('');
+    }
+  };
+
+  const handleSubmit2 = () => {
+    setSubmitted2(true);
+    const unfilledDropdownIndex = filledStatus.findIndex(status => !status);
+    if (unfilledDropdownIndex !== -1) {
+      setErrorMessage2(`Please fill the remaining dropdowns`);
+    } else {
+      setErrorMessage2('');
+    }
+  };
+
+  const handleSubmit3 = () => {
+    const { likes, dislikes, suggestions } = formData3;
+    const areFieldsFilled3 = likes && dislikes && suggestions;
+    setSubmitted3(true);
+    setAreFieldsFilled3(areFieldsFilled3)
+    if (!areFieldsFilled3) {
+      setErrorMessage3('Please fill all the required fields.');
+    } else {
+      setErrorMessage3('');
+    }
+  };
+
+  const handleSubmit4 = () => {
+    const { works, actions, skills, training } = formData4;
+    const areFieldsFilled4 = works && actions && skills && training;
+    setSubmitted4(true);
+    setAreFieldsFilled4(areFieldsFilled4);
+    if (!areFieldsFilled4) {
+      setErrorMessage4('Please fill all the required fields.');
+    } else {
+      setErrorMessage4('');
+    }
+  };
+
+  const handleDropdownChange = (index, option) => {
+    const newFilledStatus = [...filledStatus];
+    newFilledStatus[index] = !!option;
+    setFilledStatus(newFilledStatus);
+  };
+
+
+  const handleNavClick = (ev, item) => {
+    setSelectedNavKey(item.key);
+  };
+
+
+  const handleRatingChange = (event, newValue) => {
+    setValue(newValue); 
+  };
  
   const handleTabSelect = (event,data) => {
     setSelectedTab1(data.value);
@@ -425,10 +589,6 @@ const MGAppraisal = () => {
   const handleNavChange = (item) => {
     setSelectedTab(item.props.itemKey);
     handleTabSelect(item.props.itemKey);
-  };
-
-  const handleNavClick = (ev, item) => {
-    setSelectedNavKey(item.key);
   };
  
  
@@ -480,6 +640,7 @@ const MGAppraisal = () => {
     }));
   };
  
+
   const columns = [
     createTableColumn({
       columnId: 'empid',
@@ -807,106 +968,175 @@ const MGAppraisal = () => {
       )}
 
       {selectedTab1 === 'tab3' && (
-      <div style={{display: 'flex', marginTop: '3vh'}}>
-      <Nav
-        groups={navLinkGroups}
-        selectedKey={selectedNavKey}
-        onLinkClick={handleNavClick}
-        styles={{
-          root: {
-            width: '205px',
-            marginRight: '20px',
-            backgroundColor: themestate ? "rgb(51, 51, 51)" : "",
-            color: themestate ? "white" : "",
-          },
-        }}
-      />
-      <div>
-      {selectedNavKey === 'option1' && (
-        <div style={{ marginTop: '1rem' }}>
-          <Field label="To state your understanding of your roles and responsibilities / objectives as agreed in last year’s appraisal / during joining. ">
-            <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
-            placeholder="Enter your response..." />
+        <div style={{ display: 'flex'}}>
+          <div style={{ display: 'flex', flexDirection: 'column', height: '100%', }}>
+          <Nav
+            groups={navLinkGroups}
+            selectedKey={selectedNavKey}
+            onLinkClick={handleNavClick}
+            styles={{
+              root: {
+              width: '205px',
+              display: 'flex',
+              flexDirection: 'column',
+              flex: '1 1 auto',
+            },
+            link: getNavLinkStyle,
+          }}
+          />
+            <div style={{ marginTop: 'auto', padding: '1rem', borderTop: '1px solid #ccc' }}>
+          <Rating styles={{color:themestate?"white":""}} value={value} onChange={handleRatingChange} />
+          <Button  onClick={() => setValue(0)}>Clear Rating</Button>
+        </div>
+          </div>
+
+          <div style={{ marginLeft: '20px', flex: '1 1 auto' }}>
+          {selectedNavKey === 'option1' && (
+            <div style={{ marginTop: '1rem' }}>
+              <div style={{ marginTop: '1rem' }}>
+              <Field label="To state your understanding of your roles and responsibilities / objectives as agreed in last year’s appraisal / during joining. ">
+                <Textarea
+                  style={{
+                    marginTop: '0.5rem',
+                    width: '500px',
+                    minHeight: '50px',
+                    borderColor: !formData1.roleResponse && submitted1 ? 'red' : '',
+                  }}
+                  value={formData1.roleResponse}
+                  onChange={(e) => handleFieldChange1('roleResponse', e.target.value)}
+                  placeholder="Enter your response..."
+                />
           </Field>
+          </div>
+          <div style={{ marginTop: '1rem' }}>
           <Field label="Last Year’s Accomplishments:  List your most significant accomplishments or contributions made during the review period. Make special note of any new tasks or duties you successfully performed that were outside the scope of your regular responsibilities. Please do not mention your regular day to day activities">
-            <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
-            placeholder="Enter your response..." />
+            <Textarea
+              style={{
+                marginTop: '0.5rem',
+                width: '500px',
+                minHeight: '50px',
+                borderColor: !formData1.accomplishments && submitted1 ? 'red' : '',
+              }}
+              value={formData1.accomplishments}
+              onChange={(e) => handleFieldChange1('accomplishments', e.target.value)}
+              placeholder="Enter your response..."
+            />
           </Field>
-          <Field label="Strengths
-                        List the personal and technical abilities that help you perform your job well.  List any additional skills that you have, but that you don’t currently use in your role that could be brought to your job or could be used to assist others. 
-                        Example: I am a SCM Consultant and have knowledge in WMS, would like to explore that area
-                        I am good at proposal writing, would like to conduct training for other colleagues etc …">
-            <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
-            placeholder="Enter your response..." />
+          </div>
+          <div style={{ marginTop: '1rem' }}>
+          <Field label="Strengths List the personal and technical abilities that help you perform your job well. List any additional skills that you have, but that you don’t currently use in your role that could be brought to your job or could be used to assist others. Example: I am a SCM Consultant and have knowledge in WMS, would like to explore that area. I am good at proposal writing, would like to conduct training for other colleagues etc …">
+            <Textarea
+              style={{
+                marginTop: '0.5rem',
+                width: '500px',
+                minHeight: '50px',
+                borderColor: !formData1.strengths && submitted1 ? 'red' : '',
+              }}
+              value={formData1.strengths}
+              onChange={(e) => handleFieldChange1('strengths', e.target.value)}
+              placeholder="Enter your response..."
+            />
           </Field>
-          <Field label="Development Needs
-                        List the personal and technical abilities you need to develop or enhance in order to improve your job performance.  List the steps you plan to take and/or the resources you need to accomplish this development.  
-                      ">
-            <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
-            placeholder="Enter your response..." />
+          </div>
+          <div style={{ marginTop: '1rem' }}>
+          <Field label="Development Needs List the personal and technical abilities you need to develop or enhance in order to improve your job performance. List the steps you plan to take and/or the resources you need to accomplish this development.">
+            <Textarea
+              style={{
+                marginTop: '0.5rem',
+                width: '500px',
+                minHeight: '50px',
+                borderColor: !formData1.developmentNeeds && submitted1 ? 'red' : '',
+              }}
+              value={formData1.developmentNeeds}
+              onChange={(e) => handleFieldChange1('developmentNeeds', e.target.value)}
+              placeholder="Enter your response..."
+            />
           </Field>
+          </div>
+          {errorMessage1 && <div style={{ color: 'red', marginTop: '0.5rem' }}>{errorMessage1}</div>}
+          <Button style={{marginTop: '5px', backgroundColor: 'blue', color: 'white'}} onClick={handleSubmit1}>Submit</Button>
         </div>
       )}
 
       {selectedNavKey === 'option2' && (
         <div style={{ marginTop: '1rem' }}>
-          <Field label="For all the skills rated below, team member to give self ratings and managers to cross-rate 
-                          Rating Performance Description">
-          </Field>
+          <Field label="For all the skills rated below, team member to give self ratings and managers to cross-rate Rating Performance Description" />
           {labels.map((label, index) => (
-                  <div key={index} style={{ marginTop: '1rem', display: 'flex', alignItems: 'center' }}>
-                    <Text variant="medium" style={{ marginRight: '1rem' }}>{label}:</Text>
-                    <Dropdown
-                      placeholder="Select an option"
-                      options={options.map(option => ({ key: option, text: option }))}
-                      styles={{ dropdown: { width: 200 } }}
-                    />
-                  </div>
-                ))}
+            <div key={index} style={{ marginTop: '1rem', display: 'flex', alignItems: 'center' }}>
+              <Text variant="medium" style={{ marginRight: '1rem' }}>{label}:</Text>
+              <div style={{ 
+                borderColor: submitted2 && !filledStatus[index] ? 'red' : '', 
+                borderWidth: 1, 
+                borderStyle: 'solid', 
+                borderRadius: 4,
+              }}>
+                <Dropdown
+                  placeholder="Select an option"
+                  options={options.map(option => ({ key: option, text: option }))}
+                  styles={{ 
+                    dropdown: { width: 200, borderColor: submitted2 && !filledStatus[index] ? 'red' : '' },
+                  }}
+                  onChange={(event, option) => handleDropdownChange(index, option)}
+                />
+              </div>
+            </div>
+          ))}
+          {errorMessage2 && <div style={{ color: 'red', marginTop: '0.5rem' }}>{errorMessage2}</div>}
+          <Button style={{marginTop: '5px', backgroundColor: 'blue', color: 'white'}} onClick={handleSubmit2}>Submit</Button>
         </div>
       )}
-      {selectedNavKey === 'option3' && (
-        <div style={{ marginTop: '1rem' }}>
-          <Field label="Top 3 likes in the organization">
-            <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
-            placeholder="Enter your response..." />
-          </Field>
-          <Field label="Top 3 dislikes in the organization">
-            <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
-            placeholder="Enter your response..." />
-          </Field>
-          <Field label="Any Suggestion to Improve the organisation">
-            <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
-            placeholder="Enter your response..." />
-          </Field>
+
+            {selectedNavKey === 'option3' && (
+              <div style={{ marginTop: '1rem' }}>
+                <div style={{ marginTop: '1rem' }}>
+                <Field label="Top 3 likes in the organization">
+                  <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px', borderColor: !formData3.likes && submitted3 ? 'red' : '' }} value={formData3.likes} onChange={(e) => handleFieldChange3('likes', e.target.value)} placeholder="Enter your response..." />
+                </Field>
+                </div>
+                <div style={{ marginTop: '1rem' }}>
+                <Field label="Top 3 dislikes in the organization">
+                <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px', borderColor: !formData3.dislikes && submitted3 ? 'red' : '' }} value={formData3.dislikes} onChange={(e) => handleFieldChange3('dislikes', e.target.value)} placeholder="Enter your response..." />
+                </Field>
+                </div>
+                <div style={{ marginTop: '1rem' }}>
+                <Field label="Any Suggestion to Improve the organisation">
+                <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px', borderColor: !formData3.suggestions && submitted3 ? 'red' : '' }} value={formData3.suggestions} onChange={(e) => handleFieldChange3('suggestions', e.target.value)} placeholder="Enter your response..." />
+                </Field>
+                </div>
+                {errorMessage3 && <div style={{ color: 'red', marginTop: '0.5rem' }}>{errorMessage3}</div>}
+                <Button style={{marginTop: '5px', backgroundColor: 'blue', color: 'white'}} onClick={handleSubmit3}>Submit</Button>
+              </div>
+            )}
+
+            {selectedNavKey === 'option4' && (
+              <div style={{ marginTop: '1rem' }}>
+                <div style={{ marginTop: '1rem' }}>
+                <Field label="List the kind of work or job would you like to be doing in one/two/five years time">
+                <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px', borderColor: !formData4.works && submitted4 ? 'red' : '' }} value={formData4.works} onChange={(e) => handleFieldChange4('works', e.target.value)} placeholder="Enter your response..." />
+                </Field>
+                </div>
+                <div style={{ marginTop: '1rem' }}>
+                <Field label="List the actions you have taken to make yourself indispensible">
+                <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px', borderColor: !formData4.actions && submitted4 ? 'red' : '' }} value={formData4.actions} onChange={(e) => handleFieldChange4('actions', e.target.value)} placeholder="Enter your response..." />
+                </Field>
+                </div>
+                <div style={{ marginTop: '1rem' }}>
+                <Field label="Do you want to explore your skills areas other than your present work?">
+                <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px', borderColor: !formData4.skills && submitted4 ? 'red' : '' }} value={formData4.skills} onChange={(e) => handleFieldChange4('skills', e.target.value)} placeholder="Enter your response..." />
+                </Field>
+                </div>
+                <div style={{ marginTop: '1rem' }}>
+                <Field label="What sort of training/experiences would benefit you in the next year? Not just job-skills - also your natural strengths and personal passions you'd like to develop - you and your work can benefit from these">
+                <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px', borderColor: !formData4.training && submitted4 ? 'red' : '' }} value={formData4.training} onChange={(e) => handleFieldChange4('training', e.target.value)} placeholder="Enter your response..." />
+                </Field>
+                </div>
+                {errorMessage4 && <div style={{ color: 'red', marginTop: '0.5rem' }}>{errorMessage4}</div>}
+                <Button style={{marginTop: '5px', backgroundColor: 'blue', color: 'white'}} onClick={handleSubmit4}>Submit</Button>
+              </div>
+            )}
+          </div>
         </div>
       )}
-      {selectedNavKey === 'option4' && (
-        <div style={{ marginTop: '1rem' }}>
-          <Field label="List the kind of work or job would you like to be doing in one/two/five years time">
-            <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
-            placeholder="Enter your response..." />
-          </Field>
-          <Field label="List the actions you have taken to make yourself indispensible">
-            <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
-            placeholder="Enter your response..." />
-          </Field>
-          <Field label="Do you want to explore your skills areas other than your present work?">
-            <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
-            placeholder="Enter your response..." />
-          </Field>
-          <Field label="What sort of training/experiences would benefit you in the next year? Not just job-skills - also your natural strengths and personal passions you'd like to develop - you and your work can benefit from these">
-            <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
-            placeholder="Enter your response..." />
-          </Field>
-        </div>
-      )}
-      
-      </div>
-    </div>
-    
-        )}  
-     
         </div>
         </DrawerBody>
          )}

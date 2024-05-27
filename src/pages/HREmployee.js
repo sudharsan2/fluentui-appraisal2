@@ -5,6 +5,8 @@ import
 from
 'date-fns'
 ;
+// import { CopyToClipboard } from 'react-copy-to-clipboard';
+import axios from 'axios';
 import {
   Table,
   TableHeader,
@@ -21,11 +23,15 @@ import {
   Avatar,
   TabList,
   Tab,
+  Link,
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbButton,
   BreadcrumbDivider,
   BreadcrumbProps,
+  Dropdown,
+  Option,
+  useId,
  
   PopoverTrigger, PopoverSurface, Popover,
  
@@ -37,11 +43,11 @@ import {
   SearchBox,
   Text,
 } from "@fluentui/react-components";
-import {AddRegular, PersonDeleteRegular , EditRegular, SearchRegular, FilterRegular, FilterDismissRegular, FilterAddRegular, ChartMultipleFilled,ChartMultipleRegular,Dismiss24Regular ,Timer20Regular,Calendar20Regular, ArrowDownRegular, ArrowClockwiseRegular,ShareMultiple24Filled ,Add24Filled,ShareIos24Filled  } from "@fluentui/react-icons"; // Import the icons
+import {AddRegular, PersonDeleteRegular , EditRegular, SearchRegular, FilterRegular, FilterDismissRegular, FilterAddRegular, ChartMultipleFilled,ChartMultipleRegular,Dismiss24Regular ,Timer20Regular,Calendar20Regular, ArrowDownRegular, ArrowClockwiseRegular,ShareMultiple24Filled ,Add24Filled,ShareIos24Filled,CheckmarkCircleFilled  } from "@fluentui/react-icons"; // Import the icons
 import './page.css';
 import zIndex from "@mui/material/styles/zIndex";
-import { Link } from "@fluentui/react";
-import axios from 'axios';
+
+
 import {Modal, Form, Input, DatePicker, Select,  Row, Col, message } from 'antd';
  
 const useStyles = makeStyles({
@@ -170,14 +176,174 @@ const useStyles = makeStyles({
   content: {
     fontSize: '13px',
     marginLeft: '10px'
+  },
+  uploadIcon: {
+    marginRight: '5px'
+  },
+
+  filterPanel:{
+    display:'flex',
+    flexDirection:'column',
   }
- 
 });
- 
- 
- 
- 
-const HREmployee = () => {
+
+const data = {
+  tab1: [
+    {
+      empid: 1,
+      name: "John Doe",
+      dept: "Engineering",
+      doj: "2020-01-15",
+      appraisal: "Excellent",
+      manager: "Jane Doe",
+    },
+    {
+      empid: 2,
+      name: "Jane Smith",
+      dept: "Product",
+      doj: "2019-03-25",
+      appraisal: "Good",
+      manager: "John Doe",
+    },
+    {
+        empid: 11,
+        name: "John Doe",
+        dept: "Engineering",
+        doj: "2020-01-15",
+        appraisal: "Excellent",
+        manager: "Jane Doe",
+      },
+      {
+        empid: 12,
+        name: "Jane Smith",
+        dept: "Product",
+        doj: "2019-03-25",
+        appraisal: "Good",
+        manager: "John Doe",
+      },
+      {
+        empid: 21,
+        name: "John Doe",
+        dept: "Engineering",
+        doj: "2020-01-15",
+        appraisal: "Excellent",
+        manager: "Jane Doe",
+      },
+      {
+        empid: 22,
+        name: "Jane Smith",
+        dept: "Product",
+        doj: "2019-03-25",
+        appraisal: "Good",
+        manager: "John Doe",
+      },
+      {
+        empid: 31,
+        name: "John Doe",
+        dept: "Engineering",
+        doj: "2020-01-15",
+        appraisal: "Excellent",
+        manager: "Jane Doe",
+      },
+      {
+        empid: 32,
+        name: "Jane Smith",
+        dept: "Product",
+        doj: "2019-03-25",
+        appraisal: "Good",
+        manager: "John Doe",
+      },
+      {
+        empid: 41,
+        name: "John Doe",
+        dept: "Engineering",
+        doj: "2020-01-15",
+        appraisal: "Excellent",
+        manager: "Jane Doe",
+      },
+      {
+        empid: 42,
+        name: "Jane Smith",
+        dept: "Product",
+        doj: "2019-03-25",
+        appraisal: "Good",
+        manager: "John Doe",
+      },
+      {
+        empid: 51,
+        name: "John Doe",
+        dept: "Engineering",
+        doj: "2020-01-15",
+        appraisal: "Excellent",
+        manager: "Jane Doe",
+      },
+      {
+        empid: 52,
+        name: "Jane Smith",
+        dept: "Product",
+        doj: "2019-03-25",
+        appraisal: "Good",
+        manager: "John Doe",
+      },
+    
+  ],
+  tab2: [
+    {
+      empid: 3,
+      name: "Alice Johnson",
+      dept: "Design",
+      doj: "2021-07-19",
+      appraisal: "Excellent",
+      manager: "Emily Davis",
+    },
+    {
+      empid: 4,
+      name: "Bob Brown",
+      dept: "QA",
+      doj: "2018-11-05",
+      appraisal: "Satisfactory",
+      manager: "James White",
+    },
+  ],
+  tab3: [
+    {
+      empid: 5,
+      name: "Charlie Davis",
+      dept: "DevOps",
+      doj: "2022-02-20",
+      appraisal: "Excellent",
+      manager: "Michael Black",
+    },
+    {
+      empid: 6,
+      name: "Dana Wilson",
+      dept: "Data Science",
+      doj: "2017-05-12",
+      appraisal: "Good",
+      manager: "Sarah Green",
+    },
+  ],
+  tab4: [
+    {
+      empid: 7,
+      name: "Eve Martinez",
+      dept: "HR",
+      doj: "2016-09-28",
+      appraisal: "Good",
+      manager: "Laura Blue",
+    },
+    {
+      empid: 8,
+      name: "Franklin Lee",
+      dept: "Marketing",
+      doj: "2015-12-15",
+      appraisal: "Excellent",
+      manager: "David Yellow",
+    },
+  ],
+};
+
+const HREmployee = (props) => {
   const styles = useStyles();
   const [selectedTab, setSelectedTab] = React.useState("tab1");
   // const [selectedTab1, setSelectedTab1] = React.useState("tab1")
@@ -193,7 +359,13 @@ const HREmployee = () => {
   const [open, setOpen] = React.useState(false);
   const [selectedTab1, setSelectedTab1] = React.useState('tab1');
   const [selectedTab2, setSelectedTab2] = React.useState('tab1');
+
+  const [addedDetails, setaddedDetails] = React.useState([]);
  
+  const [filteredData, setFilteredData] = useState([]);
+  
+  const [copied, setCopied] = React.useState(false);
+
   const [sortState, setSortState] = useState({
     sortDirection: 'ascending',
     sortColumn: 'empid',
@@ -207,7 +379,14 @@ const HREmployee = () => {
  
   const [modalVisible, setModalVisible] = useState(false);
   const [form] = Form.useForm();
- 
+  const [options, setOptions] = useState([]);
+  const [options1, setOptions1] = useState([]);
+
+  const [options2, setOptions2] = useState([]);
+
+  const [activeOptionId, setActiveOptionId] = useState("");
+  const [activeOptionId1, setActiveOptionId1] = useState("");
+  const [activeOptionId2, setActiveOptionId2] = useState("");
   // useEffect(() => {
   //   const currentDate = new Date();
   //   const currentMonth = currentDate.getMonth(); // 0-based index, January is 0
@@ -238,20 +417,92 @@ const HREmployee = () => {
  
  
   // }, []);
+  const dropdownId = useId("dropdown");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://127.0.0.1:8000/user/managerlist");
+        setOptions(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleChange = (event, data) => {
+    props.form.setFieldsValue({ manager: data.optionValue });
+  };
+
+
+
+  
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://127.0.0.1:8000/user/reviewerlist");
+        setOptions1(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://127.0.0.1:8000/user/departmentlist");
+        setOptions2(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleChange1 = (event, data) => {
+    props.form.setFieldsValue({ reviewer: data.optionValue });
+  };
+
  
   useEffect(() => {
     fetchEmployeeData();
   }, []);
- 
+  
+  useEffect(() => {
+    fetchEmployeeData1();
+  }, [addedDetails]);
+
   const fetchEmployeeData = () => {
     axios.get('http://172.235.21.99:5051/user/employee/list')
       .then(response => {
         setData(response.data);
+        console.log({"data1": response.data})
       })
       .catch(error => {
         console.error('There was an error fetching the data!', error);
       });
   };
+
+  const fetchEmployeeData1 = () => {
+    setTimeout(() => {
+      axios.get('http://172.235.21.99:5051/user/employee/list')
+        .then(response => {
+          setData(response.data);
+          console.log({"data1": response.data})
+        })
+        .catch(error => {
+          console.error('There was an error fetching the data!', error);
+        });
+    }, 2000); // 2000 milliseconds = 2 seconds
+  };
+  
  
   useEffect(() => {
     if (data.length > 0) {
@@ -362,7 +613,64 @@ const HREmployee = () => {
   const handleApplyFilters = () => {
     setSelectedFilters(newSelectedFilters); // Update selected filters state
   };
- 
+
+  const onActiveOptionChange = React.useCallback(
+    (_, data) => {
+      setActiveOptionId(data?.nextOption?.value); 
+      // Assuming optionValue is the id
+      console.log({"active":data?.nextOption?.value})
+    },
+    [setActiveOptionId]
+  );
+
+  const onActiveOptionChange1 = React.useCallback(
+    (_, data) => {
+      setActiveOptionId1(data?.nextOption?.value); 
+      // Assuming optionValue is the id
+      console.log({"active":data?.nextOption?.value})
+    },
+    [setActiveOptionId1]
+  );
+
+  const onActiveOptionChange2 = React.useCallback(
+    (_, data) => {
+      setActiveOptionId2(data?.nextOption?.value); 
+      // Assuming optionValue is the id
+      console.log({"active":data?.nextOption?.value})
+    },
+    [setActiveOptionId2]
+  );
+
+  const handlesharetoManager = async (parameter) => {
+    try {
+      const result = await axios.post('http://127.0.0.1:8000/user/employee/changeFormStatus', {
+        "empId":parameter,"status":"sharedToManager"
+      });
+       // Extract and set the token from the response
+    } catch (error) {
+      console.error('Error sending data to the API', error);
+    }
+  };
+
+  const handleShareLinkClick = async (parameter) => {
+    try {
+      const result = await axios.post('http://172.235.21.99:5051/user/form-links', {
+        "empId": parameter, // Include the parameter in the request data
+      });
+      const token = result.data.token; // Extract the token from the response
+
+      // Copy the token to the clipboard
+      navigator.clipboard.writeText(token).then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000); // Reset copied state after 2 seconds
+      }).catch((error) => {
+        console.error('Error copying text to clipboard', error);
+      });
+    } catch (error) {
+      console.error('Error sending data to the API', error);
+    }
+  };
+
   const columns = [
     createTableColumn({
       columnId: 'employee_id',
@@ -411,9 +719,7 @@ const HREmployee = () => {
   });
  
  
-  const handleEditEmployee = () => {
-    alert("Add Employee functionality to be implemented");
-  };
+  
  
   // const handleDeleteEmployee = () => {
   //   alert("Delete Employee functionality to be implemented");
@@ -445,18 +751,65 @@ const HREmployee = () => {
       // alert('An error occurred while deleting employees');
     }
   };
+
+  const handleEditEmployee1 = async () => {
+    console.log(JSON.stringify({ ids: itemSelected }));
+    try {
+      const response = await fetch(`http://172.235.21.99:5051/user/employee/${itemSelected}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ids: itemSelected }),
+      });
+ 
+      if (response.ok) {
+       
+        // Clear the selectedItems state
+        setSelectedItems({});
+        // Optionally clear the itemSelected state
+        setItemSelected([]);
+        fetchEmployeeData();
+      } else {
+        // alert('Failed to delete employees');
+      }
+    } catch (error) {
+      console.error('Error deleting employees:', error);
+      // alert('An error occurred while deleting employees');
+    }
+  };
  
  
  
   const handleAddEmployee = async (values) => {
     console.log('Form values:', values);
+  
+    // Helper function to extract the date part from an ISO string
+    const getDateOnly = (isoString) => {
+      if (typeof isoString === 'string') {
+        return isoString.split('T')[0];
+      } else if (isoString instanceof Date) {
+        return isoString.toISOString().split('T')[0];
+      }
+      console.log(isoString)
+      return isoString; // Return as is if it's neither a string nor a Date
+    };
+  
+    // Update the date fields with the date-only part
+    values.appraisal_date = getDateOnly(values.appraisal_date);
+    values.date_of_joining = getDateOnly(values.date_of_joining);
+    values.date_of_reporting = getDateOnly(values.date_of_reporting);
+    values.dob = getDateOnly(values.dob);
+
+    const empdetails = {...values,"reviewer":activeOptionId, "manager":activeOptionId1,"department":activeOptionId2}
+    setaddedDetails(empdetails)
     try {
-      const response = await axios.post('http://172.235.21.99:5051/user/employee/list', values, {
+      const response = await axios.post('http://127.0.0.1:8000/user/employee/list', empdetails, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
- 
+  
       if (response.status === 200 || response.status === 201) {
         message.success('Employee added successfully');
         setModalVisible(false); // Close modal after submission
@@ -469,6 +822,11 @@ const HREmployee = () => {
       message.error('An error occurred');
     }
   };
+  
+  
+  
+    
+
    
  
  
@@ -480,17 +838,39 @@ const HREmployee = () => {
   };
  
  
-  const filteredData = searchQuery
-  ? (data || []).filter((item) =>
-      (item.employee_name && item.employee_name.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (item.employee_id && item.employee_id.toString().includes(searchQuery)) ||
-      (item.department && item.department.toString().toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (item.date_of_joining && item.date_of_joining.includes(searchQuery)) ||
-      // Uncomment if 'appraisal' is part of the dataset and needs to be searched
-      // (item.appraisal && item.appraisal.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (item.reporting_manager && item.reporting_manager.toLowerCase().includes(searchQuery.toLowerCase()))
-    )
-  : (data || []);
+  // const filteredData = searchQuery
+  // ? (data || []).filter((item) =>
+  //     (item.employee_name && item.employee_name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+  //     (item.employee_id && item.employee_id.toString().includes(searchQuery)) ||
+  //     (item.department && item.department.toString().toLowerCase().includes(searchQuery.toLowerCase())) ||
+  //     (item.date_of_joining && item.date_of_joining.includes(searchQuery)) ||
+  //     // Uncomment if 'appraisal' is part of the dataset and needs to be searched
+  //     // (item.appraisal && item.appraisal.toLowerCase().includes(searchQuery.toLowerCase())) ||
+  //     (item.reporting_manager && item.reporting_manager.toLowerCase().includes(searchQuery.toLowerCase()))
+  //   )
+  // : (data || []);
+
+
+  useEffect(() => {
+    const filterData = () => {
+      if (searchQuery) {
+        const filtered = (data || []).filter((item) =>
+          (item.employee_name && item.employee_name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+          (item.employee_id && item.employee_id.toString().includes(searchQuery)) ||
+          (item.department && item.department.toString().toLowerCase().includes(searchQuery.toLowerCase())) ||
+          (item.date_of_joining && item.date_of_joining.includes(searchQuery)) ||
+          (item.reporting_manager && item.reporting_manager.toLowerCase().includes(searchQuery.toLowerCase()))
+        );
+        setFilteredData(filtered);
+      } else {
+        setFilteredData(data || []);
+        console.log({"data":data})
+      }
+      
+    };
+
+    filterData();
+  }, [data]);
  
 const sortedData = [...filteredData].sort((a, b) => {
   const aValue = a[sortState.sortColumn];
@@ -720,8 +1100,8 @@ return (
       </div>
     </div>
         )}
- 
-    {selectedTab1 === 'tab2' && (
+
+{selectedTab1 === 'tab2' && (
         <div className={`${styles.container} ${styles.gridTemplate2}`}>
         <div className={styles.gridrow} style={{ gridArea: 'nameAndId' }}>
           <div className={`${styles.section} ${styles.nameAndId}`}>
@@ -736,7 +1116,10 @@ return (
         <div className={`${styles.section} ${styles.formLink}`}>
           <div className={styles.content}>
             <ShareMultiple24Filled style={{color:'rgb(1,105,185)'}}/>
-            <Link style={{marginLeft:"10px"}}>Share Form Link</Link>
+            <Link style={{ marginLeft: '10px' }} onClick={() => handleShareLinkClick(selectedEmployee.employee_id)}>
+              Share Form Link
+            </Link>
+      {copied && <span style={{ marginLeft: '10px', color: 'green' }}>Copied to clipboard!</span>}
           </div>
         </div>
       </div>
@@ -863,185 +1246,188 @@ return (
         style={{ borderRadius: '0px', paddingTop:20,  }}
         bodyStyle={{ borderRadius: 0 }}
       >
-        <Form form={form} onFinish={handleAddEmployee} style={{ borderRadius:0, paddingTop:20,  }}>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                label="Employee ID"
-                name="employee_id"
-               
-              >
-                <Input
-                  style={{
-                    fontWeight:'bold',
-                    borderRadius: 0,
-                    border: 0,
-                    borderBottom: '1px solid rgb(180,180,180)',
-                  }}
- 
-                 
-                />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                label="Employee Name"
-                name="employee_name"
-               
-              >
-                <Input style={{
-                    borderRadius: 0,
-                    border: 0,
-                    borderBottom: '1px solid rgb(180,180,180)',
-                  }}/>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                label="Employee Mail"
-                name="employee_mail"
-               
-              >
-                <Input style={{
-                    borderRadius: 0,
-                    border: 0,
-                    borderBottom: '1px solid rgb(180,180,180)',
-                  }}/>
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item label="Date of Birth" name="dob" >
-                <DatePicker style={{ width: '100%' }} style={{
-                    borderRadius: 0,
-                    border: 0,
-                    borderBottom: '1px solid rgb(180,180,180)',
-                  }}/>
-              </Form.Item>
-            </Col>
- 
-            <Col span={12}>
-              <Form.Item label="Appraisal date" name="appraisal_date" >
-                <DatePicker style={{ width: '100%' }} style={{
-                    borderRadius: 0,
-                    border: 0,
-                    borderBottom: '1px solid rgb(180,180,180)',
-                  }}/>
-              </Form.Item>
-            </Col>
- 
- 
-          </Row>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item label="Designation" name="designation" >
-                <Input style={{
-                    borderRadius: 0,
-                    border: 0,
-                    borderBottom: '1px solid rgb(180,180,180)',
-                  }}/>
-              </Form.Item>
-            </Col>
- 
-            <Col span={12}>
-              <Form.Item label="Manager" name="manager" >
-                <Input style={{
-                    borderRadius: 0,
-                    border: 0,
-                    borderBottom: '1px solid rgb(180,180,180)',
-                  }}/>
-              </Form.Item>
-            </Col>
- 
- 
-            <Col span={12}>
-              <Form.Item
-                label="Reporting Manager"
-                name="reporting_manager"
-               
-              >
-                <Input style={{
-                    borderRadius: 0,
-                    border: 0,
-                    borderBottom: '1px solid rgb(180,180,180)',
-                  }}/>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                label="Date of Joining"
-                name="date_of_joining"
-               
-              >
-                <DatePicker style={{ width: '100%' }} style={{
-                    borderRadius: 0,
-                    border: 0,
-                    borderBottom: '1px solid rgb(180,180,180)',
-                  }}/>
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                label="Date of Reporting"
-                name="date_of_reporting"
-               
-              >
-                <DatePicker style={{ width: '100%' }} style={{
-                    borderRadius: 0,
-                    border: 0,
-                    borderBottom: '1px solid rgb(180,180,180)',
-                  }}/>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                label="Experience Before Focusr"
-                name="experience_in_domain_before_focusr"
-               
-              >
-                <Input type="number" style={{
-                    borderRadius: 0,
-                    border: 0,
-                    borderBottom: '1px solid rgb(180,180,180)',
-                  }}/>
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item label="Manager" name="manager" >
-                <Input style={{
-                    borderRadius: 0,
-                    border: 0,
-                    borderBottom: '1px solid rgb(180,180,180)',
-                  }}/>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item label="Reviewer" name="reviewer">
-                <Input style={{
-                    borderRadius: 0,
-                    border: 0,
-                    borderBottom: '1px solid rgb(180,180,180)',
-                  }}/>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={24}>
-              <Form.Item>
-                <Button type="primary" htmlType="submit">
-                  Submit
-                </Button>
-              </Form.Item>
-            </Col>
-          </Row>
-        </Form>
+        <Form form={form} onFinish={handleAddEmployee} style={{ borderRadius: 0, paddingTop: 20 }}>
+  <Row gutter={16}>
+    <Col span={12}>
+      <Form.Item label="Employee ID" name="employee_id">
+        <Input
+          style={{
+            fontWeight: 'bold',
+            borderRadius: 0,
+            border: 0,
+            borderBottom: '1px solid rgb(180,180,180)',
+          }}
+        />
+      </Form.Item>
+    </Col>
+    <Col span={12}>
+      <Form.Item label="Employee Name" name="employee_name">
+        <Input
+          style={{
+            borderRadius: 0,
+            border: 0,
+            borderBottom: '1px solid rgb(180,180,180)',
+          }}
+        />
+      </Form.Item>
+    </Col>
+  </Row>
+  <Row gutter={16}>
+    <Col span={12}>
+      <Form.Item label="Employee Mail" name="employee_mail">
+        <Input
+          style={{
+            borderRadius: 0,
+            border: 0,
+            borderBottom: '1px solid rgb(180,180,180)',
+          }}
+        />
+      </Form.Item>
+    </Col>
+    <Col span={12}>
+      <Form.Item label="Date of Birth" name="dob">
+        <DatePicker
+          style={{
+            borderRadius: 0,
+            border: 0,
+            borderBottom: '1px solid rgb(180,180,180)',
+          }}
+        />
+      </Form.Item>
+    </Col>
+    <Col span={12}>
+      <Form.Item label="Appraisal date" name="appraisal_date">
+        <DatePicker
+          style={{
+            borderRadius: 0,
+            border: 0,
+            borderBottom: '1px solid rgb(180,180,180)',
+          }}
+        />
+      </Form.Item>
+    </Col>
+  </Row>
+  <Row gutter={16}>
+    <Col span={12}>
+      <Form.Item label="Designation" name="designation">
+        <Input
+          style={{
+            borderRadius: 0,
+            border: 0,
+            borderBottom: '1px solid rgb(180,180,180)',
+          }}
+          
+        />
+      </Form.Item>
+    </Col>
+    <Col span={12}>
+      <Form.Item label="department" name="dept_name">
+      <Dropdown
+          aria-labelledby={`${dropdownId}-underline`}
+          placeholder="Select dep"
+          appearance="underline"
+          style={{minWidth:"10px"}}
+          onActiveOptionChange={onActiveOptionChange2}
+          {...props}
+        >
+          {options2.map((option) => (
+            <Option key={option.id} text={option.dept_name} value={option.id}>
+              {option.dept_name}
+            </Option>
+          ))}
+        </Dropdown>
+      </Form.Item>
+    </Col>
+    <Col span={12}>
+      <Form.Item name="reporting_manager" label="Manager">
+        <Dropdown
+          aria-labelledby={`${dropdownId}-underline`}
+          placeholder="Select a manager"
+          appearance="underline"
+          style={{minWidth:"10px"}}
+          onActiveOptionChange={onActiveOptionChange}
+          {...props}
+        >
+          {options.map((option) => (
+            <Option key={option.id} text={option.username} value={option.id}>
+              {option.username}
+            </Option>
+          ))}
+        </Dropdown>
+      </Form.Item>
+    </Col>
+  </Row>
+  <Row gutter={16}>
+    <Col span={12}>
+      <Form.Item label="Date of Joining" name="date_of_joining">
+        <DatePicker
+          style={{
+            borderRadius: 0,
+            border: 0,
+            borderBottom: '1px solid rgb(180,180,180)',
+          }}
+        />
+      </Form.Item>
+    </Col>
+    <Col span={12}>
+      <Form.Item label="Date of Reporting" name="date_of_reporting">
+        <DatePicker
+          style={{
+            borderRadius: 0,
+            border: 0,
+            borderBottom: '1px solid rgb(180,180,180)',
+          }}
+        />
+      </Form.Item>
+    </Col>
+  </Row>
+  <Row gutter={16}>
+    <Col span={12}>
+      <Form.Item label="Experience Before Focusr" name="experience_in_domain_before_focusr">
+        <Input
+          type="number"
+          style={{
+            borderRadius: 0,
+            border: 0,
+            borderBottom: '1px solid rgb(180,180,180)',
+          }}
+        />
+      </Form.Item>
+    </Col>
+    
+  </Row>
+  <Row gutter={16}>
+    <Col span={12}>
+      <Form.Item label="Reviewer" name="reviewer">
+        {/* <label id={`${dropdownId}-underline`}>Reviewer</label> */}
+        <Dropdown
+          aria-labelledby={`${dropdownId}-underline`}
+          placeholder="Select a reviewer"
+          appearance="underline"
+          style={{minWidth:"10px"}}
+          onActiveOptionChange={onActiveOptionChange1}
+          {...props}
+        >
+          {options1.map((option) => (
+            <Option key={option.id} text={option.username} value={option.id}>
+              {option.username}
+            </Option>
+          ))}
+        </Dropdown>
+      </Form.Item>
+    </Col>
+  </Row>
+  <Row>
+    <Col span={24}>
+      <Form.Item>
+        <Button type="primary" htmlType="submit">
+          Submit
+        </Button>
+      </Form.Item>
+    </Col>
+  </Row>
+</Form>
+
       </Modal>
     </div>
  

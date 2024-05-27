@@ -1,5 +1,6 @@
 import React,{useState} from "react";
 import {useSelector, useDispatch} from 'react-redux';
+import {Stack, Nav, Dropdown } from '@fluentui/react';
 import {
   makeStyles,
   shorthands,
@@ -20,6 +21,9 @@ import {
   OverlayDrawer,
   DrawerBody,
   DrawerHeader,
+  Field,
+  Textarea,
+  Rating,
   DrawerHeaderTitle,
   DrawerProps,
   Avatar,
@@ -36,7 +40,6 @@ import {
 } from "@fluentui/react-components";
 import {AddRegular, PersonDeleteRegular , EditRegular, SearchRegular, FilterRegular, FilterDismissRegular, FilterAddRegular, ChartMultipleFilled,ChartMultipleRegular,Dismiss24Regular ,Timer20Regular,Calendar20Regular, ArrowDownRegular, ArrowClockwiseRegular,ShareMultiple24Filled ,Add24Filled,ShareIos24Filled  } from "@fluentui/react-icons"; // Import the icons
 import './page.css';
-import { Link } from "@fluentui/react";
 
 
 const useStyles = makeStyles({
@@ -374,6 +377,74 @@ const data = {
   ],
 };
 
+const options = [
+
+  'Outstanding',
+
+  'Exceeds expectations',
+
+  'Meets expectations',
+
+  'Needs improvement',
+
+  'Unacceptable',
+
+];
+
+
+
+// Define labels for dropdowns
+
+const labels = [
+
+  'Attendance & Punctuality',
+
+  `Technical Skills 
+
+  (Effectiveness with which you apply job knowledge and skill to tasks)`,
+
+  'Quality of work (Comprehensive, accurate, thorough, professional, timely etc)',
+
+  `New Knowledge
+
+  (Seek new knowledge, apply it to your job and share it with others)`,
+
+  `Utilization and Productivity 
+
+  (Make full use of time.  Seek additional work if underutilized)`,
+
+  `Time Management & Organizational Skills 
+
+  (Organize, plan, and forecast work skillfully and accurately.  Effective prioritization.  Meet deadlines or communicate early if will not be met.)`,
+
+  `Interpersonal Skills
+
+  (Positive attitude, work and communicate well with others)`,
+
+  `Communication - Verbal & Written 
+
+  (Communicate knowledge clearly, accurately and thoroughly.  Document work effectively and create procedures)`,
+
+  `Initiative, Innovation & Creativity 
+
+  (Actively seek improvements & challenge status quo in appropriate ways.  Contribute new ideas.  Analyze problems and present solutions)`,
+
+  `Teamwork
+
+  (Co-ordinate own work with others, seek opinions from team members, share information willingly)`,
+
+  `Client Focused
+
+  (Actively seek to understand clients business issues, provide quality service to achieve client satisfaction)`,
+
+  `Planning and Organizational Skills (Organizing, planning and monitoring of work skillfully and accurately; able to effectively prioritize tasks; meets deadlines or communicates need to revise schedule ahead of time)`,
+
+  'Value Addition ( Extras you are able to do )'
+
+  // Add more labels as needed
+
+];
+
 const RVReviewer = () => {
   const styles = useStyles();
   const [selectedTab, setSelectedTab] = React.useState("tab1");
@@ -392,6 +463,159 @@ const RVReviewer = () => {
     sortDirection: 'ascending',
     sortColumn: 'empid',
   });
+
+  const [selectedNavKey, setSelectedNavKey] = useState('option1');
+  const [value, setValue] = useState(4);
+
+  const [formData1, setFormData1] = useState({
+    roleResponse: '',
+    accomplishments: '',
+    strengths: '',
+    developmentNeeds: ''
+  });
+
+  const [formData3, setFormData3] = useState({
+    likes: '',
+    dislikes: '',
+    suggestions: '',
+  });
+
+  const [formData4, setFormData4] = useState({
+    works: '',
+    actions: '',
+    skills: '',
+    training: ''
+  });
+
+  const [areFieldsFilled1, setAreFieldsFilled1] = useState(false);
+  const [areFieldsFilled3, setAreFieldsFilled3] = useState(false);
+  const [areFieldsFilled4, setAreFieldsFilled4] = useState(false);
+  const [filledStatus, setFilledStatus] = useState(Array(labels.length).fill(false));
+  const [submitted1, setSubmitted1] = useState(false);
+  const [submitted2, setSubmitted2] = useState(false);
+  const [submitted3, setSubmitted3] = useState(false);
+  const [submitted4, setSubmitted4] = useState(false);
+  const [errorMessage1, setErrorMessage1] = useState('');
+  const [errorMessage2, setErrorMessage2] = useState('');
+  const [errorMessage3, setErrorMessage3] = useState('');
+  const [errorMessage4, setErrorMessage4] = useState('');
+
+
+
+  const navLinkGroups = [
+    {
+      links: [
+        { name: 'Review of KPI', key: 'option1' },
+        { name: 'Review of other skills', key: 'option2' },
+        { name: 'Organization Feedback', key: 'option3' },
+        { name: 'Training Need Analysis', key: 'option4' },
+  
+      ],
+    },
+  ];
+
+  const getNavLinkStyle = (key) => {
+    let backgroundColor = themestate ? "rgb(51, 51, 51)" : "";
+    if (key === selectedNavKey) {
+      if (key === 'option1') {
+        backgroundColor = submitted1 && !areFieldsFilled1 ? "rgb(51, 51, 51)" : "red";
+      } else if (key === 'option2') {
+        backgroundColor = submitted2 && !filledStatus ? "rgb(51, 51, 51)" : "red";
+      } else if (key === 'option3') {
+        backgroundColor = submitted3 && !areFieldsFilled3 ? "rgb(51, 51, 51)" : "red";
+      } else if (key === 'option4') {
+        backgroundColor = submitted4 && !areFieldsFilled4 ? "rgb(51, 51, 51)" : "red";
+      }
+    }
+    return { backgroundColor };
+  };
+
+  const handleFieldChange1 = (fieldName, value) => {
+    setFormData1({
+      ...formData1,
+      [fieldName]: value
+    });
+  };
+
+  const handleFieldChange3 = (fieldName, value) => {
+    setFormData3({
+      ...formData3,
+      [fieldName]: value
+    });
+  };
+
+  const handleFieldChange4 = (fieldName, value) => {
+    setFormData4({
+      ...formData4,
+      [fieldName]: value
+    });
+  };
+
+  const handleSubmit1 = () => {
+    const { roleResponse, accomplishments, strengths, developmentNeeds } = formData1;
+    const areFieldsFilled1 = roleResponse.trim() !== '' && accomplishments.trim() !== '' && strengths.trim() !== '' && developmentNeeds.trim() !== '';
+    setSubmitted1(true);
+    setAreFieldsFilled1(areFieldsFilled1); // Update the state variable
+    if (!areFieldsFilled1) {
+      setErrorMessage1('Please fill all the required fields.');
+    } else {
+      setErrorMessage1('');
+    }
+  };
+
+  const handleSubmit2 = () => {
+    setSubmitted2(true);
+    const unfilledDropdownIndex = filledStatus.findIndex(status => !status);
+    if (unfilledDropdownIndex !== -1) {
+      setErrorMessage2(`Please fill the remaining dropdowns`);
+    } else {
+      setErrorMessage2('');
+    }
+  };
+
+  const handleSubmit3 = () => {
+    const { likes, dislikes, suggestions } = formData3;
+    const areFieldsFilled3 = likes && dislikes && suggestions;
+    setSubmitted3(true);
+    setAreFieldsFilled3(areFieldsFilled3)
+    if (!areFieldsFilled3) {
+      setErrorMessage3('Please fill all the required fields.');
+    } else {
+      setErrorMessage3('');
+    }
+  };
+
+  const handleSubmit4 = () => {
+    const { works, actions, skills, training } = formData4;
+    const areFieldsFilled4 = works && actions && skills && training;
+    setSubmitted4(true);
+    setAreFieldsFilled4(areFieldsFilled4);
+    if (!areFieldsFilled4) {
+      setErrorMessage4('Please fill all the required fields.');
+    } else {
+      setErrorMessage4('');
+    }
+  };
+
+  const handleDropdownChange = (index, option) => {
+    const newFilledStatus = [...filledStatus];
+    newFilledStatus[index] = !!option;
+    setFilledStatus(newFilledStatus);
+  };
+
+
+  const handleNavClick = (ev, item) => {
+    setSelectedNavKey(item.key);
+  };
+
+
+  const handleRatingChange = (event, newValue) => {
+    setValue(newValue); 
+  };
+
+
+
+  const [selectedOptions, setSelectedOptions] = useState(Array(labels.length).fill(0));
  
   const handleTabSelect = (event,data) => {
     setSelectedTab1(data.value);
@@ -419,7 +643,7 @@ const RVReviewer = () => {
   // };
  
   const handleSearchChange = (event) => {
-    setSearchQuery(event.target.value);
+    setSearchQuery(event.target.value || '');
   };
  
   const handleToggleFilters = () => {
@@ -695,266 +919,526 @@ const RVReviewer = () => {
     </div>
         )}
         {selectedTab1 === 'tab2' && (
-              <div className={`${styles.container} ${styles.gridTemplate2}`}>
-        {/* <div className={styles.gridrow} style={{ gridArea: 'nameAndId' }}> */}
-          <div className={`${styles.section} ${styles.nameAndId}`}>
-            <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Name and Emp ID :</div>
-            <div className={styles.name} style={{color:themestate?"white":""}}>{selectedEmployee.name}</div>
-            <div className={styles.empid} style={{color:themestate?"white":""}}>{selectedEmployee.empid}</div>
-          {/* </div> */}
+        <div style={{ display: 'flex' , marginTop: '5px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+          <Nav
+            groups={navLinkGroups}
+            selectedKey={selectedNavKey}
+            onLinkClick={handleNavClick}
+            styles={{
+              root: {
+              width: '205px',
+              // backgroundColor: themestate ? "rgb(51, 51, 51)" : "",
+              color: themestate ? "white" : "",
+              display: 'flex',
+              flexDirection: 'column',
+              flex: '1 1 auto',
+            },
+            link: (props, theme) => ({
+            ...getNavLinkStyle(props.key),
+            }),
+          }}
+          />
+            <div style={{ marginTop: 'auto', padding: '1rem', borderTop: '1px solid #ccc' }}>
+          <Rating value={value} onChange={handleRatingChange} />
         </div>
-
-        {/* <div className={styles.gridrow} style={{ gridArea: 'managerInfo' }}> */}
-          <div className={`${styles.section} ${styles.managerInfo}`}>
-            <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Manager Info:</div>
-            <div className={styles.manager} style={{color:themestate?"white":""}}>{selectedEmployee.manager}</div>
-            <div className={styles.managerId} style={{color:themestate?"white":""}}>{selectedEmployee.managerId}</div>
           </div>
-        {/* </div> */}
 
-        {/* <div className={styles.gridrow} style={{ gridArea: 'email' }}> */}
-          <div className={`${styles.section} ${styles.email}`}>
-            <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Email</div>
-            <div style={{color:themestate?"white":""}}>{selectedEmployee.email}</div>
+          <div style={{ marginLeft: '20px', flex: '1 1 auto' }}>
+          {selectedNavKey === 'option1' && (
+          <div style={{ marginTop: '1rem' }}>
+            <div style={{ marginTop: '1rem' }}>
+            <Field label="To state your understanding of your roles and responsibilities / objectives as agreed in last year’s appraisal / during joining. ">
+              <Textarea
+                style={{
+                  marginTop: '0.5rem',
+                  width: '500px',
+                  minHeight: '50px',
+                }}
+                value="Your response text here..."
+                readOnly={true}
+              />
+            </Field>
+            </div>
+            <div style={{ marginTop: '1rem' }}>
+            <Field label="Last Year’s Accomplishments: List your most significant accomplishments or contributions made during the review period. Make special note of any new tasks or duties you successfully performed that were outside the scope of your regular responsibilities. Please do not mention your regular day to day activities">
+              <Textarea
+                style={{
+                  marginTop: '0.5rem',
+                  width: '500px',
+                  minHeight: '50px',
+                }}
+                value="Your response text here..."
+                readOnly={true}
+              />
+            </Field>
+            </div>
+            <div style={{ marginTop: '1rem' }}>
+            <Field label="Strengths List the personal and technical abilities that help you perform your job well. List any additional skills that you have, but that you don’t currently use in your role that could be brought to your job or could be used to assist others. Example: I am a SCM Consultant and have knowledge in WMS, would like to explore that area. I am good at proposal writing, would like to conduct training for other colleagues etc …">
+              <Textarea
+                style={{
+                  marginTop: '0.5rem',
+                  width: '500px',
+                  minHeight: '50px',
+                }}
+                value="Your response text here..."
+                readOnly={true}
+              />
+            </Field>
+            </div>
+            <div style={{ marginTop: '1rem' }}>
+            <Field label="Development Needs List the personal and technical abilities you need to develop or enhance in order to improve your job performance. List the steps you plan to take and/or the resources you need to accomplish this development.">
+              <Textarea
+                style={{
+                  marginTop: '0.5rem',
+                  width: '500px',
+                  minHeight: '50px',
+                }}
+                value="Your response text here..."
+                readOnly={true}
+              />
+            </Field>
+            </div>
           </div>
-        {/* </div> */}
-
-      {/* <div className={styles.gridrow} style={{ gridArea: 'doj' }}> */}
-      <div className={`${styles.section} ${styles.doj}`}>
-          <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Date of Joining:</div>
-          <div className={styles.doj} style={{color:themestate?"white":""}}>{selectedEmployee.doj}</div>
-          {/* <div style={{marginLeft:"10px",color:themestate?"white":""}}>{selectedEmployee.doj}</div> */}
-      </div>
-      {/* </div> */}
-      
-      {/* <div className={styles.gridrow} style={{ gridArea: 'status' }}> */}
-      <div className={`${styles.section} ${styles.status}`}>
-        <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Current Status:</div>
-        <div style={{color:themestate?"white":""}}>{selectedEmployee.status}</div>
-      </div>
-      {/* </div> */}
-
-      {/* <div className={styles.gridrow} style={{ gridArea: 'dos' }}> */}
-      <div className={`${styles.section} ${styles.dos}`}>
-          <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Date of Starting:</div>
-          <div style={{color:themestate?"white":""}}>{selectedEmployee.dos}</div>
-      </div>
-      {/* </div> */}
-
-      {/* <div className={styles.gridrow} style={{ gridArea: 'role' }}> */}
-      <div className={`${styles.section} ${styles.role}`}>
-        <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Role:</div>
-        <div style={{color:themestate?"white":""}}>{selectedEmployee.role}</div>
-      </div>
-      {/* </div> */}
-
-      {/* <div className={styles.gridrow} style={{ gridArea: 'appraisal' }}> */}
-      <div className={`${styles.section} ${styles.appraisal}`}>
-          <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Appraisal Date:</div>
-          <div style={{color:themestate?"white":""}}>{selectedEmployee.appraisal}</div>
-      </div>
-      {/* </div> */}
-
-      <div className={styles.gridrow} style={{ gridArea: 'dept' }}>
-      <div className={`${styles.section} ${styles.dept}`}>
-        <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Department:</div>
-        <div style={{color:themestate?"white":""}}>{selectedEmployee.dept}</div>
-      </div>
-      </div>
-
-      <div className={styles.gridrow} style={{ gridArea: 'totalExperience' }}>
-      <div className={`${styles.section} ${styles.totalExperience}`}>
-          <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Total Experience:</div>
-          <div style={{color:themestate?"white":""}}>{selectedEmployee.totalExperience}</div>
-      </div>
-      </div>
-
-      <div className={styles.gridrow} style={{ gridArea: 'editDetails' }}>
-      <div className={`${styles.section} ${styles.editDetails}`}>
-        <div className={styles.editDetails}>
-          <EditRegular className={styles.editIcon} />
-          <span>Edit Details</span>
-        </div>
-      </div>
-      </div>
-
-      <div className={styles.gridrow} style={{ gridArea: 'focusRExperience' }}>
-      <div className={`${styles.section} ${styles.focusRExperience}`}>
-          <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Experience in FocusR:</div>
-          <div style={{color:themestate?"white":""}}>{selectedEmployee.focusRExperience}</div>
-      </div>
-      </div>
-    </div>
         )}
+
+    {selectedNavKey === 'option2' && (
+      <div style={{ marginTop: '1rem', marginBottom: '1rem' }}>
+        <Field label="For all the skills rated below, team member to give self ratings and managers to cross-rate Rating Performance Description" />
+        {labels.map((label, index) => (
+          <div key={index} style={{ marginTop: '1rem', display: 'flex', alignItems: 'center' }}>
+            <Text variant="medium" style={{ marginRight: '1rem' }}>{label}:</Text>
+            {/* Render the selected option directly */}
+            <Text variant="medium">{options[selectedOptions[index]]}</Text>
+            {/* Optionally, you can provide a button to change the selected option */}
+          </div>
+        ))}
+      </div>
+    )}
+
+        {selectedNavKey === 'option3' && (
+          <div style={{ marginTop: '1rem' }}>
+            <div style={{ marginTop: '1rem' }}>
+            <Field label="Top 3 likes in the organization">
+              <Textarea
+                style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
+                value="Your response text here..."
+                readOnly={true}
+              />
+            </Field>
+            </div>
+            <div style={{ marginTop: '1rem' }}>
+            <Field label="Top 3 dislikes in the organization">
+              <Textarea
+                style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
+                value="Your response text here..."
+                readOnly={true}
+              />
+            </Field>
+            </div>
+            <div style={{ marginTop: '1rem' }}>
+            <Field label="Any Suggestion to Improve the organisation">
+              <Textarea
+                style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
+                value="Your response text here..."
+                readOnly={true}
+              />
+            </Field>
+            </div>
+          </div>
+        )}
+
+        {selectedNavKey === 'option4' && (
+          <div style={{ marginTop: '1rem' }}>
+            <div style={{ marginTop: '1rem' }}>
+            <Field label="List the kind of work or job would you like to be doing in one/two/five years time">
+              <Textarea
+                style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
+                value="Your response text here..."
+                readOnly={true}
+              />
+            </Field>
+            </div>
+            <div style={{ marginTop: '1rem' }}>
+            <Field label="List the actions you have taken to make yourself indispensable">
+              <Textarea
+                style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
+                value="Your response text here..."
+                readOnly={true}
+              />
+            </Field>
+            </div>
+            <div style={{ marginTop: '1rem' }}>
+            <Field label="Do you want to explore your skills areas other than your present work?">
+              <Textarea
+                style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
+                value="Your response text here..."
+                readOnly={true}
+              />
+            </Field>
+            </div>
+            <div style={{ marginTop: '1rem' }}>
+            <Field label="If you want to explore skill areas other than your present work, List the skill areas you want to explore.">
+              <Textarea
+                style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
+                value="Your response text here..."
+                readOnly={true}
+              />
+            </Field>
+            </div>
+          </div>
+        )}
+          </div>
+        </div>
+      )}
+
         {selectedTab1 === 'tab3' && (
-              <div className={`${styles.container} ${styles.gridTemplate3}`}>
-        {/* <div className={styles.gridrow} style={{ gridArea: 'nameAndId' }}> */}
-          <div className={`${styles.section} ${styles.nameAndId}`}>
-            <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Name and Emp ID :</div>
-            <div className={styles.name} style={{color:themestate?"white":""}}>{selectedEmployee.name}</div>
-            <div className={styles.empid} style={{color:themestate?"white":""}}>{selectedEmployee.empid}</div>
-          {/* </div> */}
+        <div style={{ display: 'flex' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+          <Nav
+            groups={navLinkGroups}
+            selectedKey={selectedNavKey}
+            onLinkClick={handleNavClick}
+            styles={{
+              root: {
+              width: '205px',
+              // backgroundColor: themestate ? "rgb(51, 51, 51)" : "",
+              color: themestate ? "white" : "",
+              display: 'flex',
+              flexDirection: 'column',
+              flex: '1 1 auto',
+            },
+            link: (props, theme) => ({
+            ...getNavLinkStyle(props.key),
+            }),
+          }}
+          />
+            <div style={{ marginTop: 'auto', padding: '1rem', borderTop: '1px solid #ccc' }}>
+          <Rating value={value} onChange={handleRatingChange} />
         </div>
-
-        {/* <div className={styles.gridrow} style={{ gridArea: 'managerInfo' }}> */}
-          <div className={`${styles.section} ${styles.managerInfo}`}>
-            <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Manager Info:</div>
-            <div className={styles.manager} style={{color:themestate?"white":""}}>{selectedEmployee.manager}</div>
-            <div className={styles.managerId} style={{color:themestate?"white":""}}>{selectedEmployee.managerId}</div>
           </div>
-        {/* </div> */}
 
-        {/* <div className={styles.gridrow} style={{ gridArea: 'email' }}> */}
-          <div className={`${styles.section} ${styles.email}`}>
-            <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Email</div>
-            <div style={{color:themestate?"white":""}}>{selectedEmployee.email}</div>
+          <div style={{ marginLeft: '20px', flex: '1 1 auto' }}>
+          {selectedNavKey === 'option1' && (
+          <div style={{ marginTop: '1rem' }}>
+            <div style={{ marginTop: '1rem' }}>
+            <Field label="To state your understanding of your roles and responsibilities / objectives as agreed in last year’s appraisal / during joining. ">
+              <Textarea
+                style={{
+                  marginTop: '0.5rem',
+                  width: '500px',
+                  minHeight: '50px',
+                }}
+                value="Your response text here..."
+                readOnly={true}
+              />
+            </Field>
+            </div>
+            <div style={{ marginTop: '1rem' }}>
+            <Field label="Last Year’s Accomplishments: List your most significant accomplishments or contributions made during the review period. Make special note of any new tasks or duties you successfully performed that were outside the scope of your regular responsibilities. Please do not mention your regular day to day activities">
+              <Textarea
+                style={{
+                  marginTop: '0.5rem',
+                  width: '500px',
+                  minHeight: '50px',
+                }}
+                value="Your response text here..."
+                readOnly={true}
+              />
+            </Field>
+            </div>
+            <div style={{ marginTop: '1rem' }}>
+            <Field label="Strengths List the personal and technical abilities that help you perform your job well. List any additional skills that you have, but that you don’t currently use in your role that could be brought to your job or could be used to assist others. Example: I am a SCM Consultant and have knowledge in WMS, would like to explore that area. I am good at proposal writing, would like to conduct training for other colleagues etc …">
+              <Textarea
+                style={{
+                  marginTop: '0.5rem',
+                  width: '500px',
+                  minHeight: '50px',
+                }}
+                value="Your response text here..."
+                readOnly={true}
+              />
+            </Field>
+            </div>
+            <div style={{ marginTop: '1rem' }}>
+            <Field label="Development Needs List the personal and technical abilities you need to develop or enhance in order to improve your job performance. List the steps you plan to take and/or the resources you need to accomplish this development.">
+              <Textarea
+                style={{
+                  marginTop: '0.5rem',
+                  width: '500px',
+                  minHeight: '50px',
+                }}
+                value="Your response text here..."
+                readOnly={true}
+              />
+            </Field>
+            </div>
           </div>
-        {/* </div> */}
-
-      {/* <div className={styles.gridrow} style={{ gridArea: 'doj' }}> */}
-      <div className={`${styles.section} ${styles.doj}`}>
-          <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Date of Joining:</div>
-          <div className={styles.doj} style={{color:themestate?"white":""}}>{selectedEmployee.doj}</div>
-          {/* <div style={{marginLeft:"10px",color:themestate?"white":""}}>{selectedEmployee.doj}</div> */}
-      </div>
-      {/* </div> */}
-      
-      {/* <div className={styles.gridrow} style={{ gridArea: 'status' }}> */}
-      <div className={`${styles.section} ${styles.status}`}>
-        <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Current Status:</div>
-        <div style={{color:themestate?"white":""}}>{selectedEmployee.status}</div>
-      </div>
-      {/* </div> */}
-
-      {/* <div className={styles.gridrow} style={{ gridArea: 'dos' }}> */}
-      <div className={`${styles.section} ${styles.dos}`}>
-          <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Date of Starting:</div>
-          <div style={{color:themestate?"white":""}}>{selectedEmployee.dos}</div>
-      </div>
-      {/* </div> */}
-
-      {/* <div className={styles.gridrow} style={{ gridArea: 'role' }}> */}
-      <div className={`${styles.section} ${styles.role}`}>
-        <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Role:</div>
-        <div style={{color:themestate?"white":""}}>{selectedEmployee.role}</div>
-      </div>
-      {/* </div> */}
-
-      {/* <div className={styles.gridrow} style={{ gridArea: 'appraisal' }}> */}
-      <div className={`${styles.section} ${styles.appraisal}`}>
-          <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Appraisal Date:</div>
-          <div style={{color:themestate?"white":""}}>{selectedEmployee.appraisal}</div>
-      </div>
-      {/* </div> */}
-
-      <div className={styles.gridrow} style={{ gridArea: 'dept' }}>
-      <div className={`${styles.section} ${styles.dept}`}>
-        <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Department:</div>
-        <div style={{color:themestate?"white":""}}>{selectedEmployee.dept}</div>
-      </div>
-      </div>
-
-      <div className={styles.gridrow} style={{ gridArea: 'totalExperience' }}>
-      <div className={`${styles.section} ${styles.totalExperience}`}>
-          <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Total Experience:</div>
-          <div style={{color:themestate?"white":""}}>{selectedEmployee.totalExperience}</div>
-      </div>
-      </div>
-
-      <div className={styles.gridrow} style={{ gridArea: 'editDetails' }}>
-      <div className={`${styles.section} ${styles.editDetails}`}>
-        <div className={styles.editDetails}>
-          <EditRegular className={styles.editIcon} />
-          <span>Edit Details</span>
-        </div>
-      </div>
-      </div>
-
-      <div className={styles.gridrow} style={{ gridArea: 'focusRExperience' }}>
-      <div className={`${styles.section} ${styles.focusRExperience}`}>
-          <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Experience in FocusR:</div>
-          <div style={{color:themestate?"white":""}}>{selectedEmployee.focusRExperience}</div>
-      </div>
-      </div>
-    </div>
         )}
+
+    {selectedNavKey === 'option2' && (
+      <div style={{ marginTop: '1rem', marginBottom: '1rem' }}>
+        <Field label="For all the skills rated below, team member to give self ratings and managers to cross-rate Rating Performance Description" />
+        {labels.map((label, index) => (
+          <div key={index} style={{ marginTop: '1rem', display: 'flex', alignItems: 'center' }}>
+            <Text variant="medium" style={{ marginRight: '1rem' }}>{label}:</Text>
+            {/* Render the selected option directly */}
+            <Text variant="medium">{options[selectedOptions[index]]}</Text>
+            {/* Optionally, you can provide a button to change the selected option */}
+          </div>
+        ))}
+      </div>
+    )}
+
+        {selectedNavKey === 'option3' && (
+          <div style={{ marginTop: '1rem' }}>
+            <div style={{ marginTop: '1rem' }}>
+            <Field label="Top 3 likes in the organization">
+              <Textarea
+                style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
+                value="Your response text here..."
+                readOnly={true}
+              />
+            </Field>
+            </div>
+            <div style={{ marginTop: '1rem' }}>
+            <Field label="Top 3 dislikes in the organization">
+              <Textarea
+                style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
+                value="Your response text here..."
+                readOnly={true}
+              />
+            </Field>
+            </div>
+            <div style={{ marginTop: '1rem' }}>
+            <Field label="Any Suggestion to Improve the organisation">
+              <Textarea
+                style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
+                value="Your response text here..."
+                readOnly={true}
+              />
+            </Field>
+            </div>
+          </div>
+        )}
+
+        {selectedNavKey === 'option4' && (
+          <div style={{ marginTop: '1rem' }}>
+            <div style={{ marginTop: '1rem' }}>
+            <Field label="List the kind of work or job would you like to be doing in one/two/five years time">
+              <Textarea
+                style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
+                value="Your response text here..."
+                readOnly={true}
+              />
+            </Field>
+            </div>
+            <div style={{ marginTop: '1rem' }}>
+            <Field label="List the actions you have taken to make yourself indispensable">
+              <Textarea
+                style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
+                value="Your response text here..."
+                readOnly={true}
+              />
+            </Field>
+            </div>
+            <div style={{ marginTop: '1rem' }}>
+            <Field label="Do you want to explore your skills areas other than your present work?">
+              <Textarea
+                style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
+                value="Your response text here..."
+                readOnly={true}
+              />
+            </Field>
+            </div>
+            <div style={{ marginTop: '1rem' }}>
+            <Field label="If you want to explore skill areas other than your present work, List the skill areas you want to explore.">
+              <Textarea
+                style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
+                value="Your response text here..."
+                readOnly={true}
+              />
+            </Field>
+            </div>
+          </div>
+        )}
+          </div>
+        </div>
+      )}
         {selectedTab1 === 'tab4' && (
-              <div className={`${styles.container} ${styles.gridTemplate4}`}>
-        {/* <div className={styles.gridrow} style={{ gridArea: 'nameAndId' }}> */}
-          <div className={`${styles.section} ${styles.nameAndId}`}>
-            <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Name and Emp ID :</div>
-            <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.name}</div>
-            <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.empid}</div>
-          {/* </div> */}
+        <div style={{ display: 'flex' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+          <Nav
+            groups={navLinkGroups}
+            selectedKey={selectedNavKey}
+            onLinkClick={handleNavClick}
+            styles={{
+              root: {
+              width: '205px',
+              // backgroundColor: themestate ? "rgb(51, 51, 51)" : "",
+              color: themestate ? "white" : "",
+              display: 'flex',
+              flexDirection: 'column',
+              flex: '1 1 auto',
+            },
+            link: (props, theme) => ({
+            ...getNavLinkStyle(props.key),
+            }),
+          }}
+          />
+            <div style={{ marginTop: 'auto', padding: '1rem', borderTop: '1px solid #ccc' }}>
+          <Rating value={value} onChange={handleRatingChange} />
+          <Button onClick={() => setValue(0)}>Clear Rating</Button>
         </div>
-
-        {/* <div className={styles.gridrow} style={{ gridArea: 'empForm' }}> */}
-        <div className={`${styles.section} ${styles.empform}`}>
-            <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Employee Filled Form:</div>
-            <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.empForm}</div>
           </div>
-        {/* </div> */}
 
-        {/* <div className={styles.gridrow} style={{ gridArea: 'email' }}> */}
-          <div className={`${styles.section} ${styles.email}`}>
-            <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Email:</div>
-            <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.email}</div>
+          <div style={{ marginLeft: '20px', flex: '1 1 auto' }}>
+          {selectedNavKey === 'option1' && (
+            <div style={{ marginTop: '1rem' }}>
+              <div style={{ marginTop: '1rem' }}>
+              <Field label="To state your understanding of your roles and responsibilities / objectives as agreed in last year’s appraisal / during joining. ">
+                <Textarea
+                  style={{
+                    marginTop: '0.5rem',
+                    width: '500px',
+                    minHeight: '50px',
+                    borderColor: !formData1.roleResponse && submitted1 ? 'red' : '',
+                  }}
+                  value={formData1.roleResponse}
+                  onChange={(e) => handleFieldChange1('roleResponse', e.target.value)}
+                  placeholder="Enter your response..."
+                />
+          </Field>
           </div>
-        {/* </div> */}
+          <div style={{ marginTop: '1rem' }}>
+          <Field label="Last Year’s Accomplishments:  List your most significant accomplishments or contributions made during the review period. Make special note of any new tasks or duties you successfully performed that were outside the scope of your regular responsibilities. Please do not mention your regular day to day activities">
+            <Textarea
+              style={{
+                marginTop: '0.5rem',
+                width: '500px',
+                minHeight: '50px',
+                borderColor: !formData1.accomplishments && submitted1 ? 'red' : '',
+              }}
+              value={formData1.accomplishments}
+              onChange={(e) => handleFieldChange1('accomplishments', e.target.value)}
+              placeholder="Enter your response..."
+            />
+          </Field>
+          </div>
+          <div style={{ marginTop: '1rem' }}>
+          <Field label="Strengths List the personal and technical abilities that help you perform your job well. List any additional skills that you have, but that you don’t currently use in your role that could be brought to your job or could be used to assist others. Example: I am a SCM Consultant and have knowledge in WMS, would like to explore that area. I am good at proposal writing, would like to conduct training for other colleagues etc …">
+            <Textarea
+              style={{
+                marginTop: '0.5rem',
+                width: '500px',
+                minHeight: '50px',
+                borderColor: !formData1.strengths && submitted1 ? 'red' : '',
+              }}
+              value={formData1.strengths}
+              onChange={(e) => handleFieldChange1('strengths', e.target.value)}
+              placeholder="Enter your response..."
+            />
+          </Field>
+          </div>
+          <div style={{ marginTop: '1rem' }}>
+          <Field label="Development Needs List the personal and technical abilities you need to develop or enhance in order to improve your job performance. List the steps you plan to take and/or the resources you need to accomplish this development.">
+            <Textarea
+              style={{
+                marginTop: '0.5rem',
+                width: '500px',
+                minHeight: '50px',
+                borderColor: !formData1.developmentNeeds && submitted1 ? 'red' : '',
+              }}
+              value={formData1.developmentNeeds}
+              onChange={(e) => handleFieldChange1('developmentNeeds', e.target.value)}
+              placeholder="Enter your response..."
+            />
+          </Field>
+          </div>
+          {errorMessage1 && <div style={{ color: 'red', marginTop: '0.5rem' }}>{errorMessage1}</div>}
+          <Button style={{marginTop: '5px', backgroundColor: 'blue', color: 'white'}} onClick={handleSubmit1}>Submit</Button>
+        </div>
+      )}
 
-      {/* <div className={styles.gridrow} style={{ gridArea: 'doj' }}> */}
-      <div className={`${styles.section} ${styles.doj}`}>
-          <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Date of Joining:</div>
-          <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.doj}</div>
-          {/* <div style={{marginLeft:"10px",color:themestate?"white":""}}>{selectedEmployee.doj}</div> */}
-      </div>
-      {/* </div> */}
-      
-      {/* <div className={styles.gridrow} style={{ gridArea: 'status' }}> */}
-      <div className={`${styles.section} ${styles.status}`}>
-        <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Current Status:</div>
-        <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.status}</div>
-      </div>
-      {/* </div> */}
+      {selectedNavKey === 'option2' && (
+        <div style={{ marginTop: '1rem' }}>
+          <Field label="For all the skills rated below, team member to give self ratings and managers to cross-rate Rating Performance Description" />
+          {labels.map((label, index) => (
+            <div key={index} style={{ marginTop: '1rem', display: 'flex', alignItems: 'center' }}>
+              <Text variant="medium" style={{ marginRight: '1rem' }}>{label}:</Text>
+              <div style={{ 
+                borderColor: submitted2 && !filledStatus[index] ? 'red' : '', 
+                borderWidth: 1, 
+                borderStyle: 'solid', 
+                borderRadius: 4,
+              }}>
+                <Dropdown
+                  placeholder="Select an option"
+                  options={options.map(option => ({ key: option, text: option }))}
+                  styles={{ 
+                    dropdown: { width: 200, borderColor: submitted2 && !filledStatus[index] ? 'red' : '' },
+                  }}
+                  onChange={(event, option) => handleDropdownChange(index, option)}
+                />
+              </div>
+            </div>
+          ))}
+          {errorMessage2 && <div style={{ color: 'red', marginTop: '0.5rem' }}>{errorMessage2}</div>}
+          <Button style={{marginTop: '5px', backgroundColor: 'blue', color: 'white'}} onClick={handleSubmit2}>Submit</Button>
+        </div>
+      )}
 
-      {/* <div className={styles.gridrow} style={{ gridArea: 'dos' }}> */}
-      <div className={`${styles.section} ${styles.dos}`}>
-          <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Date of Starting:</div>
-          <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.dos}</div>
-      </div>
-      {/* </div> */}
+            {selectedNavKey === 'option3' && (
+              <div style={{ marginTop: '1rem' }}>
+                <div style={{ marginTop: '1rem' }}>
+                <Field label="Top 3 likes in the organization">
+                  <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px', borderColor: !formData3.likes && submitted3 ? 'red' : '' }} value={formData3.likes} onChange={(e) => handleFieldChange3('likes', e.target.value)} placeholder="Enter your response..." />
+                </Field>
+                </div>
+                <div style={{ marginTop: '1rem' }}>
+                <Field label="Top 3 dislikes in the organization">
+                <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px', borderColor: !formData3.dislikes && submitted3 ? 'red' : '' }} value={formData3.dislikes} onChange={(e) => handleFieldChange3('dislikes', e.target.value)} placeholder="Enter your response..." />
+                </Field>
+                </div>
+                <div style={{ marginTop: '1rem' }}>
+                <Field label="Any Suggestion to Improve the organisation">
+                <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px', borderColor: !formData3.suggestions && submitted3 ? 'red' : '' }} value={formData3.suggestions} onChange={(e) => handleFieldChange3('suggestions', e.target.value)} placeholder="Enter your response..." />
+                </Field>
+                </div>
+                {errorMessage3 && <div style={{ color: 'red', marginTop: '0.5rem' }}>{errorMessage3}</div>}
+                <Button style={{marginTop: '5px', backgroundColor: 'blue', color: 'white'}} onClick={handleSubmit3}>Submit</Button>
+              </div>
+            )}
 
-      {/* <div className={styles.gridrow} style={{ gridArea: 'role' }}> */}
-      <div className={`${styles.section} ${styles.role}`}>
-        <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Role:</div>
-        <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.role}</div>
-      </div>
-      {/* </div> */}
-
-      {/* <div className={styles.gridrow} style={{ gridArea: 'appraisal' }}> */}
-      <div className={`${styles.section} ${styles.appraisal}`}>
-          <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Appraisal Date:</div>
-          <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.appraisal}</div>
-      </div>
-      {/* </div> */}
-
-      <div className={styles.gridrow} style={{ gridArea: 'dept' }}>
-      <div className={`${styles.section} ${styles.dept}`}>
-        <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Department:</div>
-        <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.dept}</div>
-      </div>
-      </div>
-
-      <div className={styles.gridrow} style={{ gridArea: 'share' }}>
-        <div className={`${styles.section} ${styles.share}`}>
-          <div className={styles.shareDetails}>
-            <ShareIos24Filled style={{color:'rgb(1,105,185)'}}/>
-            <Link className={styles.shareLink}>Share to HR</Link>
+            {selectedNavKey === 'option4' && (
+              <div style={{ marginTop: '1rem' }}>
+                <div style={{ marginTop: '1rem' }}>
+                <Field label="List the kind of work or job would you like to be doing in one/two/five years time">
+                <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px', borderColor: !formData4.works && submitted4 ? 'red' : '' }} value={formData4.works} onChange={(e) => handleFieldChange4('works', e.target.value)} placeholder="Enter your response..." />
+                </Field>
+                </div>
+                <div style={{ marginTop: '1rem' }}>
+                <Field label="List the actions you have taken to make yourself indispensible">
+                <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px', borderColor: !formData4.actions && submitted4 ? 'red' : '' }} value={formData4.actions} onChange={(e) => handleFieldChange4('actions', e.target.value)} placeholder="Enter your response..." />
+                </Field>
+                </div>
+                <div style={{ marginTop: '1rem' }}>
+                <Field label="Do you want to explore your skills areas other than your present work?">
+                <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px', borderColor: !formData4.skills && submitted4 ? 'red' : '' }} value={formData4.skills} onChange={(e) => handleFieldChange4('skills', e.target.value)} placeholder="Enter your response..." />
+                </Field>
+                </div>
+                <div style={{ marginTop: '1rem' }}>
+                <Field label="What sort of training/experiences would benefit you in the next year? Not just job-skills - also your natural strengths and personal passions you'd like to develop - you and your work can benefit from these">
+                <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px', borderColor: !formData4.training && submitted4 ? 'red' : '' }} value={formData4.training} onChange={(e) => handleFieldChange4('training', e.target.value)} placeholder="Enter your response..." />
+                </Field>
+                </div>
+                {errorMessage4 && <div style={{ color: 'red', marginTop: '0.5rem' }}>{errorMessage4}</div>}
+                <Button style={{marginTop: '5px', backgroundColor: 'blue', color: 'white'}} onClick={handleSubmit4}>Submit</Button>
+              </div>
+            )}
           </div>
         </div>
-      </div>
-    </div>
-        )}
+      )}
           </div>
         </DrawerBody>
          )}

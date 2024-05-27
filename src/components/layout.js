@@ -13,6 +13,7 @@ import { AlertBadgeRegular, QuestionRegular, WeatherSunnyRegular, WeatherMoonReg
 import { themeActions } from '../Store/Store';
 import { calc } from 'antd/es/theme/internal';
 import { DarkModeSwitch } from 'react-toggle-dark-mode';
+import { logoutAction } from '../Store/authSlice';
  
 const { Header, Content, Footer, Sider } = Layout;
 const useStyles = makeStyles({
@@ -37,6 +38,14 @@ const ExampleContent = () => {
   const lighttheme = useSelector((state) => state.theme.light);
   const darktheme = useSelector((state) => state.theme.dark);
   const themestate = useSelector((state) => state.theme.theme);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    localStorage.clear(); // Clear all items in local storage
+    dispatch(logoutAction());
+    navigate("/", { replace: true });
+  };
  
   return (
     <div style={{ marginBottom: "20px" }}>
@@ -44,7 +53,8 @@ const ExampleContent = () => {
         <Text truncate wrap={false} className={styles.text} style={themestate ? { width: "75%", color: darktheme.fontcolordark } : { width: "75%" }}>
           FocusR Consultancy and Technologies pvt ltd.
         </Text>
-        <Link appearance="subtle" href="http://localhost:3000/" style={themestate ? { width: "25%", textAlign: "right", color: darktheme.fontcolordark ,WebkitTapHighlightColor: 'transparent'} : { width: "25%", textAlign: "right",WebkitTapHighlightColor: 'transparent' }}>
+        <Link appearance="subtle"  style={themestate ? { width: "25%", textAlign: "right", color: darktheme.fontcolordark ,WebkitTapHighlightColor: 'transparent'} : { width: "25%", textAlign: "right",WebkitTapHighlightColor: 'transparent' }}
+        onClick={handleLogout}>
           Sign out
         </Link>
       </div>
@@ -78,6 +88,8 @@ const CustomLayout = ({ children }) => {
   const darktheme = useSelector((state) => state.theme.dark);
   const themestate = useSelector((state) => state.theme.theme);
   
+  
+
   const toggleDarkMode = (checked) => {
     setDarkMode(checked);
   };

@@ -1136,8 +1136,8 @@ const NavDrawerDefault = (props) => {
     <div className={styles.root} style={{height: 'calc(100vh - 48px)'}}>
        {/* <div style={themestate?{backgroundColor:darktheme.sidebarcolordark, height: 'calc(100vh - 48px)'}:{backgroundColor:lighttheme.sidebarcolorlight}}> */}
         <NavDrawer
-  defaultSelectedValue="1"
-  defaultSelectedCategoryValue="1"
+  defaultSelectedValue="2"
+  defaultSelectedCategoryValue="2"
   open={isOpen}
   type={type}
   onOpenChange={(_, { open }) => setIsOpen(open)}

@@ -359,8 +359,10 @@ const HREmployee = (props) => {
   const [open, setOpen] = React.useState(false);
   const [selectedTab1, setSelectedTab1] = React.useState('tab1');
   const [selectedTab2, setSelectedTab2] = React.useState('tab1');
- 
 
+  const [addedDetails, setaddedDetails] = React.useState([]);
+ 
+  const [filteredData, setFilteredData] = useState([]);
   
   const [copied, setCopied] = React.useState(false);
 
@@ -380,9 +382,11 @@ const HREmployee = (props) => {
   const [options, setOptions] = useState([]);
   const [options1, setOptions1] = useState([]);
 
+  const [options2, setOptions2] = useState([]);
+
   const [activeOptionId, setActiveOptionId] = useState("");
   const [activeOptionId1, setActiveOptionId1] = useState("");
- 
+  const [activeOptionId2, setActiveOptionId2] = useState("");
   // useEffect(() => {
   //   const currentDate = new Date();
   //   const currentMonth = currentDate.getMonth(); // 0-based index, January is 0
@@ -432,6 +436,8 @@ const HREmployee = (props) => {
     props.form.setFieldsValue({ manager: data.optionValue });
   };
 
+
+
   
 
   useEffect(() => {
@@ -439,6 +445,19 @@ const HREmployee = (props) => {
       try {
         const response = await axios.get("http://127.0.0.1:8000/user/reviewerlist");
         setOptions1(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://127.0.0.1:8000/user/departmentlist");
+        setOptions2(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -455,16 +474,35 @@ const HREmployee = (props) => {
   useEffect(() => {
     fetchEmployeeData();
   }, []);
- 
+  
+  useEffect(() => {
+    fetchEmployeeData1();
+  }, [addedDetails]);
+
   const fetchEmployeeData = () => {
     axios.get('http://172.235.21.99:5051/user/employee/list')
       .then(response => {
         setData(response.data);
+        console.log({"data1": response.data})
       })
       .catch(error => {
         console.error('There was an error fetching the data!', error);
       });
   };
+
+  const fetchEmployeeData1 = () => {
+    setTimeout(() => {
+      axios.get('http://172.235.21.99:5051/user/employee/list')
+        .then(response => {
+          setData(response.data);
+          console.log({"data1": response.data})
+        })
+        .catch(error => {
+          console.error('There was an error fetching the data!', error);
+        });
+    }, 2000); // 2000 milliseconds = 2 seconds
+  };
+  
  
   useEffect(() => {
     if (data.length > 0) {
@@ -594,6 +632,15 @@ const HREmployee = (props) => {
     [setActiveOptionId1]
   );
 
+  const onActiveOptionChange2 = React.useCallback(
+    (_, data) => {
+      setActiveOptionId2(data?.nextOption?.value); 
+      // Assuming optionValue is the id
+      console.log({"active":data?.nextOption?.value})
+    },
+    [setActiveOptionId2]
+  );
+
   const handlesharetoManager = async (parameter) => {
     try {
       const result = await axios.post('http://127.0.0.1:8000/user/employee/changeFormStatus', {
@@ -672,9 +719,7 @@ const HREmployee = (props) => {
   });
  
  
-  const handleEditEmployee = () => {
-    alert("Add Employee functionality to be implemented");
-  };
+  
  
   // const handleDeleteEmployee = () => {
   //   alert("Delete Employee functionality to be implemented");
@@ -684,6 +729,33 @@ const HREmployee = (props) => {
     console.log(JSON.stringify({ ids: itemSelected }));
     try {
       const response = await fetch('http://172.235.21.99:5051/user/employee/multi-delete/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ids: itemSelected }),
+      });
+ 
+      if (response.ok) {
+       
+        // Clear the selectedItems state
+        setSelectedItems({});
+        // Optionally clear the itemSelected state
+        setItemSelected([]);
+        fetchEmployeeData();
+      } else {
+        // alert('Failed to delete employees');
+      }
+    } catch (error) {
+      console.error('Error deleting employees:', error);
+      // alert('An error occurred while deleting employees');
+    }
+  };
+
+  const handleEditEmployee1 = async () => {
+    console.log(JSON.stringify({ ids: itemSelected }));
+    try {
+      const response = await fetch(`http://172.235.21.99:5051/user/employee/${itemSelected}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -729,8 +801,8 @@ const HREmployee = (props) => {
     values.date_of_reporting = getDateOnly(values.date_of_reporting);
     values.dob = getDateOnly(values.dob);
 
-    const empdetails = {...values,"reviewer":activeOptionId, "manager":activeOptionId1}
-  
+    const empdetails = {...values,"reviewer":activeOptionId, "manager":activeOptionId1,"department":activeOptionId2}
+    setaddedDetails(empdetails)
     try {
       const response = await axios.post('http://127.0.0.1:8000/user/employee/list', empdetails, {
         headers: {
@@ -766,17 +838,39 @@ const HREmployee = (props) => {
   };
  
  
-  const filteredData = searchQuery
-  ? (data || []).filter((item) =>
-      (item.employee_name && item.employee_name.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (item.employee_id && item.employee_id.toString().includes(searchQuery)) ||
-      (item.department && item.department.toString().toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (item.date_of_joining && item.date_of_joining.includes(searchQuery)) ||
-      // Uncomment if 'appraisal' is part of the dataset and needs to be searched
-      // (item.appraisal && item.appraisal.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (item.reporting_manager && item.reporting_manager.toLowerCase().includes(searchQuery.toLowerCase()))
-    )
-  : (data || []);
+  // const filteredData = searchQuery
+  // ? (data || []).filter((item) =>
+  //     (item.employee_name && item.employee_name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+  //     (item.employee_id && item.employee_id.toString().includes(searchQuery)) ||
+  //     (item.department && item.department.toString().toLowerCase().includes(searchQuery.toLowerCase())) ||
+  //     (item.date_of_joining && item.date_of_joining.includes(searchQuery)) ||
+  //     // Uncomment if 'appraisal' is part of the dataset and needs to be searched
+  //     // (item.appraisal && item.appraisal.toLowerCase().includes(searchQuery.toLowerCase())) ||
+  //     (item.reporting_manager && item.reporting_manager.toLowerCase().includes(searchQuery.toLowerCase()))
+  //   )
+  // : (data || []);
+
+
+  useEffect(() => {
+    const filterData = () => {
+      if (searchQuery) {
+        const filtered = (data || []).filter((item) =>
+          (item.employee_name && item.employee_name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+          (item.employee_id && item.employee_id.toString().includes(searchQuery)) ||
+          (item.department && item.department.toString().toLowerCase().includes(searchQuery.toLowerCase())) ||
+          (item.date_of_joining && item.date_of_joining.includes(searchQuery)) ||
+          (item.reporting_manager && item.reporting_manager.toLowerCase().includes(searchQuery.toLowerCase()))
+        );
+        setFilteredData(filtered);
+      } else {
+        setFilteredData(data || []);
+        console.log({"data":data})
+      }
+      
+    };
+
+    filterData();
+  }, [data]);
  
 const sortedData = [...filteredData].sort((a, b) => {
   const aValue = a[sortState.sortColumn];
@@ -1022,7 +1116,10 @@ return (
         <div className={`${styles.section} ${styles.formLink}`}>
           <div className={styles.content}>
             <ShareMultiple24Filled style={{color:'rgb(1,105,185)'}}/>
-            <Link style={{marginLeft:"10px"}}>Share Form Link</Link>
+            <Link style={{ marginLeft: '10px' }} onClick={() => handleShareLinkClick(selectedEmployee.employee_id)}>
+              Share Form Link
+            </Link>
+      {copied && <span style={{ marginLeft: '10px', color: 'green' }}>Copied to clipboard!</span>}
           </div>
         </div>
       </div>
@@ -1219,18 +1316,26 @@ return (
             border: 0,
             borderBottom: '1px solid rgb(180,180,180)',
           }}
+          
         />
       </Form.Item>
     </Col>
     <Col span={12}>
-      <Form.Item label="Manager" name="manager">
-        <Input
-          style={{
-            borderRadius: 0,
-            border: 0,
-            borderBottom: '1px solid rgb(180,180,180)',
-          }}
-        />
+      <Form.Item label="department" name="dept_name">
+      <Dropdown
+          aria-labelledby={`${dropdownId}-underline`}
+          placeholder="Select dep"
+          appearance="underline"
+          style={{minWidth:"10px"}}
+          onActiveOptionChange={onActiveOptionChange2}
+          {...props}
+        >
+          {options2.map((option) => (
+            <Option key={option.id} text={option.dept_name} value={option.id}>
+              {option.dept_name}
+            </Option>
+          ))}
+        </Dropdown>
       </Form.Item>
     </Col>
     <Col span={12}>
@@ -1239,6 +1344,7 @@ return (
           aria-labelledby={`${dropdownId}-underline`}
           placeholder="Select a manager"
           appearance="underline"
+          style={{minWidth:"10px"}}
           onActiveOptionChange={onActiveOptionChange}
           {...props}
         >
@@ -1288,26 +1394,17 @@ return (
         />
       </Form.Item>
     </Col>
-    <Col span={12}>
-      <Form.Item label="Manager" name="manager">
-        <Input
-          style={{
-            borderRadius: 0,
-            border: 0,
-            borderBottom: '1px solid rgb(180,180,180)',
-          }}
-        />
-      </Form.Item>
-    </Col>
+    
   </Row>
   <Row gutter={16}>
     <Col span={12}>
       <Form.Item label="Reviewer" name="reviewer">
-        <label id={`${dropdownId}-underline`}>Reviewer</label>
+        {/* <label id={`${dropdownId}-underline`}>Reviewer</label> */}
         <Dropdown
           aria-labelledby={`${dropdownId}-underline`}
           placeholder="Select a reviewer"
           appearance="underline"
+          style={{minWidth:"10px"}}
           onActiveOptionChange={onActiveOptionChange1}
           {...props}
         >

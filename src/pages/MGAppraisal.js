@@ -577,9 +577,9 @@ const MGAppraisal = () => {
     setSelectedTab1(data.value);
   };
  
-  const handleTabSelect1 = (value) => {
-    setSelectedTab1(value);
-  };
+  // const handleTabSelect1 = (value) => {
+  //   setSelectedTab1(value);
+  // };
  
   const handleTabSelect1 = (event,data) => {
     setSelectedTab1(data.value);

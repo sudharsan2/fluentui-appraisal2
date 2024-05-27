@@ -577,12 +577,8 @@ const MGAppraisal = () => {
     setSelectedTab1(data.value);
   };
  
-  // const handleTabSelect1 = (value) => {
-  //   setSelectedTab1(value);
-  // };
- 
-  const handleTabSelect1 = (event,data) => {
-    setSelectedTab1(data.value);
+  const handleTabSelect1 = (value) => {
+    setSelectedTab1(value);
   };
  
   const handleTabChange = (event, data) => {
@@ -590,10 +586,10 @@ const MGAppraisal = () => {
     setSelectedItems({}); // Reset selection when tab changes
   };
 
-  const handleNavChange = (item) => {
-    setSelectedTab(item.props.itemKey);
-    handleTabSelect(item.props.itemKey);
-  };
+  // const handleNavChange = (item) => {
+  //   setSelectedTab(item.props.itemKey);
+  //   handleTabSelect(item.props.itemKey);
+  // };
  
  
   const handleSearchChange = (event) => {
@@ -731,7 +727,7 @@ const MGAppraisal = () => {
         open={open}
         onOpenChange={(_, state) => {
           setOpen(state.open);
-          handleTabSelect2('tab1');
+          handleTabSelect1('tab1');
         }}
         style={{height:'calc(100vh - 48px)',marginTop:"48px", backgroundColor:themestate?"rgb(51, 51, 51)":""}}
       >
@@ -772,7 +768,7 @@ const MGAppraisal = () => {
             <TabList
                 defaultSelectedValue="tab1"
                 appearance="subtle"
-                onTabSelect={handleTabSelect1}
+                onTabSelect={handleTabSelect}
                 style={{marginLeft:"3vw", marginTop:"3vh"}}
             >
                 <Tab value="tab1" className={themestate ? "tab dark drawer" : "tab"} style= {{border:'1px solid transparent'}}>Employee Info</Tab>

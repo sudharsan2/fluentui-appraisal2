@@ -1,4 +1,5 @@
 import React, {  useEffect, useState } from 'react';
+import {Stack, Nav, Dropdown } from '@fluentui/react';
 import {useSelector, useDispatch} from 'react-redux';
 import
 { format, parseISO }
@@ -13,40 +14,40 @@ import {
   Textarea,
   Rating,
   Table,
+  TableBody,
+  TableCell,
   TableHeader,
   TableHeaderCell,
-  TableBody,
   TableRow,
-  TableCell,
   TableSelectionCell,
-  makeStyles,
-  shorthands,
+  Button,
+  SearchBox,
+  Field,
+  Textarea,
+  Rating,
+  Checkbox,
+  DrawerProps,
+  Avatar,
+  Text,
+  Link,
   createTableColumn,
   useTableFeatures,
   useTableSort,
-  Avatar,
-  TabList,
-  Tab,
-  Link,
-  Breadcrumb,
+  Option,
   BreadcrumbItem,
   BreadcrumbButton,
   BreadcrumbDivider,
   BreadcrumbProps,
-  Dropdown,
-  Option,
   useId,
- 
-  PopoverTrigger, PopoverSurface, Popover,
- 
-} from '@fluentui/react-components';
-import { OverlayDrawer, DrawerHeader, DrawerHeaderTitle, DrawerBody } from '@fluentui/react-drawer';
-import {
-  Button,
-  Checkbox,
-  SearchBox,
-  Text,
+  Breadcrumb
 } from "@fluentui/react-components";
+import { OverlayDrawer, DrawerHeader, DrawerHeaderTitle, DrawerBody } from '@fluentui/react-drawer';
+// import {
+//   Button,
+//   Checkbox,
+//   SearchBox,
+//   Text,
+// } from "@fluentui/react-components";
 import {AddRegular, PersonDeleteRegular , EditRegular, SearchRegular, FilterRegular, FilterDismissRegular, FilterAddRegular, ChartMultipleFilled,ChartMultipleRegular,Dismiss24Regular ,Timer20Regular,Calendar20Regular, ArrowDownRegular, ArrowClockwiseRegular,ShareMultiple24Filled ,Add24Filled,ShareIos24Filled,CheckmarkCircleFilled  } from "@fluentui/react-icons"; // Import the icons
 import './page.css';
 import zIndex from "@mui/material/styles/zIndex";
@@ -166,17 +167,17 @@ const useStyles = makeStyles({
       "editDetails focusRExperience"
     `,
   },
-  gridTemplate2: {
-    gridTemplateColumns: '1fr 1fr',
-    gridTemplateAreas: `
-      "nameAndId formLink"
-      "email doj"
-      "status dos"
-      "role appraisal"
-      "dept reviewer"
-      "editDetails share"
-    `,
-  },
+  // gridTemplate2: {
+  //   gridTemplateColumns: '1fr 1fr',
+  //   gridTemplateAreas: `
+  //     "nameAndId formLink"
+  //     "email doj"
+  //     "status dos"
+  //     "role appraisal"
+  //     "dept reviewer"
+  //     "editDetails share"
+  //   `,
+  // },
   content: {
     fontSize: '13px',
     marginLeft: '10px'
@@ -461,6 +462,40 @@ const HREmployee = (props) => {
   const [activeOptionId, setActiveOptionId] = useState("");
   const [activeOptionId1, setActiveOptionId1] = useState("");
   const [activeOptionId2, setActiveOptionId2] = useState("");
+  const [selectedNavKey, setSelectedNavKey] = useState('option1');
+  const [value, setValue] = useState(4);
+
+  const navLinkGroups = [
+    {
+      links: [
+        { name: 'Review of KPI', key: 'option1' },
+        { name: 'Review of other skills', key: 'option2' },
+        { name: 'Organization Feedback', key: 'option3' },
+        { name: 'Training Need Analysis', key: 'option4' },
+      ],
+    },
+  ];
+
+  const getNavLinkStyle = (key) => {
+    let backgroundColor = themestate ? "rgb(51, 51, 51)" : "";
+    if (key === selectedNavKey) {
+      backgroundColor = "red";
+    }
+    return { backgroundColor };
+  };
+
+  const handleNavClick = (ev, item) => {
+    setSelectedNavKey(item.key);
+  };
+
+  const handleRatingChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  const [selectedOptions, setSelectedOptions] = useState(Array(labels.length).fill(0));
+
+// Handler function to update selected option for a label
+
   // useEffect(() => {
   //   const currentDate = new Date();
   //   const currentMonth = currentDate.getMonth(); // 0-based index, January is 0
@@ -663,7 +698,7 @@ const HREmployee = (props) => {
     setSelectedTab1(value);
   };
  
-  const handleTabChange = () => {
+  const handleTabChange = (event, data) => {
     setSelectedTab(data.value);
     setSelectedItems({});
    

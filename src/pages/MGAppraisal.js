@@ -635,6 +635,9 @@ const MGAppraisal = () => {
     setShowFilters((prev) => !prev);
   };
 
+  const handleTabSelect2 = (value) => {
+    setSelectedTab1(value);
+  };
 
 
   const handleItemsChange = (id) => {
@@ -728,7 +731,7 @@ const MGAppraisal = () => {
         open={open}
         onOpenChange={(_, state) => {
           setOpen(state.open);
-          handleTabSelect('tab1');
+          handleTabSelect2('tab1');
         }}
         style={{height:'calc(100vh - 48px)',marginTop:"48px", backgroundColor:themestate?"rgb(51, 51, 51)":""}}
       >

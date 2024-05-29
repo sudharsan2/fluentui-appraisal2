@@ -1,4 +1,5 @@
-import React,{useState} from "react";
+import React,{useState, useEffect} from "react";
+import axios from 'axios';
 import {useSelector, useDispatch} from 'react-redux';
 import {Stack, Nav, Dropdown } from '@fluentui/react';
 import {
@@ -373,31 +374,21 @@ const options = [
 ];
 
 // Define labels for dropdowns
-const labels = [
-  'Attendance & Punctuality',
-  `Technical Skills 
-  (Effectiveness with which you apply job knowledge and skill to tasks)`,
-  'Quality of work (Comprehensive, accurate, thorough, professional, timely etc)',
-  `New Knowledge
-  (Seek new knowledge, apply it to your job and share it with others)`,
-  `Utilization and Productivity 
-  (Make full use of time.  Seek additional work if underutilized)`,
-  `Time Management & Organizational Skills 
-  (Organize, plan, and forecast work skillfully and accurately.  Effective prioritization.  Meet deadlines or communicate early if will not be met.)`,
-  `Interpersonal Skills
-  (Positive attitude, work and communicate well with others)`,
-  `Communication - Verbal & Written 
-  (Communicate knowledge clearly, accurately and thoroughly.  Document work effectively and create procedures)`,
-  `Initiative, Innovation & Creativity 
-  (Actively seek improvements & challenge status quo in appropriate ways.  Contribute new ideas.  Analyze problems and present solutions)`,
-  `Teamwork
-  (Co-ordinate own work with others, seek opinions from team members, share information willingly)`,
-  `Client Focused
-  (Actively seek to understand clients business issues, provide quality service to achieve client satisfaction)`,
-  `Planning and Organizational Skills (Organizing, planning and monitoring of work skillfully and accurately; able to effectively prioritize tasks; meets deadlines or communicates need to revise schedule ahead of time)`,
-  'Value Addition ( Extras you are able to do )'
+const labels = {
+  'Attendance & Punctuality':'attendance_and_punctuality',
+  'Technical Skills (Effectiveness with which you apply job knowledge and skill to tasks)':'technical_skills',
+  'Quality of work (Comprehensive, accurate, thorough, professional, timely etc)':"quality_of_work",
+  "New Knowledge (Seek new knowledge, apply it to your job and share it with others)":"new_knowledge",
+  "Utilization and Productivity (Make full use of time.  Seek additional work if underutilized)":"utilization_and_productivity",
+  "Time Management & Organizational Skills (Organize, plan, and forecast work skillfully and accurately.  Effective prioritization.  Meet deadlines or communicate early if will not be met.)":"organize_plans",
+  "Interpersonal Skills (Positive attitude, work and communicate well with others)":"interpersonal_skills",
+  "Communication - Verbal & Written (Communicate knowledge clearly, accurately and thoroughly.  Document work effectively and create procedures)":"communication",
+  "Initiative, Innovation & Creativity (Actively seek improvements & challenge status quo in appropriate ways.  Contribute new ideas.  Analyze problems and present solutions)":"initiative_innovative_creativity",
+  "Teamwork (Co-ordinate own work with others, seek opinions from team members, share information willingly)":"teamwork",
+  "Client Focused (Actively seek to understand clients business issues, provide quality service to achieve client satisfaction)":"client_focused",
+  "Planning and Organizational Skills (Organizing, planning and monitoring of work skillfully and accurately; able to effectively prioritize tasks; meets deadlines or communicates need to revise schedule ahead of time)":"planning_and_organizing",
   // Add more labels as needed
-];
+};
 
 const MGReviewer = () => {
   const styles = useStyles();
@@ -421,6 +412,12 @@ const MGReviewer = () => {
   const [selectedNavKey, setSelectedNavKey] = useState('option1');
   const [value, setValue] = useState(4);
 
+  const [formdataemployee,setformdataemployee] = useState({});
+
+  const [formdatamanager, setformdatamanager] = useState({});
+
+  const[formdatareviewer, setformdatareviewer] = useState({});
+
   const navLinkGroups = [
     {
       links: [
@@ -431,6 +428,71 @@ const MGReviewer = () => {
       ],
     },
   ];
+  const [todoEmployees, settodoEmployees] = useState([]);
+  const [ waitingEmployees, setwaitingEmployees] = useState([]);
+  const [selectedTab2, setSelectedTab2] = useState('1');
+ 
+ 
+ 
+  const fetchtodoEmployeeData = () => {
+    axios.get('http://172.235.21.99:5051/user/getEmployeeforMgappraisaltodo',{
+      headers: {
+        Authorization: `Bearer ${'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE2OTYwMTcyLCJpYXQiOjE3MTY4NzM3NzIsImp0aSI6ImI2OTc0N2U4NjEzZTQwYTk4OTg5Y2IzMDVjMDhhNDE4IiwidXNlcl9pZCI6MSwidXNlcm5hbWUiOiJrYXV0aGFtIiwiZW1haWwiOiJrYXV0aGFtQGdtYWlsLmNvbSIsImVtcElkIjoiMDAxIiwicm9sZSI6WyJIUiJdfQ.EkkcWJhHZcNDau3FI_H5YebcDDfUUoKpuh3zyQM7qZo'}`
+      }
+    })
+      .then(response => {
+        settodoEmployees(response.data);
+        console.log({"data1": response.data})
+      })
+      .catch(error => {
+        console.error('There was an error fetching the data!', error);
+      });
+  };
+ 
+  const fetchwaitingEmployeeData = () => {
+    axios.get('http://172.235.21.99:5051/user/getEmployeeforMgappraisalWaiting',{
+      headers: {
+        Authorization: `Bearer ${'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE2OTYwMTcyLCJpYXQiOjE3MTY4NzM3NzIsImp0aSI6ImI2OTc0N2U4NjEzZTQwYTk4OTg5Y2IzMDVjMDhhNDE4IiwidXNlcl9pZCI6MSwidXNlcm5hbWUiOiJrYXV0aGFtIiwiZW1haWwiOiJrYXV0aGFtQGdtYWlsLmNvbSIsImVtcElkIjoiMDAxIiwicm9sZSI6WyJIUiJdfQ.EkkcWJhHZcNDau3FI_H5YebcDDfUUoKpuh3zyQM7qZo'}`
+      }
+    })
+      .then(response => {
+        setwaitingEmployees(response.data);
+        console.log({"data1": response.data})
+      })
+      .catch(error => {
+        console.error('There was an error fetching the data!', error);
+      });
+  };
+ 
+  useEffect(() => {
+    fetchtodoEmployeeData();
+    fetchwaitingEmployeeData();
+  }, []);
+
+  
+  const handleRowClick = async (employee) => {
+    try {
+      const response1 = await axios.get(`https://api.example.com/data/${employee.employee_id}`);
+      // setformdataemployee(response.data);
+      const response2 = await axios.get(`https://api.example.com/data/${employee.employee_id}`);
+      // setformdatamanager(response2.data);
+      const response3 = await axios.get(`https://api.example.com/data/${employee.employee_id}`);
+      // setformdatareviewer(response3.data);
+    } catch (err) {
+      setformdataemployee({ "question_1": "blahhhhh" });
+
+      setformdatamanager({"question_1":"hahaha"});
+
+      setformdatareviewer({"question_1":"uhuhuhu"});
+      // console.log({ "question1": formdataemployee.question_1 });
+    }
+    setformdataemployee({ "question_1": "blahhhhh" });
+    setSelectedEmployee(employee);
+    setOpen(true);
+    
+    
+   
+  };
 
   const getNavLinkStyle = (key) => {
     let backgroundColor = themestate ? "rgb(51, 51, 51)" : "";
@@ -458,6 +520,10 @@ const MGReviewer = () => {
  
   const handleTabSelect1 = (value) => {
     setSelectedTab1(value);
+  };
+
+  const handleTabSelect2 = (value) => {
+    setSelectedTab2(value);
   };
  
   const handleTabChange = (event, data) => {
@@ -501,10 +567,10 @@ const MGReviewer = () => {
     alert("Add Employee functionality to be implemented");
   };
  
-  const handleRowClick = (employee) => {
-    setSelectedEmployee(employee);
-    setOpen(true);
-  };
+  // const handleRowClick = (employee) => {
+  //   setSelectedEmployee(employee);
+  //   setOpen(true);
+  // };
  
   const handleDeleteEmployee = () => {
     alert("Delete Employee functionality to be implemented");
@@ -574,28 +640,57 @@ const MGReviewer = () => {
   });
 
 
-  const filteredData = searchQuery
-  ? data[selectedTab].filter((item) =>
-      (item.name && item.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (item.empid && item.empid.toString().includes(searchQuery)) ||
-      (item.dept && item.dept.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (item.doj && item.doj.includes(searchQuery)) || 
-      (item.appraisal && item.appraisal.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (item.manager && item.manager.toLowerCase().includes(searchQuery.toLowerCase()))
+  const filteredtodoData = searchQuery
+  ? todoEmployees.filter((item) =>
+    (item.employee_name && item.employee_name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (item.employee_id && item.employee_id.toString().includes(searchQuery)) ||
+      (item.department && item.department.toString().toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (item.date_of_joining && item.date_of_joining.includes(searchQuery)) ||
+     
+      // (item.appraisal && item.appraisal.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (item.reporting_manager && item.reporting_manager.toLowerCase().includes(searchQuery.toLowerCase()))
     )
-  :data[selectedTab];
-
-  const sortedData = [...filteredData].sort((a, b) => {
+  :todoEmployees;
+ 
+  const sortedtodoData = [...filteredtodoData].sort((a, b) => {
     const aValue = a[sortState.sortColumn];
     const bValue = b[sortState.sortColumn];
-  
+ 
     // Check if the values are strings and perform locale comparison
     if (typeof aValue === 'string' && typeof bValue === 'string') {
       return sortState.sortDirection === 'ascending'
         ? aValue.localeCompare(bValue)
         : bValue.localeCompare(aValue);
     }
-  
+ 
+    // If the values are not strings, compare them directly
+    return sortState.sortDirection === 'ascending' ? aValue - bValue : bValue - aValue;
+  });
+ 
+  const filteredwaitingData = searchQuery
+  ? waitingEmployees.filter((item) =>
+    (item.employee_name && item.employee_name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+  (item.employee_id && item.employee_id.toString().includes(searchQuery)) ||
+  (item.department && item.department.toString().toLowerCase().includes(searchQuery.toLowerCase())) ||
+  (item.date_of_joining && item.date_of_joining.includes(searchQuery)) ||
+  // Uncomment if 'appraisal' is part of the dataset and needs to be searched
+  // (item.appraisal && item.appraisal.toLowerCase().includes(searchQuery.toLowerCase())) ||
+  (item.reporting_manager && item.reporting_manager.toLowerCase().includes(searchQuery.toLowerCase()))
+)
+   
+  :waitingEmployees;
+ 
+  const sortedwaitingData = [...filteredwaitingData].sort((a, b) => {
+    const aValue = a[sortState.sortColumn];
+    const bValue = b[sortState.sortColumn];
+ 
+    // Check if the values are strings and perform locale comparison
+    if (typeof aValue === 'string' && typeof bValue === 'string') {
+      return sortState.sortDirection === 'ascending'
+        ? aValue.localeCompare(bValue)
+        : bValue.localeCompare(aValue);
+    }
+ 
     // If the values are not strings, compare them directly
     return sortState.sortDirection === 'ascending' ? aValue - bValue : bValue - aValue;
   });
@@ -791,7 +886,7 @@ const MGReviewer = () => {
                   width: '500px',
                   minHeight: '50px',
                 }}
-                value="Your response text here..."
+                value={formdataemployee.question_1}
                 readOnly={true}
               />
             </Field>
@@ -804,7 +899,7 @@ const MGReviewer = () => {
                   width: '500px',
                   minHeight: '50px',
                 }}
-                value="Your response text here..."
+                value={formdataemployee.question_2}
                 readOnly={true}
               />
             </Field>
@@ -817,7 +912,7 @@ const MGReviewer = () => {
                   width: '500px',
                   minHeight: '50px',
                 }}
-                value="Your response text here..."
+                value={formdataemployee.question_3}
                 readOnly={true}
               />
             </Field>
@@ -830,7 +925,7 @@ const MGReviewer = () => {
                   width: '500px',
                   minHeight: '50px',
                 }}
-                value="Your response text here..."
+                value={formdataemployee.question_4}
                 readOnly={true}
               />
             </Field>
@@ -841,11 +936,11 @@ const MGReviewer = () => {
     {selectedNavKey === 'option2' && (
       <div style={{ marginTop: '1rem', marginBottom: '1rem' }}>
         <Field label="For all the skills rated below, team member to give self ratings and managers to cross-rate Rating Performance Description" />
-        {labels.map((label, index) => (
+        {Object.entries(labels).map(([label, value], index) => (
           <div key={index} style={{ marginTop: '1rem', display: 'flex', alignItems: 'center' }}>
             <Text variant="medium" style={{ marginRight: '1rem' }}>{label}:</Text>
             {/* Render the selected option directly */}
-            <Text variant="medium">{options[selectedOptions[index]]}</Text>
+            <Text variant="medium">{formdataemployee[value]}</Text>
             {/* Optionally, you can provide a button to change the selected option */}
           </div>
         ))}
@@ -964,7 +1059,7 @@ const MGReviewer = () => {
                   width: '500px',
                   minHeight: '50px',
                 }}
-                value="Your response text here..."
+                value={formdatamanager.question_1}
                 readOnly={true}
               />
             </Field>
@@ -977,7 +1072,7 @@ const MGReviewer = () => {
                   width: '500px',
                   minHeight: '50px',
                 }}
-                value="Your response text here..."
+                value={formdatamanager.question_2}
                 readOnly={true}
               />
             </Field>
@@ -990,7 +1085,7 @@ const MGReviewer = () => {
                   width: '500px',
                   minHeight: '50px',
                 }}
-                value="Your response text here..."
+                value={formdatamanager.question_3}
                 readOnly={true}
               />
             </Field>
@@ -1003,7 +1098,7 @@ const MGReviewer = () => {
                   width: '500px',
                   minHeight: '50px',
                 }}
-                value="Your response text here..."
+                value={formdatamanager.question_4}
                 readOnly={true}
               />
             </Field>
@@ -1014,11 +1109,11 @@ const MGReviewer = () => {
     {selectedNavKey === 'option2' && (
       <div style={{ marginTop: '1rem', marginBottom: '1rem' }}>
         <Field label="For all the skills rated below, team member to give self ratings and managers to cross-rate Rating Performance Description" />
-        {labels.map((label, index) => (
+        {Object.entries(labels).map(([label, value], index) => (
           <div key={index} style={{ marginTop: '1rem', display: 'flex', alignItems: 'center' }}>
             <Text variant="medium" style={{ marginRight: '1rem' }}>{label}:</Text>
             {/* Render the selected option directly */}
-            <Text variant="medium">{options[selectedOptions[index]]}</Text>
+            <Text variant="medium">{formdatamanager[value]}</Text>
             {/* Optionally, you can provide a button to change the selected option */}
           </div>
         ))}
@@ -1137,7 +1232,7 @@ const MGReviewer = () => {
                   width: '500px',
                   minHeight: '50px',
                 }}
-                value="Your response text here..."
+                value={formdatareviewer.question_1}
                 readOnly={true}
               />
             </Field>
@@ -1150,7 +1245,7 @@ const MGReviewer = () => {
                   width: '500px',
                   minHeight: '50px',
                 }}
-                value="Your response text here..."
+                value={formdatareviewer.question_2}
                 readOnly={true}
               />
             </Field>
@@ -1163,7 +1258,7 @@ const MGReviewer = () => {
                   width: '500px',
                   minHeight: '50px',
                 }}
-                value="Your response text here..."
+                value= {formdatareviewer.question_3}
                 readOnly={true}
               />
             </Field>
@@ -1176,7 +1271,7 @@ const MGReviewer = () => {
                   width: '500px',
                   minHeight: '50px',
                 }}
-                value="Your response text here..."
+                value= {formdatareviewer.question_4}
                 readOnly={true}
               />
             </Field>
@@ -1187,11 +1282,11 @@ const MGReviewer = () => {
     {selectedNavKey === 'option2' && (
       <div style={{ marginTop: '1rem', marginBottom: '1rem' }}>
         <Field label="For all the skills rated below, team member to give self ratings and managers to cross-rate Rating Performance Description" />
-        {labels.map((label, index) => (
+        {Object.entries(labels).map(([label, value], index) => (
           <div key={index} style={{ marginTop: '1rem', display: 'flex', alignItems: 'center' }}>
             <Text variant="medium" style={{ marginRight: '1rem' }}>{label}:</Text>
             {/* Render the selected option directly */}
-            <Text variant="medium">{options[selectedOptions[index]]}</Text>
+            <Text variant="medium">{formdatareviewer[value]}</Text>
             {/* Optionally, you can provide a button to change the selected option */}
           </div>
         ))}
@@ -1297,7 +1392,7 @@ const MGReviewer = () => {
       <TabList
         defaultSelectedValue="tab1"
         appearance="subtle"
-        onTabSelect={handleTabChange}
+        onTabSelect={handleTabSelect2}
         style={themestate?{color:'white'}:{}}
       >
         <Tab    className={themestate ? "tab dark" : "tab"} style= {{border:'1px solid transparent'}} value="tab1">To do</Tab>
@@ -1384,29 +1479,51 @@ const MGReviewer = () => {
         <TableHeaderCell style={{ fontWeight: 'bold', cursor:'pointer' }} {...headerSortProps('manager')}>Manager</TableHeaderCell>
       </TableRow>
     </TableHeader>
-    <TableBody>
-    {sortedData.map((item) => (
-       <TableRow key={item.empid} style={themestate?{color:'white', }:{}}  className={themestate?"hovereffect dark":"hovereffect"} onClick={() => handleRowClick(item)} >
+    {selectedTab2==='tab1'?<TableBody>
+      {sortedtodoData.map((item) => (
+       <TableRow key={item.employee_id} style={themestate ? { color: 'white' } : {}} className={themestate ? "hovereffect dark" : "hovereffect"} onClick={() => handleRowClick(item)}>
        <TableSelectionCell
-         checked={!!selectedItems[item.empid]}
-         style={{zIndex:1000}}
+         checked={!!selectedItems[item.employee_id]}
+         style={{ zIndex: 1000 }}
          onChange={(event) => {
-          
-          //  event.stopPropagation(); // Prevents the row click event from being triggered
-           handleItemsChange(item.empid);
-           setOpen(false)
+           event.stopPropagation();
+           handleItemsChange(item.employee_id);
+           setOpen(false);
          }}
-         
        />
-          <TableCell >{item.empid}</TableCell>
-          <TableCell>{item.name}</TableCell>
-          <TableCell>{item.dept}</TableCell>
-          <TableCell>{item.doj}</TableCell>
-          <TableCell>{item.appraisal}</TableCell>
-          <TableCell>{item.manager}</TableCell>
-        </TableRow>
+       <TableCell>{item.employee_id}</TableCell>
+       <TableCell>{item.employee_name}</TableCell>
+       <TableCell>{item.department.dept_name}</TableCell>
+       <TableCell>{item.date_of_joining}</TableCell>
+       <TableCell>{item.appraisal_date}</TableCell>
+       <TableCell>{item.reporting_manager}</TableCell>
+     </TableRow>
+     
       ))}
-    </TableBody>
+    </TableBody>:null}
+ 
+    {selectedTab2==='tab2'?<TableBody>
+      {sortedwaitingData.map((item) => (
+        <TableRow key={item.employee_id} style={themestate ? { color: 'white' } : {}} className={themestate ? "hovereffect dark" : "hovereffect"} onClick={() => handleRowClick(item)}>
+        <TableSelectionCell
+          checked={!!selectedItems[item.employee_id]}
+          style={{ zIndex: 1000 }}
+          onChange={(event) => {
+            event.stopPropagation();
+            handleItemsChange(item.employee_id);
+            setOpen(false);
+          }}
+        />
+        <TableCell>{item.employee_id}</TableCell>
+        <TableCell>{item.employee_name}</TableCell>
+        <TableCell>{item.department.dept_name}</TableCell>
+        <TableCell>{item.date_of_joining}</TableCell>
+        <TableCell>{item.appraisal_date}</TableCell>
+        <TableCell>{item.reporting_manager}</TableCell>
+      </TableRow>
+     
+      ))}
+    </TableBody>:null}
   </Table>
 </div>
 

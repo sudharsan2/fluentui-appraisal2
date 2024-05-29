@@ -7,9 +7,10 @@ from
 'date-fns'
 ;
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import {Stack, Nav } from '@fluentui/react';
+
 import axios from 'axios';
 import {
+  makeStyles,
   Field,
   Textarea,
   Rating,
@@ -22,9 +23,9 @@ import {
   TableSelectionCell,
   Button,
   SearchBox,
-  Field,
-  Textarea,
-  Rating,
+  // Field,
+  // Textarea,
+  // Rating,
   Checkbox,
   DrawerProps,
   Avatar,
@@ -39,7 +40,10 @@ import {
   BreadcrumbDivider,
   BreadcrumbProps,
   useId,
-  Breadcrumb
+  Breadcrumb,
+  Tab,
+  TabList,
+  
 } from "@fluentui/react-components";
 import { OverlayDrawer, DrawerHeader, DrawerHeaderTitle, DrawerBody } from '@fluentui/react-drawer';
 // import {
@@ -348,55 +352,21 @@ const data = {
   ],
 };
 
-const labels = [
-
-  'Attendance & Punctuality',
-
-  `Technical Skills 
-
-  (Effectiveness with which you apply job knowledge and skill to tasks)`,
-
-  'Quality of work (Comprehensive, accurate, thorough, professional, timely etc)',
-
-  `New Knowledge
-
-  (Seek new knowledge, apply it to your job and share it with others)`,
-
-  `Utilization and Productivity 
-
-  (Make full use of time.  Seek additional work if underutilized)`,
-
-  `Time Management & Organizational Skills 
-
-  (Organize, plan, and forecast work skillfully and accurately.  Effective prioritization.  Meet deadlines or communicate early if will not be met.)`,
-
-  `Interpersonal Skills
-
-  (Positive attitude, work and communicate well with others)`,
-
-  `Communication - Verbal & Written 
-
-  (Communicate knowledge clearly, accurately and thoroughly.  Document work effectively and create procedures)`,
-
-  `Initiative, Innovation & Creativity 
-
-  (Actively seek improvements & challenge status quo in appropriate ways.  Contribute new ideas.  Analyze problems and present solutions)`,
-
-  `Teamwork
-
-  (Co-ordinate own work with others, seek opinions from team members, share information willingly)`,
-
-  `Client Focused
-
-  (Actively seek to understand clients business issues, provide quality service to achieve client satisfaction)`,
-
-  `Planning and Organizational Skills (Organizing, planning and monitoring of work skillfully and accurately; able to effectively prioritize tasks; meets deadlines or communicates need to revise schedule ahead of time)`,
-
-  'Value Addition ( Extras you are able to do )'
-
+const labels = {
+  'Attendance & Punctuality':'attendance_and_punctuality',
+  'Technical Skills (Effectiveness with which you apply job knowledge and skill to tasks)':'technical_skills',
+  'Quality of work (Comprehensive, accurate, thorough, professional, timely etc)':"quality_of_work",
+  "New Knowledge (Seek new knowledge, apply it to your job and share it with others)":"new_knowledge",
+  "Utilization and Productivity (Make full use of time.  Seek additional work if underutilized)":"utilization_and_productivity",
+  "Time Management & Organizational Skills (Organize, plan, and forecast work skillfully and accurately.  Effective prioritization.  Meet deadlines or communicate early if will not be met.)":"organize_plans",
+  "Interpersonal Skills (Positive attitude, work and communicate well with others)":"interpersonal_skills",
+  "Communication - Verbal & Written (Communicate knowledge clearly, accurately and thoroughly.  Document work effectively and create procedures)":"communication",
+  "Initiative, Innovation & Creativity (Actively seek improvements & challenge status quo in appropriate ways.  Contribute new ideas.  Analyze problems and present solutions)":"initiative_innovative_creativity",
+  "Teamwork (Co-ordinate own work with others, seek opinions from team members, share information willingly)":"teamwork",
+  "Client Focused (Actively seek to understand clients business issues, provide quality service to achieve client satisfaction)":"client_focused",
+  "Planning and Organizational Skills (Organizing, planning and monitoring of work skillfully and accurately; able to effectively prioritize tasks; meets deadlines or communicates need to revise schedule ahead of time)":"planning_and_organizing",
   // Add more labels as needed
-
-];
+};
 
 const HREmployee = (props) => {
   const styles = useStyles();
@@ -415,11 +385,11 @@ const HREmployee = (props) => {
   const [selectedTab1, setSelectedTab1] = React.useState('tab1');
   const [selectedTab2, setSelectedTab2] = React.useState('tab1');
 
-  const [value, setValue] = useState(4);
+  // const [value, setValue] = useState(4);
   
-  const [selectedOptions, setSelectedOptions] = useState(Array(labels.length).fill(0));
+  // const [selectedOptions, setSelectedOptions] = useState(Array(labels.length).fill(0));
 
-  const [selectedNavKey, setSelectedNavKey] = useState('option1');
+  // const [selectedNavKey, setSelectedNavKey] = useState('option1');
 
   const [addedDetails, setaddedDetails] = React.useState([]);
  
@@ -427,9 +397,9 @@ const HREmployee = (props) => {
   
   const [copied, setCopied] = React.useState(false);
 
-  const handleRatingChange = (event, newValue) => {
-    setValue(newValue); 
-  };
+  // const handleRatingChange = (event, newValue) => {
+  //   setValue(newValue); 
+  // };
 
 
   const [areFieldsFilled1, setAreFieldsFilled1] = useState(false);
@@ -465,28 +435,30 @@ const HREmployee = (props) => {
   const [selectedNavKey, setSelectedNavKey] = useState('option1');
   const [value, setValue] = useState(4);
 
-  const navLinkGroups = [
-    {
-      links: [
-        { name: 'Review of KPI', key: 'option1' },
-        { name: 'Review of other skills', key: 'option2' },
-        { name: 'Organization Feedback', key: 'option3' },
-        { name: 'Training Need Analysis', key: 'option4' },
-      ],
-    },
-  ];
+  const [formdataemployee,setformdataemployee] = useState({});
 
-  const getNavLinkStyle = (key) => {
-    let backgroundColor = themestate ? "rgb(51, 51, 51)" : "";
-    if (key === selectedNavKey) {
-      backgroundColor = "red";
-    }
-    return { backgroundColor };
-  };
+  // const navLinkGroups = [
+  //   {
+  //     links: [
+  //       { name: 'Review of KPI', key: 'option1' },
+  //       { name: 'Review of other skills', key: 'option2' },
+  //       { name: 'Organization Feedback', key: 'option3' },
+  //       { name: 'Training Need Analysis', key: 'option4' },
+  //     ],
+  //   },
+  // ];
 
-  const handleNavClick = (ev, item) => {
-    setSelectedNavKey(item.key);
-  };
+  // const getNavLinkStyle = (key) => {
+  //   let backgroundColor = themestate ? "rgb(51, 51, 51)" : "";
+  //   if (key === selectedNavKey) {
+  //     backgroundColor = "red";
+  //   }
+  //   return { backgroundColor };
+  // };
+
+  // const handleNavClick = (ev, item) => {
+  //   setSelectedNavKey(item.key);
+  // };
 
   const handleRatingChange = (event, newValue) => {
     setValue(newValue);
@@ -564,7 +536,7 @@ const HREmployee = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/user/managerlist");
+        const response = await axios.get("http://172.235.21.99:5051/user/managerlist");
         setOptions(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -585,7 +557,7 @@ const HREmployee = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/user/reviewerlist");
+        const response = await axios.get("http://172.235.21.99:5051/user/reviewerlist");
         setOptions1(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -598,7 +570,7 @@ const HREmployee = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/user/departmentlist");
+        const response = await axios.get("http://172.235.21.99:5051/user/departmentlist");
         setOptions2(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -732,9 +704,26 @@ const HREmployee = (props) => {
     {setItemSelected((prev) => ([...prev], [id]));}
   }
  
-  const handleRowClick = (employee) => {
+  const handleRowClick = async (employee) => {
+    try {
+      const response1 = await axios.get(`http://172.235.21.99:5051/user/team-member/remarks/${employee.employee_id}`);
+      setformdataemployee(response1.data);
+      
+      
+    } catch (err) {
+      setformdataemployee({ "question_1": "blahhhhh" });
+
+      
+
+      
+      // console.log({ "question1": formdataemployee.question_1 });
+    }
+    // setformdataemployee({ "question_1": "blahhhhh" });
     setSelectedEmployee(employee);
     setOpen(true);
+    
+    
+   
   };
  
   const handleSearchChange = (event) => {
@@ -785,8 +774,8 @@ const HREmployee = (props) => {
 
   const handlesharetoManager = async (parameter) => {
     try {
-      const result = await axios.post('http://127.0.0.1:8000/user/employee/changeFormStatus', {
-        "empId":parameter,"status":"sharedToManager"
+      const result = await axios.post(`http://172.235.21.99:5051/user/employee/changeFormStatus/${parameter}`, {
+        "status":"sharedtomanager"
       });
        // Extract and set the token from the response
     } catch (error) {
@@ -946,7 +935,7 @@ const HREmployee = (props) => {
     const empdetails = {...values,"reviewer":activeOptionId, "manager":activeOptionId1,"department":activeOptionId2}
     setaddedDetails(empdetails)
     try {
-      const response = await axios.post('http://127.0.0.1:8000/user/employee/list', empdetails, {
+      const response = await axios.post('http://172.235.21.99:5051/user/employee/list', empdetails, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -1150,90 +1139,94 @@ return (
                
                
             </TabList>
-        {selectedTab1 === 'tab1' && (
-      <div className={`${styles.container} ${styles.gridTemplate1}`}>
+            {selectedTab1 === 'tab1' && (
+                
+              <div className={`${styles.container} ${styles.gridTemplate1}`}>
         {/* <div className={styles.gridrow} style={{ gridArea: 'nameAndId' }}> */}
           <div className={`${styles.section} ${styles.nameAndId}`}>
             <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Name and Emp ID :</div>
             <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.employee_name}</div>
             <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.employee_id}</div>
-          {/* </div> */}  
+          {/* </div> */}
         </div>
- 
+
         {/* <div className={styles.gridrow} style={{ gridArea: 'managerInfo' }}> */}
           <div className={`${styles.section} ${styles.managerInfo}`}>
             <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Manager Info:</div>
-            <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.reporting_manager}</div>
+            <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.manager}</div>
             <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.managerId}</div>
           </div>
         {/* </div> */}
- 
+
         {/* <div className={styles.gridrow} style={{ gridArea: 'email' }}> */}
           <div className={`${styles.section} ${styles.email}`}>
             <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Email</div>
-            <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.employee_mail}</div>
+            <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.email}</div>
           </div>
         {/* </div> */}
- 
+
       {/* <div className={styles.gridrow} style={{ gridArea: 'doj' }}> */}
       <div className={`${styles.section} ${styles.doj}`}>
           <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Date of Joining:</div>
-          <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.date_of_joining}</div>
+          <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.doj}</div>
           {/* <div style={{marginLeft:"10px",color:themestate?"white":""}}>{selectedEmployee.doj}</div> */}
       </div>
       {/* </div> */}
-     
+      
       {/* <div className={styles.gridrow} style={{ gridArea: 'status' }}> */}
       <div className={`${styles.section} ${styles.status}`}>
         <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Current Status:</div>
         <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.status}</div>
       </div>
       {/* </div> */}
- 
+
       {/* <div className={styles.gridrow} style={{ gridArea: 'dos' }}> */}
       <div className={`${styles.section} ${styles.dos}`}>
           <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Date of Starting:</div>
-          <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.date_of_reporting}</div>
+          <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.dos}</div>
       </div>
       {/* </div> */}
- 
+
       {/* <div className={styles.gridrow} style={{ gridArea: 'role' }}> */}
       <div className={`${styles.section} ${styles.role}`}>
         <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Role:</div>
-        <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.designation}</div>
+        <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.role}</div>
       </div>
       {/* </div> */}
- 
+
       {/* <div className={styles.gridrow} style={{ gridArea: 'appraisal' }}> */}
       <div className={`${styles.section} ${styles.appraisal}`}>
           <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Appraisal Date:</div>
-          <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.appraisal_date}</div>
+          <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.appraisal}</div>
       </div>
       {/* </div> */}
- 
+
       <div className={styles.gridrow} style={{ gridArea: 'dept' }}>
       <div className={`${styles.section} ${styles.dept}`}>
         <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Department:</div>
-        <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.department.dept_name}</div>
+        <div className={styles.content}  style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.dept}</div>
       </div>
       </div>
- 
+
       <div className={styles.gridrow} style={{ gridArea: 'totalExperience' }}>
       <div className={`${styles.section} ${styles.totalExperience}`}>
           <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Total Experience:</div>
           <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.totalExperience}</div>
       </div>
       </div>
- 
+
       <div className={styles.gridrow} style={{ gridArea: 'editDetails' }}>
-      <div className={`${styles.section} ${styles.editDetails}`}>
-        <div className={styles.editDetails}>
-          <EditRegular className={styles.editIcon} />
-          <span>Edit Details</span>
-        </div>
+      <div className={`${styles.section} ${styles.share}`}>
+                  <div className={styles.content} style={{display: "flex"}}>
+                    <ShareMultiple24Filled style={{color:'rgb(1,105,185)'}}/>
+                    <Link style={{ marginLeft: '10px' }} onClick={() => handleShareLinkClick(selectedEmployee.employee_id)}>
+                      Share Form Link
+                    </Link>
+              {copied && <span style={{ marginLeft: '10px', color: 'green' }}>Copied to clipboard!</span>}
+                  </div>
+                </div>
       </div>
-      </div>
- 
+
       <div className={styles.gridrow} style={{ gridArea: 'focusRExperience' }}>
       <div className={`${styles.section} ${styles.focusRExperience}`}>
           <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Experience in FocusR:</div>
@@ -1242,9 +1235,9 @@ return (
       </div>
     </div>
         )}
-
-{selectedTab1 === 'tab2' && (
-        <div style={{ display: 'flex' , marginTop: '5px' }}>
+        {selectedTab1 === 'tab2' && (
+          
+        <div style={{ display: 'flex', marginTop: '5px' }}>
           <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
           <Nav
             groups={navLinkGroups}
@@ -1268,7 +1261,29 @@ return (
           <Rating value={value} onChange={handleRatingChange} />
         </div>
           </div>
+          <div>
+          <div style={{display:"flex" , width:"100%", justifyContent:"center"}}>
+            <div style={{display:"flex" , width:"50%", justifyContent:"space-between"}}>
+            
+              <div className={`${styles.section} ${styles.share}`}>
+                <div className={styles.content} style={{display: "flex"}}>
+                  <ShareIos24Filled style={{color:'rgb(1,105,185)'}}/>
+                  <Link style={{ marginLeft: '10px' }} className={styles.shareLink} onClick={() => handlesharetoManager(formdataemployee.id)}>Share to {selectedEmployee.manager} </Link>
+                
+              
+              </div>
+              </div>
 
+              <div className={`${styles.section} ${styles.reviewer}`}>
+                <div className={styles.content} style={{display: "flex"}}>
+                  <Add24Filled style={{color:'rgb(1,105,185)'}}/>
+                  <Link className={styles.reviewerLink} style={{marginLeft:"10px"}}>Add Reviewer</Link>
+                </div>
+              </div>
+
+              </div>
+              </div>
+            
           <div style={{ marginLeft: '20px', flex: '1 1 auto' }}>
           {selectedNavKey === 'option1' && (
           <div style={{ marginTop: '1rem' }}>
@@ -1280,7 +1295,7 @@ return (
                   width: '500px',
                   minHeight: '50px',
                 }}
-                value="Your response text here..."
+                value={formdataemployee.question_1}
                 readOnly={true}
               />
             </Field>
@@ -1293,7 +1308,7 @@ return (
                   width: '500px',
                   minHeight: '50px',
                 }}
-                value="Your response text here..."
+                value={formdataemployee.question_2}
                 readOnly={true}
               />
             </Field>
@@ -1306,7 +1321,7 @@ return (
                   width: '500px',
                   minHeight: '50px',
                 }}
-                value="Your response text here..."
+                value={formdataemployee.question_3}
                 readOnly={true}
               />
             </Field>
@@ -1319,7 +1334,7 @@ return (
                   width: '500px',
                   minHeight: '50px',
                 }}
-                value="Your response text here..."
+                value={formdataemployee.question_4}
                 readOnly={true}
               />
             </Field>
@@ -1330,11 +1345,11 @@ return (
     {selectedNavKey === 'option2' && (
       <div style={{ marginTop: '1rem', marginBottom: '1rem' }}>
         <Field label="For all the skills rated below, team member to give self ratings and managers to cross-rate Rating Performance Description" />
-        {labels.map((label, index) => (
+        {Object.entries(labels).map(([label, value], index) => (
           <div key={index} style={{ marginTop: '1rem', display: 'flex', alignItems: 'center' }}>
             <Text variant="medium" style={{ marginRight: '1rem' }}>{label}:</Text>
             {/* Render the selected option directly */}
-            <Text variant="medium">{options[selectedOptions[index]]}</Text>
+            <Text variant="medium">{formdataemployee[value]}</Text>
             {/* Optionally, you can provide a button to change the selected option */}
           </div>
         ))}
@@ -1373,7 +1388,7 @@ return (
           </div>
         )}
 
-        {selectedNavKey === 'option4' && (
+{selectedNavKey === 'option4' && (
           <div style={{ marginTop: '1rem' }}>
             <div style={{ marginTop: '1rem' }}>
             <Field label="List the kind of work or job would you like to be doing in one/two/five years time">
@@ -1415,9 +1430,12 @@ return (
         )}
           </div>
         </div>
+        </div>
+        
       )}
 
         </div>
+        
         </DrawerBody>
          )}
       </OverlayDrawer>

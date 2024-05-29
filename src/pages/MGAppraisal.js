@@ -1,7 +1,9 @@
-import React,{useState} from "react";
+import React,{useState, useEffect} from "react";
 import {useSelector, useDispatch} from 'react-redux';
-import {Stack, Nav, Dropdown } from '@fluentui/react';
+import {Stack, Nav} from '@fluentui/react';
+import axios from 'axios';
 import {
+  Dropdown,
   makeStyles,
   shorthands,
   Tab,
@@ -35,7 +37,8 @@ import {
   BreadcrumbButton,
   BreadcrumbDivider,
   Rating,
-  BreadcrumbProps
+  BreadcrumbProps,
+  Option,
 } from "@fluentui/react-components";
 import {AddRegular, PersonDeleteRegular , EditRegular, SearchRegular, FilterRegular, FilterDismissRegular, FilterAddRegular, ChartMultipleFilled,ChartMultipleRegular,Dismiss24Regular ,Timer20Regular,Calendar20Regular, ArrowDownRegular, ArrowClockwiseRegular,ShareMultiple24Filled ,Add24Filled,ShareIos24Filled  } from "@fluentui/react-icons"; // Import the icons
 import './page.css';
@@ -380,31 +383,21 @@ const options = [
 ];
 
 // Define labels for dropdowns
-const labels = [
-  'Attendance & Punctuality',
-  `Technical Skills 
-  (Effectiveness with which you apply job knowledge and skill to tasks)`,
-  'Quality of work (Comprehensive, accurate, thorough, professional, timely etc)',
-  `New Knowledge
-  (Seek new knowledge, apply it to your job and share it with others)`,
-  `Utilization and Productivity 
-  (Make full use of time.  Seek additional work if underutilized)`,
-  `Time Management & Organizational Skills 
-  (Organize, plan, and forecast work skillfully and accurately.  Effective prioritization.  Meet deadlines or communicate early if will not be met.)`,
-  `Interpersonal Skills
-  (Positive attitude, work and communicate well with others)`,
-  `Communication - Verbal & Written 
-  (Communicate knowledge clearly, accurately and thoroughly.  Document work effectively and create procedures)`,
-  `Initiative, Innovation & Creativity 
-  (Actively seek improvements & challenge status quo in appropriate ways.  Contribute new ideas.  Analyze problems and present solutions)`,
-  `Teamwork
-  (Co-ordinate own work with others, seek opinions from team members, share information willingly)`,
-  `Client Focused
-  (Actively seek to understand clients business issues, provide quality service to achieve client satisfaction)`,
-  `Planning and Organizational Skills (Organizing, planning and monitoring of work skillfully and accurately; able to effectively prioritize tasks; meets deadlines or communicates need to revise schedule ahead of time)`,
-  'Value Addition ( Extras you are able to do )'
+const labels = {
+  'Attendance & Punctuality':'attendance_and_punctuality',
+  'Technical Skills (Effectiveness with which you apply job knowledge and skill to tasks)':'technical_skills',
+  'Quality of work (Comprehensive, accurate, thorough, professional, timely etc)':"quality_of_work",
+  "New Knowledge (Seek new knowledge, apply it to your job and share it with others)":"new_knowledge",
+  "Utilization and Productivity (Make full use of time.  Seek additional work if underutilized)":"utilization_and_productivity",
+  "Time Management & Organizational Skills (Organize, plan, and forecast work skillfully and accurately.  Effective prioritization.  Meet deadlines or communicate early if will not be met.)":"organize_plans",
+  "Interpersonal Skills (Positive attitude, work and communicate well with others)":"interpersonal_skills",
+  "Communication - Verbal & Written (Communicate knowledge clearly, accurately and thoroughly.  Document work effectively and create procedures)":"communication",
+  "Initiative, Innovation & Creativity (Actively seek improvements & challenge status quo in appropriate ways.  Contribute new ideas.  Analyze problems and present solutions)":"initiative_innovative_creativity",
+  "Teamwork (Co-ordinate own work with others, seek opinions from team members, share information willingly)":"teamwork",
+  "Client Focused (Actively seek to understand clients business issues, provide quality service to achieve client satisfaction)":"client_focused",
+  "Planning and Organizational Skills (Organizing, planning and monitoring of work skillfully and accurately; able to effectively prioritize tasks; meets deadlines or communicates need to revise schedule ahead of time)":"planning_and_organizing",
   // Add more labels as needed
-];
+};
 
 const MGAppraisal = () => {
   const styles = useStyles();
@@ -426,6 +419,8 @@ const MGAppraisal = () => {
   });
   const [selectedNavKey, setSelectedNavKey] = useState('option1');
   const [value, setValue] = useState(4);
+
+  const [formId, setformId] = useState(0);
 
   const [formData1, setFormData1] = useState({
     roleResponse: '',
@@ -460,6 +455,13 @@ const MGAppraisal = () => {
   const [errorMessage3, setErrorMessage3] = useState('');
   const [errorMessage4, setErrorMessage4] = useState('');
 
+  const [formdataemployee,setformdataemployee] = useState({});
+
+  const [formdata, setformdata] = useState({});
+
+  const [activeOptionId, setActiveOptionId] = useState({});
+
+  const [selectedOptions, setSelectedOptions] = useState(Array(labels.length).fill(0));
 
 
   const navLinkGroups = [
@@ -473,6 +475,94 @@ const MGAppraisal = () => {
       ],
     },
   ];
+  
+  const [todoEmployees, settodoEmployees] = useState([]);
+    const [ waitingEmployees, setwaitingEmployees] = useState([]);
+    const [selectedTab2, setSelectedTab2] = useState('tab1');
+   
+   
+   
+    const fetchtodoEmployeeData = () => {
+      const token2 = localStorage.getItem('accessToken');
+      console.log(token2)
+      axios.get('http://172.235.21.99:5051/user/getEmployeeforMgappraisaltodo',{
+        headers: {
+          Authorization: `Bearer ${token2}`
+        }
+      })
+        .then(response => {
+          settodoEmployees(response.data);
+          console.log({"data1": response.data})
+        })
+        .catch(error => {
+          console.error('There was an error fetching the data!', error);
+        });
+    };
+   
+    const fetchwaitingEmployeeData = () => {
+      const token2 = localStorage.getItem('accessToken');
+      axios.get('http://172.235.21.99:5051/user/getEmployeeforMgappraisalWaiting',{
+        headers: {
+          Authorization: `Bearer ${token2}`
+        }
+      })
+        .then(response => {
+          setwaitingEmployees(response.data);
+          console.log({"data1": response.data})
+        })
+        .catch(error => {
+          console.error('There was an error fetching the data!', error);
+        });
+    };
+   
+    useEffect(() => {
+      fetchtodoEmployeeData();
+      fetchwaitingEmployeeData();
+    }, []);
+
+
+  const onActiveOptionChange1 = React.useCallback(
+   (params) => (_, data) => {
+      setActiveOptionId({
+        ...activeOptionId,
+      [params]:data?.nextOption?.value}); 
+
+      setformdata({
+        ...formdata,
+        [params]:data?.nextOption?.value
+      });
+      // Assuming optionValue is the id
+      console.log({"active":data?.nextOption?.value})
+    },
+    [setActiveOptionId,setformdata]
+  );
+
+
+  const fetchDatamanager = async () => {
+    try {
+      const response = await axios.get('https://api.example.com/data');
+      setformdata(response.data); // Store response data into state
+      
+    } catch (err) {
+      
+    }
+  };
+
+  
+
+  const fetchDataemployee = async () => {
+    try {
+      const response = await axios.get('https://api.example.com/data');
+      // setformdataemployee(response.data);
+      
+    } catch (err) {
+      setformdataemployee({ "question1": "blahhhhh" });
+      console.log({ "question1": formdataemployee.question_1 });
+    }
+  };
+
+  
+  
 
   const getNavLinkStyle = (key) => {
     let backgroundColor = "rgb(51, 51, 51)";
@@ -495,6 +585,11 @@ const MGAppraisal = () => {
       ...formData1,
       [fieldName]: value
     });
+
+    setformdata({
+      ...formdata,
+      [fieldName]: value
+    });
   };
 
   const handleFieldChange3 = (fieldName, value) => {
@@ -502,11 +597,21 @@ const MGAppraisal = () => {
       ...formData3,
       [fieldName]: value
     });
+
+    setformdata({
+      ...formdata,
+      [fieldName]: value
+    });
   };
 
   const handleFieldChange4 = (fieldName, value) => {
     setFormData4({
       ...formData4,
+      [fieldName]: value
+    });
+
+    setformdata({
+      ...formdata,
       [fieldName]: value
     });
   };
@@ -530,6 +635,10 @@ const MGAppraisal = () => {
       setErrorMessage2(`Please fill the remaining dropdowns`);
     } else {
       setErrorMessage2('');
+      setformdata({
+        ...formdata,
+        ...activeOptionId
+      })
     }
   };
 
@@ -545,6 +654,7 @@ const MGAppraisal = () => {
     }
   };
 
+
   const handleSubmit4 = () => {
     const { works, actions, skills, training } = formData4;
     const areFieldsFilled4 = works && actions && skills && training;
@@ -557,10 +667,24 @@ const MGAppraisal = () => {
     }
   };
 
+  const handleSubmit = async () => {
+    try {
+      console.log({"id":formdataemployee})
+      const result = await axios.post(`http://172.235.21.99:5051/user/appraiser/remarks/${formdataemployee.employee_id}`,formdata
+        
+      );
+       // Extract and set the token from the response
+    } catch (error) {
+      console.error('Error sending data to the API', error);
+    }
+  };
+
+
   const handleDropdownChange = (index, option) => {
     const newFilledStatus = [...filledStatus];
     newFilledStatus[index] = !!option;
     setFilledStatus(newFilledStatus);
+    console.log({"status":filledStatus})
   };
 
 
@@ -615,9 +739,39 @@ const MGAppraisal = () => {
     alert("Add Employee functionality to be implemented");
   };
  
-  const handleRowClick = (employee) => {
+  const handleRowClick = async (employee) => {
+    try {
+      const response1 = await axios.get(`http://127.0.0.1:8000/user/team-member/remarks/${employee.employee_id}`);
+      setformdataemployee(response1.data);
+      console.log({"formdataemployee":response1.data})
+      const response2 = await axios.get(`http://127.0.0.1:8000/user/appraiser/remarks/${employee.employee_id}`);
+      setformdata(response2.data);
+      
+    } catch (err) {
+      
+
+      
+
+      
+      // console.log({ "question1": formdataemployee.question_1 });
+    }
+    // setformdataemployee({ "question_1": "blahhhhh" });
     setSelectedEmployee(employee);
     setOpen(true);
+    
+    
+   
+  };
+
+  const handlesharetoHR = async (parameter) => {
+    try {
+      const result = await axios.post(`http://172.235.21.99:5051/user/employee/changeFormStatus/${formdataemployee.id}`, {
+        "empId":parameter,"status":"managerfilled","canSeeManagerComments":true
+      });
+       // Extract and set the token from the response
+    } catch (error) {
+      console.error('Error sending data to the API', error);
+    }
   };
  
   const handleDeleteEmployee = () => {
@@ -631,8 +785,8 @@ const MGAppraisal = () => {
     setShowFilters((prev) => !prev);
   };
 
-  const handleTabSelect2 = (value) => {
-    setSelectedTab1(value);
+  const handleTabSelect2 = (event,data) => {
+    setSelectedTab2(data.value);
   };
 
 
@@ -692,28 +846,58 @@ const MGAppraisal = () => {
   });
 
 
-  const filteredData = searchQuery
-  ? data[selectedTab].filter((item) =>
-      (item.name && item.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (item.empid && item.empid.toString().includes(searchQuery)) ||
-      (item.dept && item.dept.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (item.doj && item.doj.includes(searchQuery)) || 
-      (item.appraisal && item.appraisal.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (item.manager && item.manager.toLowerCase().includes(searchQuery.toLowerCase()))
+ 
+ const filteredtodoData = searchQuery
+  ? todoEmployees.filter((item) =>
+    (item.employee_name && item.employee_name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (item.employee_id && item.employee_id.toString().includes(searchQuery)) ||
+      (item.department && item.department.toString().toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (item.date_of_joining && item.date_of_joining.includes(searchQuery)) ||
+     
+      // (item.appraisal && item.appraisal.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (item.reporting_manager && item.reporting_manager.toLowerCase().includes(searchQuery.toLowerCase()))
     )
-  :data[selectedTab];
-
-  const sortedData = [...filteredData].sort((a, b) => {
+  :todoEmployees;
+ 
+  const sortedtodoData = [...filteredtodoData].sort((a, b) => {
     const aValue = a[sortState.sortColumn];
     const bValue = b[sortState.sortColumn];
-  
+ 
     // Check if the values are strings and perform locale comparison
     if (typeof aValue === 'string' && typeof bValue === 'string') {
       return sortState.sortDirection === 'ascending'
         ? aValue.localeCompare(bValue)
         : bValue.localeCompare(aValue);
     }
-  
+ 
+    // If the values are not strings, compare them directly
+    return sortState.sortDirection === 'ascending' ? aValue - bValue : bValue - aValue;
+  });
+ 
+  const filteredwaitingData = searchQuery
+  ? waitingEmployees.filter((item) =>
+    (item.employee_name && item.employee_name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+  (item.employee_id && item.employee_id.toString().includes(searchQuery)) ||
+  (item.department && item.department.toString().toLowerCase().includes(searchQuery.toLowerCase())) ||
+  (item.date_of_joining && item.date_of_joining.includes(searchQuery)) ||
+  // Uncomment if 'appraisal' is part of the dataset and needs to be searched
+  // (item.appraisal && item.appraisal.toLowerCase().includes(searchQuery.toLowerCase())) ||
+  (item.reporting_manager && item.reporting_manager.toLowerCase().includes(searchQuery.toLowerCase()))
+)
+   
+  :waitingEmployees;
+ 
+  const sortedwaitingData = [...filteredwaitingData].sort((a, b) => {
+    const aValue = a[sortState.sortColumn];
+    const bValue = b[sortState.sortColumn];
+ 
+    // Check if the values are strings and perform locale comparison
+    if (typeof aValue === 'string' && typeof bValue === 'string') {
+      return sortState.sortDirection === 'ascending'
+        ? aValue.localeCompare(bValue)
+        : bValue.localeCompare(aValue);
+    }
+ 
     // If the values are not strings, compare them directly
     return sortState.sortDirection === 'ascending' ? aValue - bValue : bValue - aValue;
   });
@@ -870,104 +1054,178 @@ const MGAppraisal = () => {
     </div>
         )}
 
-    {selectedTab1 === 'tab2' && (
-        <div className={`${styles.container} ${styles.gridTemplate2}`}>
-        <div className={styles.gridrow} style={{ gridArea: 'nameAndId' }}>
-          <div className={`${styles.section} ${styles.nameAndId}`}>
-            <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Name and Emp ID :</div>
-            <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.name}</div>
-            <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.empid}</div>
+{selectedTab1 === 'tab2' && (
+        <div style={{ display: 'flex', marginTop: '5px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+          <Nav
+            groups={navLinkGroups}
+            selectedKey={selectedNavKey}
+            onLinkClick={handleNavClick}
+            styles={{
+              root: {
+              width: '205px',
+              // backgroundColor: themestate ? "rgb(51, 51, 51)" : "",
+              color: themestate ? "white" : "",
+              display: 'flex',
+              flexDirection: 'column',
+              flex: '1 1 auto',
+            },
+            link: (props, theme) => ({
+            ...getNavLinkStyle(props.key),
+            }),
+          }}
+          />
+            <div style={{ marginTop: 'auto', padding: '1rem', borderTop: '1px solid #ccc' }}>
+          <Rating value={value} onChange={handleRatingChange} />
+        </div>
+          </div>
+
+          <div style={{ marginLeft: '20px', flex: '1 1 auto' }}>
+          {selectedNavKey === 'option1' && (
+          <div style={{ marginTop: '1rem' }}>
+            <div style={{ marginTop: '1rem' }}>
+            <Field label="To state your understanding of your roles and responsibilities / objectives as agreed in last year’s appraisal / during joining. ">
+              <Textarea
+                style={{
+                  marginTop: '0.5rem',
+                  width: '500px',
+                  minHeight: '50px',
+                }}
+                value= {formdataemployee.question_1}
+                readOnly={true}
+              />
+            </Field>
+            </div>
+            <div style={{ marginTop: '1rem' }}>
+            <Field label="Last Year’s Accomplishments: List your most significant accomplishments or contributions made during the review period. Make special note of any new tasks or duties you successfully performed that were outside the scope of your regular responsibilities. Please do not mention your regular day to day activities">
+              <Textarea
+                style={{
+                  marginTop: '0.5rem',
+                  width: '500px',
+                  minHeight: '50px',
+                }}
+                value= {formdataemployee.question_2}
+                readOnly={true}
+              />
+            </Field>
+            </div>
+            <div style={{ marginTop: '1rem' }}>
+            <Field label="Strengths List the personal and technical abilities that help you perform your job well. List any additional skills that you have, but that you don’t currently use in your role that could be brought to your job or could be used to assist others. Example: I am a SCM Consultant and have knowledge in WMS, would like to explore that area. I am good at proposal writing, would like to conduct training for other colleagues etc …">
+              <Textarea
+                style={{
+                  marginTop: '0.5rem',
+                  width: '500px',
+                  minHeight: '50px',
+                }}
+                value={formdataemployee.question_3}
+                readOnly={true}
+              />
+            </Field>
+            </div>
+            <div style={{ marginTop: '1rem' }}>
+            <Field label="Development Needs List the personal and technical abilities you need to develop or enhance in order to improve your job performance. List the steps you plan to take and/or the resources you need to accomplish this development.">
+              <Textarea
+                style={{
+                  marginTop: '0.5rem',
+                  width: '500px',
+                  minHeight: '50px',
+                }}
+                value={formdataemployee.question_4}
+                readOnly={true}
+              />
+            </Field>
+            </div>
+          </div>
+        )}
+
+    {selectedNavKey === 'option2' && (
+      <div style={{ marginTop: '1rem', marginBottom: '1rem' }}>
+        <Field label="For all the skills rated below, team member to give self ratings and managers to cross-rate Rating Performance Description" />
+        {Object.entries(labels).map(([label, value], index) => (
+          <div key={index} style={{ marginTop: '1rem', display: 'flex', alignItems: 'center' }}>
+            <Text variant="medium" style={{ marginRight: '1rem' }}>{label}:</Text>
+            {/* Render the selected option directly */}
+            <Text variant="medium">{formdataemployee[value]}</Text>
+            {/* Optionally, you can provide a button to change the selected option */}
+          </div>
+        ))}
+      </div>
+    )}
+
+        {selectedNavKey === 'option3' && (
+          <div style={{ marginTop: '1rem' }}>
+            <div style={{ marginTop: '1rem' }}>
+            <Field label="Top 3 likes in the organization">
+              <Textarea
+                style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
+                value={formdataemployee.organization_feedback}
+                readOnly={true}
+              />
+            </Field>
+            </div>
+            <div style={{ marginTop: '1rem' }}>
+            <Field label="Top 3 dislikes in the organization">
+              <Textarea
+                style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
+                value={formdataemployee.traning_need_analysis}
+                readOnly={true}
+              />
+            </Field>
+            </div>
+            <div style={{ marginTop: '1rem' }}>
+            <Field label="Any Suggestion to Improve the organisation">
+              <Textarea
+                style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
+                value={formdataemployee.self_rating}
+                readOnly={true}
+              />
+            </Field>
+            </div>
+          </div>
+        )}
+
+{selectedNavKey === 'option4' && (
+          <div style={{ marginTop: '1rem' }}>
+            <div style={{ marginTop: '1rem' }}>
+            <Field label="List the kind of work or job would you like to be doing in one/two/five years time">
+              <Textarea
+                style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
+                value={formdataemployee.kpi_agreed}
+                readOnly={true}
+              />
+            </Field>
+            </div>
+            <div style={{ marginTop: '1rem' }}>
+            <Field label="List the actions you have taken to make yourself indispensable">
+              <Textarea
+                style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
+                value="Your response text here..."
+                readOnly={true}
+              />
+            </Field>
+            </div>
+            <div style={{ marginTop: '1rem' }}>
+            <Field label="Do you want to explore your skills areas other than your present work?">
+              <Textarea
+                style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
+                value="Your response text here..."
+                readOnly={true}
+              />
+            </Field>
+            </div>
+            <div style={{ marginTop: '1rem' }}>
+            <Field label="If you want to explore skill areas other than your present work, List the skill areas you want to explore.">
+              <Textarea
+                style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
+                value="Your response text here..."
+                readOnly={true}
+              />
+            </Field>
+            </div>
+          </div>
+        )}
           </div>
         </div>
-
-
-      <div className={styles.gridrow} style={{ gridArea: 'formLink' }}>
-        <div className={`${styles.section} ${styles.formLink}`}>
-          <div className={styles.formDetails}>
-            <ShareMultiple24Filled style={{color:'rgb(1,105,185)'}}/>
-            <Link style={{marginLeft:"10px"}}>Share Form Link</Link>
-          </div> 
-        </div>
-      </div>
-
-        <div className={styles.gridrow} style={{ gridArea: 'email' }}>
-          <div className={`${styles.section} ${styles.email}`}>
-            <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Email:</div>
-            <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.email}</div>
-          </div>
-        </div>
-
-      <div className={styles.gridrow} style={{ gridArea: 'doj' }}>
-      <div className={`${styles.section} ${styles.doj}`}>
-          <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Date of Joining:</div>
-          <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.doj}</div>
-          {/* <div style={{marginLeft:"10px",color:themestate?"white":""}}>{selectedEmployee.doj}</div> */}
-      </div>
-      </div>
-      
-      <div className={styles.gridrow} style={{ gridArea: 'status' }}>
-      <div className={`${styles.section} ${styles.status}`}>
-        <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Current Status:</div>
-        <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.status}</div>
-      </div>
-      </div>
-
-      <div className={styles.gridrow} style={{ gridArea: 'dos' }}>
-      <div className={`${styles.section} ${styles.dos}`}>
-          <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Date of Starting:</div>
-          <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.dos}</div>
-      </div>
-      </div>
-
-      <div className={styles.gridrow} style={{ gridArea: 'role' }}>
-      <div className={`${styles.section} ${styles.role}`}>
-        <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Role:</div>
-        <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.role}</div>
-      </div>
-      </div>
-
-      <div className={styles.gridrow} style={{ gridArea: 'appraisal' }}>
-      <div className={`${styles.section} ${styles.appraisal}`}>
-          <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Appraisal Date:</div>
-          <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.appraisal}</div>
-      </div>
-      </div>
-
-      <div className={styles.gridrow} style={{ gridArea: 'dept' }}>
-        <div className={`${styles.section} ${styles.dept}`}>
-          <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Department:</div>
-          <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.dept}</div>
-        </div>
-      </div>
-
-
-      <div className={styles.gridrow} style={{ gridArea: 'reviewer' }}>
-        <div className={`${styles.section} ${styles.reviewer}`}>
-          <div className={styles.reviewerDetails}>
-            <Add24Filled style={{color:'rgb(1,105,185)'}}/>
-            <Link className={styles.reviewerLink}>Add Reviewer</Link>
-          </div>
-        </div>
-      </div>
-
-      <div className={styles.gridrow} style={{ gridArea: 'editDetails' }}>
-      <div className={`${styles.section} ${styles.editDetails}`}>
-        <div className={styles.editDetails}>
-          <EditRegular className={styles.editIcon} />
-          <span>Edit Details</span>
-        </div>
-      </div>
-      </div>
-
-      <div className={styles.gridrow} style={{ gridArea: 'share' }}>
-        <div className={`${styles.section} ${styles.share}`}>
-          <div className={styles.shareDetails}>
-            <ShareIos24Filled style={{color:'rgb(1,105,185)'}}/>
-            <Link className={styles.shareLink}>Share to Thangamani</Link>
-          </div>
-        </div>
-      </div>
-      </div>
       )}
 
       {selectedTab1 === 'tab3' && (
@@ -993,6 +1251,19 @@ const MGAppraisal = () => {
         </div>
           </div>
 
+          <div>
+            <div style={{display:"flex" , width:"100%", justifyContent:"center", marginTop:"10px"}}>
+            <div style={{display:"flex" , width:"100%", justifyContent:"space-between"}}>
+            
+              <div className={`${styles.section} ${styles.share}`}>
+                <div className={styles.content} style={{display: "flex"}}>
+                  <ShareIos24Filled style={{color:'rgb(1,105,185)'}}/>
+                  <Link style={{ marginLeft: '10px' }} className={styles.shareLink} onClick={() => handlesharetoHR(selectedEmployee.employee_id)}>Share to HR</Link>
+                </div>
+              </div>
+              </div>
+              </div>
+
           <div style={{ marginLeft: '20px', flex: '1 1 auto' }}>
           {selectedNavKey === 'option1' && (
             <div style={{ marginTop: '1rem' }}>
@@ -1005,8 +1276,8 @@ const MGAppraisal = () => {
                     minHeight: '50px',
                     borderColor: !formData1.roleResponse && submitted1 ? 'red' : '',
                   }}
-                  value={formData1.roleResponse}
-                  onChange={(e) => handleFieldChange1('roleResponse', e.target.value)}
+                  value={formdata.question_1}
+                  onChange={(e) => handleFieldChange1('question_1', e.target.value)}
                   placeholder="Enter your response..."
                 />
           </Field>
@@ -1018,10 +1289,10 @@ const MGAppraisal = () => {
                 marginTop: '0.5rem',
                 width: '500px',
                 minHeight: '50px',
-                borderColor: !formData1.accomplishments && submitted1 ? 'red' : '',
+                borderColor: !formData1.question_2 && submitted1 ? 'red' : '',
               }}
-              value={formData1.accomplishments}
-              onChange={(e) => handleFieldChange1('accomplishments', e.target.value)}
+              value={formdata.accomplishments}
+              onChange={(e) => handleFieldChange1('question_2', e.target.value)}
               placeholder="Enter your response..."
             />
           </Field>
@@ -1033,10 +1304,10 @@ const MGAppraisal = () => {
                 marginTop: '0.5rem',
                 width: '500px',
                 minHeight: '50px',
-                borderColor: !formData1.strengths && submitted1 ? 'red' : '',
+                borderColor: !formData1.question_3 && submitted1 ? 'red' : '',
               }}
-              value={formData1.strengths}
-              onChange={(e) => handleFieldChange1('strengths', e.target.value)}
+              value={formdata.strengths}
+              onChange={(e) => handleFieldChange1('question_3', e.target.value)}
               placeholder="Enter your response..."
             />
           </Field>
@@ -1048,23 +1319,23 @@ const MGAppraisal = () => {
                 marginTop: '0.5rem',
                 width: '500px',
                 minHeight: '50px',
-                borderColor: !formData1.developmentNeeds && submitted1 ? 'red' : '',
+                borderColor: !formData1.question_4 && submitted1 ? 'red' : '',
               }}
-              value={formData1.developmentNeeds}
-              onChange={(e) => handleFieldChange1('developmentNeeds', e.target.value)}
+              value={formdata.developmentNeeds}
+              onChange={(e) => handleFieldChange1('question_4', e.target.value)}
               placeholder="Enter your response..."
             />
           </Field>
           </div>
           {errorMessage1 && <div style={{ color: 'red', marginTop: '0.5rem' }}>{errorMessage1}</div>}
-          <Button style={{marginTop: '5px', backgroundColor: 'blue', color: 'white'}} onClick={handleSubmit1}>Submit</Button>
+          <Button style={{marginTop: '5px', backgroundColor: 'blue', color: 'white'}} onClick={handleSubmit}>Submit</Button>
         </div>
       )}
 
       {selectedNavKey === 'option2' && (
         <div style={{ marginTop: '1rem' }}>
           <Field label="For all the skills rated below, team member to give self ratings and managers to cross-rate Rating Performance Description" />
-          {labels.map((label, index) => (
+          {Object.entries(labels).map(([label, value], index) => (
             <div key={index} style={{ marginTop: '1rem', display: 'flex', alignItems: 'center' }}>
               <Text variant="medium" style={{ marginRight: '1rem' }}>{label}:</Text>
               <div style={{ 
@@ -1073,71 +1344,89 @@ const MGAppraisal = () => {
                 borderStyle: 'solid', 
                 borderRadius: 4,
               }}>
-                <Dropdown
+                {/* <Dropdown
                   placeholder="Select an option"
                   options={options.map(option => ({ key: option, text: option }))}
                   styles={{ 
                     dropdown: { width: 200, borderColor: submitted2 && !filledStatus[index] ? 'red' : '' },
                   }}
                   onChange={(event, option) => handleDropdownChange(index, option)}
-                />
+                  
+                /> */}
+                <Dropdown
+                  // aria-labelledby={`${dropdownId}-underline`}
+                  placeholder={formdata[value]}
+                  // appearance="underline"
+                  
+                  style={{width:"20px"}}
+                  onActiveOptionChange={onActiveOptionChange1(value)}
+                  
+                >
+                  {options.map((option) => (
+                    <Option key={option} text={option} value={option}>
+                      {option}
+                    </Option>
+                  ))}
+                </Dropdown>
+
               </div>
             </div>
           ))}
           {errorMessage2 && <div style={{ color: 'red', marginTop: '0.5rem' }}>{errorMessage2}</div>}
-          <Button style={{marginTop: '5px', backgroundColor: 'blue', color: 'white'}} onClick={handleSubmit2}>Submit</Button>
+          <Button style={{marginTop: '5px', backgroundColor: 'blue', color: 'white'}} onClick={handleSubmit}>Submit</Button>
         </div>
       )}
 
             {selectedNavKey === 'option3' && (
               <div style={{ marginTop: '1rem' }}>
                 <div style={{ marginTop: '1rem' }}>
-                <Field label="Top 3 likes in the organization">
-                  <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px', borderColor: !formData3.likes && submitted3 ? 'red' : '' }} value={formData3.likes} onChange={(e) => handleFieldChange3('likes', e.target.value)} placeholder="Enter your response..." />
+                <Field label="Enter your comments for this part">
+                  <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px', borderColor: !formData3.likes && submitted3 ? 'red' : '' }} value={formdata.part4ManagerComments} onChange={(e) => handleFieldChange3('part4ManagerComments', e.target.value)} placeholder="Enter your response..." />
                 </Field>
                 </div>
-                <div style={{ marginTop: '1rem' }}>
+                {/* <div style={{ marginTop: '1rem' }}>
                 <Field label="Top 3 dislikes in the organization">
-                <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px', borderColor: !formData3.dislikes && submitted3 ? 'red' : '' }} value={formData3.dislikes} onChange={(e) => handleFieldChange3('dislikes', e.target.value)} placeholder="Enter your response..." />
+                <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px', borderColor: !formData3.dislikes && submitted3 ? 'red' : '' }} value={formdata.dislikes} onChange={(e) => handleFieldChange3('dislikes', e.target.value)} placeholder="Enter your response..." />
                 </Field>
                 </div>
                 <div style={{ marginTop: '1rem' }}>
                 <Field label="Any Suggestion to Improve the organisation">
-                <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px', borderColor: !formData3.suggestions && submitted3 ? 'red' : '' }} value={formData3.suggestions} onChange={(e) => handleFieldChange3('suggestions', e.target.value)} placeholder="Enter your response..." />
+                <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px', borderColor: !formData3.suggestions && submitted3 ? 'red' : '' }} value={formdata.suggestions} onChange={(e) => handleFieldChange3('suggestions', e.target.value)} placeholder="Enter your response..." />
                 </Field>
-                </div>
+                </div> */}
                 {errorMessage3 && <div style={{ color: 'red', marginTop: '0.5rem' }}>{errorMessage3}</div>}
-                <Button style={{marginTop: '5px', backgroundColor: 'blue', color: 'white'}} onClick={handleSubmit3}>Submit</Button>
+                <Button style={{marginTop: '5px', backgroundColor: 'blue', color: 'white'}} onClick={handleSubmit}>Submit</Button>
               </div>
             )}
 
             {selectedNavKey === 'option4' && (
               <div style={{ marginTop: '1rem' }}>
                 <div style={{ marginTop: '1rem' }}>
-                <Field label="List the kind of work or job would you like to be doing in one/two/five years time">
-                <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px', borderColor: !formData4.works && submitted4 ? 'red' : '' }} value={formData4.works} onChange={(e) => handleFieldChange4('works', e.target.value)} placeholder="Enter your response..." />
+                <Field label="Enter your comments for this part">
+                <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px', borderColor: !formData4.works && submitted4 ? 'red' : '' }} value={formdata.part5ManagerComments} onChange={(e) => handleFieldChange4('part5ManagerComments', e.target.value)} placeholder="Enter your response..." />
                 </Field>
                 </div>
-                <div style={{ marginTop: '1rem' }}>
+                {/* <div style={{ marginTop: '1rem' }}>
                 <Field label="List the actions you have taken to make yourself indispensible">
-                <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px', borderColor: !formData4.actions && submitted4 ? 'red' : '' }} value={formData4.actions} onChange={(e) => handleFieldChange4('actions', e.target.value)} placeholder="Enter your response..." />
+                <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px', borderColor: !formData4.actions && submitted4 ? 'red' : '' }} value={formdata.actions} onChange={(e) => handleFieldChange4('actions', e.target.value)} placeholder="Enter your response..." />
                 </Field>
                 </div>
                 <div style={{ marginTop: '1rem' }}>
                 <Field label="Do you want to explore your skills areas other than your present work?">
-                <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px', borderColor: !formData4.skills && submitted4 ? 'red' : '' }} value={formData4.skills} onChange={(e) => handleFieldChange4('skills', e.target.value)} placeholder="Enter your response..." />
+                <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px', borderColor: !formData4.skills && submitted4 ? 'red' : '' }} value={formdata.skills} onChange={(e) => handleFieldChange4('skills', e.target.value)} placeholder="Enter your response..." />
                 </Field>
                 </div>
                 <div style={{ marginTop: '1rem' }}>
                 <Field label="What sort of training/experiences would benefit you in the next year? Not just job-skills - also your natural strengths and personal passions you'd like to develop - you and your work can benefit from these">
-                <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px', borderColor: !formData4.training && submitted4 ? 'red' : '' }} value={formData4.training} onChange={(e) => handleFieldChange4('training', e.target.value)} placeholder="Enter your response..." />
+                <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px', borderColor: !formData4.training && submitted4 ? 'red' : '' }} value={formdata.training} onChange={(e) => handleFieldChange4('training', e.target.value)} placeholder="Enter your response..." />
                 </Field>
-                </div>
+                </div> */}
                 {errorMessage4 && <div style={{ color: 'red', marginTop: '0.5rem' }}>{errorMessage4}</div>}
-                <Button style={{marginTop: '5px', backgroundColor: 'blue', color: 'white'}} onClick={handleSubmit4}>Submit</Button>
+                <Button style={{marginTop: '5px', backgroundColor: 'blue', color: 'white'}} onClick={handleSubmit}>Submit</Button>
               </div>
             )}
           </div>
+        </div>
         </div>
       )}
         </div>
@@ -1160,7 +1449,7 @@ const MGAppraisal = () => {
       <TabList
         defaultSelectedValue="tab1"
         appearance="subtle"
-        onTabSelect={handleTabChange}
+        onTabSelect={handleTabSelect2}
         style={themestate?{color:'white'}:{}}
       >
         <Tab    className={themestate ? "tab dark" : "tab"} style= {{border:'1px solid transparent'}} value="tab1">To do</Tab>
@@ -1247,29 +1536,52 @@ const MGAppraisal = () => {
         <TableHeaderCell style={{ fontWeight: 'bold', cursor:'pointer' }} {...headerSortProps('manager')}>Manager</TableHeaderCell>
       </TableRow>
     </TableHeader>
-    <TableBody>
-    {sortedData.map((item) => (
-       <TableRow key={item.empid} style={themestate?{color:'white', }:{}}  className={themestate?"hovereffect dark":"hovereffect"} onClick={() => handleRowClick(item)} >
+    
+{selectedTab2==='tab1'?<TableBody>
+      {sortedtodoData.map((item) => (
+       <TableRow key={item.employee_id} style={themestate ? { color: 'white' } : {}} className={themestate ? "hovereffect dark" : "hovereffect"} onClick={() => handleRowClick(item)}>
        <TableSelectionCell
-         checked={!!selectedItems[item.empid]}
-         style={{zIndex:1000}}
+         checked={!!selectedItems[item.employee_id]}
+         style={{ zIndex: 1000 }}
          onChange={(event) => {
-          
-          //  event.stopPropagation(); // Prevents the row click event from being triggered
-           handleItemsChange(item.empid);
-           setOpen(false)
+           event.stopPropagation();
+           handleItemsChange(item.employee_id);
+           setOpen(false);
          }}
-         
        />
-          <TableCell >{item.empid}</TableCell>
-          <TableCell>{item.name}</TableCell>
-          <TableCell>{item.dept}</TableCell>
-          <TableCell>{item.doj}</TableCell>
-          <TableCell>{item.appraisal}</TableCell>
-          <TableCell>{item.manager}</TableCell>
-        </TableRow>
+       <TableCell>{item.employee_id}</TableCell>
+       <TableCell>{item.employee_name}</TableCell>
+       <TableCell>{item.department.dept_name}</TableCell>
+       <TableCell>{item.date_of_joining}</TableCell>
+       <TableCell>{item.appraisal_date}</TableCell>
+       <TableCell>{item.reporting_manager}</TableCell>
+     </TableRow>
+     
       ))}
-    </TableBody>
+    </TableBody>:null}
+ 
+    {selectedTab2==='tab2'?<TableBody>
+      {sortedwaitingData.map((item) => (
+        <TableRow key={item.employee_id} style={themestate ? { color: 'white' } : {}} className={themestate ? "hovereffect dark" : "hovereffect"} onClick={() => handleRowClick(item)}>
+        <TableSelectionCell
+          checked={!!selectedItems[item.employee_id]}
+          style={{ zIndex: 1000 }}
+          onChange={(event) => {
+            event.stopPropagation();
+            handleItemsChange(item.employee_id);
+            setOpen(false);
+          }}
+        />
+        <TableCell>{item.employee_id}</TableCell>
+        <TableCell>{item.employee_name}</TableCell>
+        <TableCell>{item.department.dept_name}</TableCell>
+        <TableCell>{item.date_of_joining}</TableCell>
+        <TableCell>{item.appraisal_date}</TableCell>
+        <TableCell>{item.reporting_manager}</TableCell>
+      </TableRow>
+     
+      ))}
+    </TableBody>:null}
   </Table>
 </div>
 

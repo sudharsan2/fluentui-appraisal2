@@ -57,7 +57,7 @@ const Login = () => {
       } else if (rolesString.includes("Manager")) {
         navigate("/mgappraisal");
       } else if (rolesString.includes("Reviewer")) {
-        navigate("/kanban-interviewer");
+        navigate("/rvreviewer");
       } else if (rolesString.includes("Manager") && rolesString.includes("Reviewer")) {
         
         

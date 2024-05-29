@@ -1,6 +1,9 @@
 import logo from './logo.svg';
 import './App.css';
 import CustomLayout from './components/layout';
+
+import FormPage from './pages/employeeformup';
+
 import NavDrawerDefault from './components/drawer';
 import MGNavDrawerDefault from './components/mgdrawer';
 import RVNavDrawerDefault from './components/rvdrawer';
@@ -35,7 +38,7 @@ function App() {
         <Route path='mgappraisal' element={<CustomLayout><MGNavDrawerDefault><MGAppraisal/></MGNavDrawerDefault></CustomLayout>}/>
         <Route path='mgreviewer' element={<CustomLayout><MGNavDrawerDefault><MGReviewer/></MGNavDrawerDefault></CustomLayout>}/>
         <Route path='rvreviewer' element={<CustomLayout><RVNavDrawerDefault><RVReviewer/></RVNavDrawerDefault></CustomLayout>}/>
-      
+
         <Route path='form/:token' element={<EmployeeForm/>}/>
         
         

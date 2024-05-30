@@ -597,7 +597,7 @@ const HREmployee = (props) => {
   }, [addedDetails]);
 
   const fetchEmployeeData = () => {
-    axios.get('http://127.0.0.1:8000/user/employee/list')
+    axios.get('http://172.235.21.99:5051/user/employee/list')
       .then(response => {
         setData(response.data);
         console.log({"data1": response.data})
@@ -609,7 +609,7 @@ const HREmployee = (props) => {
 
   const fetchEmployeeData1 = () => {
     setTimeout(() => {
-      axios.get('http://127.0.0.1:8000/user/employee/list')
+      axios.get('http://172.235.21.99:5051/user/employee/list')
         .then(response => {
           setData(response.data);
           console.log({"data1": response.data})
@@ -709,7 +709,7 @@ const HREmployee = (props) => {
  
   const handleRowClick = async (employee) => {
     try {
-      const response1 = await axios.get(`http://127.0.0.1:8000/user/team-member/remarks/${employee.employee_id}`);
+      const response1 = await axios.get(`http://172.235.21.99:5051/user/team-member/remarks/${employee.employee_id}`);
       setformdataemployee(response1.data);
       
       
@@ -1482,7 +1482,7 @@ return (
             <Field label="If you want to explore skill areas other than your present work, List the skill areas you want to explore.">
               <Textarea
                 style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
-                value="Your response text here..."
+                value={formdataemployee.exploreSkills}
                 readOnly={true}
               />
             </Field>

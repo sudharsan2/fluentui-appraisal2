@@ -422,7 +422,7 @@ const HRReviewer = () => {
     sortColumn: 'empid',
   });
   const [selectedNavKey, setSelectedNavKey] = useState('option1');
-  const [value, setValue] = useState(4);
+ 
  
 
   const fetchyetToBeFilledEmployeeData = () => {
@@ -466,6 +466,10 @@ const HRReviewer = () => {
     setSelectedTab(data.value);
     setSelectedItems({}); // Reset selection when tab changes
   };
+
+  const [value, setValue] = React.useState(4);
+
+  
  
   const handleSelectionChange = (id) => {
     setSelectedItems((prev) => ({
@@ -499,9 +503,7 @@ const HRReviewer = () => {
     setSelectedNavKey(item.key);
   };
 
-  const handleRatingChange = (event, newValue) => {
-    setValue(newValue);
-  };
+  
 
   const [selectedOptions, setSelectedOptions] = useState(Array(labels.length).fill(0));
 
@@ -861,7 +863,11 @@ const HRReviewer = () => {
           }}
           />
             <div style={{ marginTop: 'auto', padding: '1rem', borderTop: '1px solid #ccc' }}>
-          <Rating value={value} onChange={handleRatingChange} />
+              <div style={{display:"flex", justifyContent:"center", alignItems:"center"}}>
+            <Rating value={value} size="large" onChange={(_, data) => {console.log(data.value); }} />
+          {/* <Rating value={value} onChange={handleRatingChange} /> */}
+          <p style={{marginLeft:"2px"}}>{2*value}</p>
+          </div>
         </div>
           </div>
 
@@ -1035,7 +1041,12 @@ const HRReviewer = () => {
           }}
           />
             <div style={{ marginTop: 'auto', padding: '1rem', borderTop: '1px solid #ccc' }}>
-          <Rating value={value} onChange={handleRatingChange} />
+          {/* <Rating value={value} onChange={handleRatingChange} /> */}
+          <div style={{display:"flex", justifyContent:"center", alignItems:"center"}}>
+            <Rating value={formdatamanager.self_rating} size="large" onChange={(_, data) => {console.log(data.value); }} />
+          {/* <Rating value={value} onChange={handleRatingChange} /> */}
+          <p style={{marginLeft:"2px"}}>{2*formdatamanager.self_rating}</p>
+          </div>
         </div>
           </div>
 
@@ -1114,7 +1125,7 @@ const HRReviewer = () => {
         {selectedNavKey === 'option3' && (
           <div style={{ marginTop: '1rem' }}>
             <div style={{ marginTop: '1rem' }}>
-            <Field label="part 5 comments">
+            <Field label="part 4 comments">
               <Textarea
                 style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
                 value={formdatamanager.part4ManagerComments}
@@ -1128,7 +1139,7 @@ const HRReviewer = () => {
 {selectedNavKey === 'option4' && (
           <div style={{ marginTop: '1rem' }}>
             <div style={{ marginTop: '1rem' }}>
-            <Field label="part 4 comments">
+            <Field label="part 5 comments">
               <Textarea
                 style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
                 value={formdatamanager.part5ManagerComments}
@@ -1170,7 +1181,12 @@ const HRReviewer = () => {
           }}
           />
             <div style={{ marginTop: 'auto', padding: '1rem', borderTop: '1px solid #ccc' }}>
-          <Rating value={value} onChange={handleRatingChange} />
+          {/* <Rating value={value} onChange={handleRatingChange} /> */}
+          <div style={{display:"flex", justifyContent:"center", alignItems:"center"}}>
+            <Rating value={formdatareviewer.self_rating} size="large" onChange={(_, data) => {console.log(data.value); }} />
+          
+          <p style={{marginLeft:"2px"}}>{2*formdatareviewer.self_rating}</p>
+          </div>
         </div>
           </div>
           <div>

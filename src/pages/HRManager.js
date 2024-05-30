@@ -941,7 +941,11 @@ const HRManager = () => {
           }}
           />
             <div style={{ marginTop: 'auto', padding: '1rem', borderTop: '1px solid #ccc' }}>
-          <Rating value={value} onChange={handleRatingChange} />
+            <div style={{display:"flex", justifyContent:"center", alignItems:"center"}}>
+            <Rating value={formdataemployee.self_rating} size="large" onChange={(_, data) => {console.log(data.value); }} />
+          {/* <Rating value={value} onChange={handleRatingChange} /> */}
+          <p style={{marginLeft:"2px"}}>{2*formdataemployee.self_rating}</p>
+          </div>
         </div>
           </div>
 
@@ -1115,7 +1119,11 @@ const HRManager = () => {
           }}
           />
             <div style={{ marginTop: 'auto', padding: '1rem', borderTop: '1px solid #ccc' }}>
-          <Rating value={value} onChange={handleRatingChange} />
+            <div style={{display:"flex", justifyContent:"center", alignItems:"center"}}>
+            <Rating value={formdatamanager.self_rating} size="large" onChange={(_, data) => {console.log(data.value); }} />
+          {/* <Rating value={value} onChange={handleRatingChange} /> */}
+          <p style={{marginLeft:"2px"}}>{2*formdatamanager.self_rating}</p>
+          </div>
         </div>
           </div>
 

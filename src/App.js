@@ -21,6 +21,7 @@ import HRSummary from './pages/HRSummary';
 import MGAppraisal from './pages/MGAppraisal';
 import MGReviewer from './pages/MGReviewer';
 import RVReviewer from './pages/RVReviewer';
+// import FormPage from './pages/employeeformup';
 
 function App() {
   return (
@@ -39,7 +40,7 @@ function App() {
         <Route path='mgreviewer' element={<CustomLayout><MGNavDrawerDefault><MGReviewer/></MGNavDrawerDefault></CustomLayout>}/>
         <Route path='rvreviewer' element={<CustomLayout><RVNavDrawerDefault><RVReviewer/></RVNavDrawerDefault></CustomLayout>}/>
 
-        <Route path='form/:token' element={<EmployeeForm/>}/>
+        <Route path='form/:token' element={<FormPage/>}/>
         
         
 

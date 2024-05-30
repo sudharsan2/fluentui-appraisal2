@@ -95,7 +95,7 @@ const FormPage = () => {
         });
 
       const response = await axios.put(`http://172.235.21.99:5051/user/handlesubmitted/${response1.tokens}`, formData);
-      const response2 = await axios.post(`http://172.235.21.99:5051/user/team-member/remarks/${response1.tokens}`, filteredData);
+      const response2 = await axios.post(`http://172.235.21.99:5051/user/team-member/remarks/${response1.employee_id}`, filteredData);
       
       setChange(true)
     } catch (error) {
@@ -160,7 +160,7 @@ const FormPage = () => {
             <TextField
                 fullWidth
                 name="appraisalDueDate"
-                value={formData.appraisalDueDate}
+                value={response1.appraisalDueDate}
                 onChange={handleInputChange}
                 margin="normal"
                 variant="outlined"
@@ -171,10 +171,11 @@ const FormPage = () => {
             <TextField
                 fullWidth
                 name="department"
-                value={formData.department}
+                value={response1.department.dept_name}
                 onChange={handleInputChange}
                 margin="normal"
                 variant="outlined"
+                // defaultValue={response1.department.dept_name}
             />
             </div>
             <div>

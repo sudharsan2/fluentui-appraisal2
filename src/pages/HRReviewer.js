@@ -801,8 +801,8 @@ const HRReviewer = () => {
         {/* <div className={styles.gridrow} style={{ gridArea: 'nameAndId' }}> */}
           <div className={`${styles.section} ${styles.nameAndId}`}>
             <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Name and Emp ID :</div>
-            <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.name}</div>
-            <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.empid}</div>
+            <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.employee_name}</div>
+            <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.employee_id}</div>
           {/* </div> */}
         </div>
 
@@ -810,21 +810,21 @@ const HRReviewer = () => {
           <div className={`${styles.section} ${styles.managerInfo}`}>
             <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Manager Info:</div>
             <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.manager}</div>
-            <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.managerId}</div>
+            <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.managerempId}</div>
           </div>
         {/* </div> */}
 
         {/* <div className={styles.gridrow} style={{ gridArea: 'email' }}> */}
           <div className={`${styles.section} ${styles.email}`}>
             <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Email</div>
-            <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.email}</div>
+            <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.employee_mail}</div>
           </div>
         {/* </div> */}
 
       {/* <div className={styles.gridrow} style={{ gridArea: 'doj' }}> */}
       <div className={`${styles.section} ${styles.doj}`}>
           <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Date of Joining:</div>
-          <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.doj}</div>
+          <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.date_of_joining}</div>
           {/* <div style={{marginLeft:"10px",color:themestate?"white":""}}>{selectedEmployee.doj}</div> */}
       </div>
       {/* </div> */}
@@ -832,42 +832,42 @@ const HRReviewer = () => {
       {/* <div className={styles.gridrow} style={{ gridArea: 'status' }}> */}
       <div className={`${styles.section} ${styles.status}`}>
         <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Current Status:</div>
-        <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.status}</div>
+        <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.formStatus}</div>
       </div>
       {/* </div> */}
 
       {/* <div className={styles.gridrow} style={{ gridArea: 'dos' }}> */}
       <div className={`${styles.section} ${styles.dos}`}>
           <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Date of Starting:</div>
-          <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.dos}</div>
+          <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.date_of_reporting}</div>
       </div>
       {/* </div> */}
 
       {/* <div className={styles.gridrow} style={{ gridArea: 'role' }}> */}
       <div className={`${styles.section} ${styles.role}`}>
         <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Role:</div>
-        <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.role}</div>
+        <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.designation}</div>
       </div>
       {/* </div> */}
 
       {/* <div className={styles.gridrow} style={{ gridArea: 'appraisal' }}> */}
       <div className={`${styles.section} ${styles.appraisal}`}>
           <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Appraisal Date:</div>
-          <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.appraisal}</div>
+          <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.appraisal_date}</div>
       </div>
       {/* </div> */}
 
       <div className={styles.gridrow} style={{ gridArea: 'dept' }}>
       <div className={`${styles.section} ${styles.dept}`}>
         <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Department:</div>
-        <div className={styles.content}  style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.dept}</div>
+        <div className={styles.content}  style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.department.dept_name}</div>
       </div>
       </div>
 
       <div className={styles.gridrow} style={{ gridArea: 'totalExperience' }}>
       <div className={`${styles.section} ${styles.totalExperience}`}>
           <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Total Experience:</div>
-          <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.totalExperience}</div>
+          <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.experience_in_domain_before_focusr}</div>
       </div>
       </div>
 
@@ -883,7 +883,7 @@ const HRReviewer = () => {
       <div className={styles.gridrow} style={{ gridArea: 'focusRExperience' }}>
       <div className={`${styles.section} ${styles.focusRExperience}`}>
           <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Experience in FocusR:</div>
-          <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.focusRExperience}</div>
+          <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.experience_in_domain_before_focusr}</div>
       </div>
       </div>
     </div>
@@ -911,7 +911,7 @@ const HRReviewer = () => {
           />
             <div style={{ marginTop: 'auto', padding: '1rem', borderTop: '1px solid #ccc' }}>
               <div style={{display:"flex", justifyContent:"center", alignItems:"center"}}>
-            <Rating value={value} size="large" onChange={(_, data) => {console.log(data.value); }} />
+            <Rating value={formdataemployee.self_rating} size="large" onChange={(_, data) => {console.log(data.value); }} />
           {/* <Rating value={value} onChange={handleRatingChange} /> */}
           <p style={{marginLeft:"2px"}}>{2*value}</p>
           </div>
@@ -996,7 +996,7 @@ const HRReviewer = () => {
             <Field label="Top 3 likes in the organization">
               <Textarea
                 style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
-                value="Your response text here..."
+                value={formdataemployee.top3LikeOrganization}
                 readOnly={true}
               />
             </Field>
@@ -1005,7 +1005,7 @@ const HRReviewer = () => {
             <Field label="Top 3 dislikes in the organization">
               <Textarea
                 style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
-                value="Your response text here..."
+                value={formdataemployee.top3disLikeOrganization}
                 readOnly={true}
               />
             </Field>
@@ -1014,7 +1014,7 @@ const HRReviewer = () => {
             <Field label="Any Suggestion to Improve the organisation">
               <Textarea
                 style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
-                value="Your response text here..."
+                value={formdataemployee.suggestionToImprove}
                 readOnly={true}
               />
             </Field>
@@ -1028,7 +1028,7 @@ const HRReviewer = () => {
             <Field label="List the kind of work or job would you like to be doing in one/two/five years time">
               <Textarea
                 style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
-                value="Your response text here..."
+                value={formdataemployee.future5years}
                 readOnly={true}
               />
             </Field>
@@ -1037,7 +1037,7 @@ const HRReviewer = () => {
             <Field label="List the actions you have taken to make yourself indispensable">
               <Textarea
                 style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
-                value="Your response text here..."
+                value={formdataemployee.indispencible}
                 readOnly={true}
               />
             </Field>
@@ -1046,7 +1046,7 @@ const HRReviewer = () => {
             <Field label="Do you want to explore your skills areas other than your present work?">
               <Textarea
                 style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
-                value="Your response text here..."
+                value={formdataemployee.exploreSkills}
                 readOnly={true}
               />
             </Field>
@@ -1055,7 +1055,7 @@ const HRReviewer = () => {
             <Field label="If you want to explore skill areas other than your present work, List the skill areas you want to explore.">
               <Textarea
                 style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
-                value="Your response text here..."
+                value={formdataemployee.exploreSkills}
                 readOnly={true}
               />
             </Field>

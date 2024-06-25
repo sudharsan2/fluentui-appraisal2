@@ -1484,7 +1484,7 @@ return (
             <Field label="If you want to explore skill areas other than your present work, List the skill areas you want to explore.">
               <Textarea
                 style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px' }}
-                value="Your response text here..."
+                value={formdataemployee.exploreSkills}
                 readOnly={true}
               />
             </Field>

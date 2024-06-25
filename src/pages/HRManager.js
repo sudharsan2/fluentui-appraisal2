@@ -478,7 +478,7 @@ const HRManager = () => {
 
   
   const fetchyetToBeFilledEmployeeData = () => {
-    axios.get('http://172.235.21.99:5051/user/getEmployeeforHRManageryYet')
+    axios.get('http://127.0.0.1:9000/user/getEmployeeforHRManageryYet')
       .then(response => {
         setyetToBeFilledEmployees(response.data);
         console.log({"data1": response.data})
@@ -489,7 +489,7 @@ const HRManager = () => {
   };
  
   const fetchfilledEmployeeData = () => {
-    axios.get('http://172.235.21.99:5051/user/getEmployeeforHRManagerFilled')
+    axios.get('http://127.0.0.1:9000/user/getEmployeeforHRManagerFilled')
       .then(response => {
         setFilledEmployees(response.data);
         console.log({"data1": response.data})
@@ -508,7 +508,7 @@ const HRManager = () => {
 
   const handlesharetoManager = async (parameter) => {
     try {
-      const result = await axios.post(`http://172.235.21.99:5051/user/employee/changeFormStatus/${parameter}`, {
+      const result = await axios.post(`http://127.0.0.1:9000/user/employee/changeFormStatus/${parameter}`, {
         "status":"sharedtoreviewer"
       });
        // Extract and set the token from the response
@@ -519,7 +519,7 @@ const HRManager = () => {
 
   const handleShareLinkClick = async (parameter) => {
     try {
-      const result = await axios.post('http://172.235.21.99:5051/user/form-links', {
+      const result = await axios.post('http://127.0.0.1:9000/user/form-links', {
         "empId": parameter, // Include the parameter in the request data
       });
       const token = result.data.token; // Extract the token from the response
@@ -616,9 +616,9 @@ const HRManager = () => {
 
   const handleRowClick = async (employee) => {
     try {
-      const response1 = await axios.get(`http://127.0.0.1:8000/user/team-member/remarks/${employee.employee_id}`);
+      const response1 = await axios.get(`http://127.0.0.1:9000/user/team-member/remarks/${employee.employee_id}`);
       setformdataemployee(response1.data);
-      const response2 = await axios.get(`http://127.0.0.1:8000/user/appraiser/remarks/${employee.employee_id}`);
+      const response2 = await axios.get(`http://127.0.0.1:9000/user/appraiser/remarks/${employee.employee_id}`);
       setformdatamanager(response2.data);
       
     } catch (err) {
@@ -904,10 +904,10 @@ const HRManager = () => {
 
       <div className={styles.gridrow} style={{ gridArea: 'editDetails' }}>
       <div className={`${styles.section} ${styles.editDetails}`}>
-        <div className={styles.editDetails}>
+        {/* <div className={styles.editDetails}>
           <EditRegular className={styles.editIcon} />
           <span>Edit Details</span>
-        </div>
+        </div> */}
       </div>
       </div>
 
@@ -1280,8 +1280,8 @@ const HRManager = () => {
       <div className={styles.controls}>
       <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleAddEmployee}><ChartMultipleRegular className={styles.iconLarge}/>Statistics</Button>
          <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleDeleteEmployee}><PersonDeleteRegular className={styles.iconLarge}/>Delete Employee</Button>
-        <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleEditEmployee}><EditRegular className={styles.iconLarge}/>Edit Employee</Button>
-       
+        {/* <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleEditEmployee}><EditRegular className={styles.iconLarge}/>Edit Employee</Button> */}
+        <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleAddEmployee}><ArrowClockwiseRegular className={styles.iconLarge}/>Refresh</Button>
       {/* <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleAddEmployee}><ArrowClockwiseRegular className={styles.iconLarge}/>Refresh</Button>
         <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleDeleteEmployee}><ArrowDownRegular  className={styles.iconLarge}/>Export</Button> */}
          <SearchBox

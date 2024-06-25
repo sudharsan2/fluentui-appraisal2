@@ -500,7 +500,7 @@ const RVReviewer = () => {
   const fetchtodoEmployeeData = () => {
     const token2 = localStorage.getItem('accessToken');
     console.log(token2)
-    axios.get('http://127.0.0.1:8000/user/getEmployeeforrvreviewertodo',{
+    axios.get('http://127.0.0.1:9000/user/getEmployeeforrvreviewertodo',{
       headers: {
         Authorization: `Bearer ${token2}`
       }
@@ -516,7 +516,7 @@ const RVReviewer = () => {
  
   const fetchwaitingEmployeeData = () => {
     const token2 = localStorage.getItem('accessToken');
-    axios.get('http://127.0.0.1:8000/user/getEmployeeforrvreviewerFilled',{
+    axios.get('http://127.0.0.1:9000/user/getEmployeeforrvreviewerFilled',{
       headers: {
         Authorization: `Bearer ${token2}`
       }
@@ -538,7 +538,7 @@ const RVReviewer = () => {
 
   const handleSubmit = async () => {
     try {
-      const result = await axios.post(`http://127.0.0.1:8000/user/reviewer/remarks/${formdataemployee.employee_id}`,formdata
+      const result = await axios.post(`http://127.0.0.1:9000/user/reviewer/remarks/${formdataemployee.employee_id}`,formdata
         
       );
        // Extract and set the token from the response
@@ -735,19 +735,19 @@ const RVReviewer = () => {
  
   const handleRowClick = async (employee) => {
     try {
-      const response1 = await axios.get(`http://127.0.0.1:8000/user/team-member/remarks/${employee.employee_id}`);
+      const response1 = await axios.get(`http://127.0.0.1:9000/user/team-member/remarks/${employee.employee_id}`);
       setformdataemployee(response1.data);
-      const response2 = await axios.get(`http://127.0.0.1:8000/user/appraiser/remarks/${employee.employee_id}`);
+      const response2 = await axios.get(`http://127.0.0.1:9000/user/appraiser/remarks/${employee.employee_id}`);
       
       setformdatamanager(response2.data);
 
-      const response3 = await axios.get(`http://127.0.0.1:8000/user/reviewer/remarks/${employee.employee_id}`);
+      const response3 = await axios.get(`http://127.0.0.1:9000/user/reviewer/remarks/${employee.employee_id}`);
       
       setformdata(response3.data);
     } catch (err) {
-      const response1 = await axios.get(`http://127.0.0.1:8000/user/team-member/remarks/${employee.employee_id}`);
+      const response1 = await axios.get(`http://127.0.0.1:9000/user/team-member/remarks/${employee.employee_id}`);
       setformdataemployee(response1.data);
-      const response2 = await axios.get(`http://127.0.0.1:8000/user/appraiser/remarks/${employee.employee_id}`);
+      const response2 = await axios.get(`http://127.0.0.1:9000/user/appraiser/remarks/${employee.employee_id}`);
       
       setformdatamanager(response2.data);
       // console.log({ "question1": formdataemployee.question_1 });
@@ -762,7 +762,7 @@ const RVReviewer = () => {
 
   const handlesharetoHR = async (parameter) => {
     try {
-      const result = await axios.post(`http://172.235.21.99:5051/user/employee/changeFormStatus/${formdataemployee.id}`, {
+      const result = await axios.post(`http://127.0.0.1:9000/user/employee/changeFormStatus/${formdataemployee.id}`, {
         "empId":parameter,"status":"reviewerfilled", "canSeeReviewerComments":true
       });
        // Extract and set the token from the response

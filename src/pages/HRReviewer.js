@@ -7,7 +7,7 @@ import
 from
 'date-fns'
 ;
-// import { CopyToClipboard } from 'react-copy-to-clipboard';
+
 import axios from 'axios';
 import {
   makeStyles,
@@ -422,11 +422,15 @@ const HRReviewer = () => {
     sortColumn: 'empid',
   });
   const [selectedNavKey, setSelectedNavKey] = useState('option1');
+
+  const [itemSelected, setItemSelected] = useState([]);
+  const [initialValues, setInitialValues] = useState({});
+  const [formEdit] = Form.useForm();
  
  
 
   const fetchyetToBeFilledEmployeeData = () => {
-    axios.get('http://127.0.0.1:8000/user/getEmployeeforHRReviewerYet')
+    axios.get('http://127.0.0.1:9000/user/getEmployeeforHRReviewerYet')
       .then(response => {
         setyetToBeFilledEmployees(response.data);
         console.log({"data1": response.data})
@@ -437,7 +441,7 @@ const HRReviewer = () => {
   };
  
   const fetchfilledEmployeeData = () => {
-    axios.get('http://127.0.0.1:8000/user/getEmployeeforHRReviewerFilled')
+    axios.get('http://127.0.0.1:9000/user/getEmployeeforHRReviewerFilled')
       .then(response => {
         setFilledEmployees(response.data);
         console.log({"data1": response.data})
@@ -537,19 +541,19 @@ const HRReviewer = () => {
  
   const handleRowClick = async (employee) => {
     try {
-      const response1 = await axios.get(`http://127.0.0.1:8000/user/team-member/remarks/${employee.employee_id}`);
+      const response1 = await axios.get(`http://127.0.0.1:9000/user/team-member/remarks/${employee.employee_id}`);
       setformdataemployee(response1.data);
-      const response2 = await axios.get(`http://127.0.0.1:8000/user/appraiser/remarks/${employee.employee_id}`);
+      const response2 = await axios.get(`http://127.0.0.1:9000/user/appraiser/remarks/${employee.employee_id}`);
       
       setformdatamanager(response2.data);
 
-      const response3 = await axios.get(`http://127.0.0.1:8000/user/reviewer/remarks/${employee.employee_id}`);
+      const response3 = await axios.get(`http://127.0.0.1:9000/user/reviewer/remarks/${employee.employee_id}`);
       
       setformdatareviewer(response3.data);
     } catch (err) {
-      const response1 = await axios.get(`http://127.0.0.1:8000/user/team-member/remarks/${employee.employee_id}`);
+      const response1 = await axios.get(`http://127.0.0.1:9000/user/team-member/remarks/${employee.employee_id}`);
       setformdataemployee(response1.data);
-      const response2 = await axios.get(`http://127.0.0.1:8000/user/appraiser/remarks/${employee.employee_id}`);
+      const response2 = await axios.get(`http://127.0.0.1:9000/user/appraiser/remarks/${employee.employee_id}`);
       
       setformdatamanager(response2.data);
       // console.log({ "question1": formdataemployee.question_1 });
@@ -581,7 +585,50 @@ const HRReviewer = () => {
       [id]: !prev[id],
     }));
   };
+
+  // const handleItemsChange = (id) => {
+  //   setSelectedItems((prev) => {
+  //     const newSelectedItems = {
+  //       ...prev,
+  //       [id]: !prev[id],
+  //     };
  
+  //     // Update the array of true selected IDs based on the new selectedItems state
+  //     const newTrueSelectedIds = Object.keys(newSelectedItems).filter(
+  //       (key) => newSelectedItems[key] === true
+  //     );
+ 
+  //     // Update the itemSelected state with the new array of true selected IDs
+  //     setItemSelected(newTrueSelectedIds);
+
+  //     if (newTrueSelectedIds.length > 0) {
+  //       const selectedEmpId = newTrueSelectedIds[0];
+  //       const selectedEmployee = data.find(emp => emp.empId === selectedEmpId);
+  //       console.log("change", selectedEmployee)
+  //       if (selectedEmployee) {
+  //         const newInitialValues = {
+  //           empId: selectedEmployee.empId,
+  //           name: selectedEmployee.name,
+  //           email: selectedEmployee.email,
+  //           username: selectedEmployee.username,
+  //           // reviewer: selectedEmployee.roles,
+  //           password: selectedEmployee.password,
+  //         };
+
+  //         setoriginalempId(selectedEmployee.empId)
+  //         setInitialValues(newInitialValues);
+  //         formEdit.setFieldsValue(newInitialValues);
+  //         console.log("Selected Employee:", selectedEmployee); // Debugging step
+  //         console.log("Initial Values Set:", newInitialValues); // Debugging step
+  //       }
+  //     }
+
+  //     console.log({"selectedItems":newTrueSelectedIds})
+ 
+  //     return newSelectedItems;
+  //   });
+  // };
+
   const columns = [
     createTableColumn({
       columnId: 'empid',
@@ -826,10 +873,10 @@ const HRReviewer = () => {
 
       <div className={styles.gridrow} style={{ gridArea: 'editDetails' }}>
       <div className={`${styles.section} ${styles.editDetails}`}>
-        <div className={styles.editDetails}>
+        {/* <div className={styles.editDetails}>
           <EditRegular className={styles.editIcon} />
           <span>Edit Details</span>
-        </div>
+        </div> */}
       </div>
       </div>
 
@@ -1318,10 +1365,10 @@ const HRReviewer = () => {
     </BreadcrumbItem>
     <BreadcrumbDivider />
     <BreadcrumbItem>
-      <Link href="/hrreviewer" className="custom-link">Reviewer</Link>
+      <Link href="/hrsummary" className="custom-link">Reviewer</Link>
     </BreadcrumbItem>
     </Breadcrumb>
-        <h2 style={themestate?{color:'white'}:{}}>Review</h2>
+        <h2 style={themestate?{color:'white'}:{}}>Reviewer</h2>
       <TabList
         defaultSelectedValue="tab1"
         appearance="subtle"
@@ -1337,10 +1384,10 @@ const HRReviewer = () => {
       <div className={styles.controls}>
       <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleAddEmployee}><ChartMultipleRegular className={styles.iconLarge}/>Statistics</Button>
          <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleDeleteEmployee}><PersonDeleteRegular className={styles.iconLarge}/>Delete Employee</Button>
-        <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleEditEmployee}><EditRegular className={styles.iconLarge}/>Edit Employee</Button>
+        {/* <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleEditEmployee}><EditRegular className={styles.iconLarge}/>Edit Employee</Button> */}
        
-      {/* <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleAddEmployee}><ArrowClockwiseRegular className={styles.iconLarge}/>Refresh</Button>
-        <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleDeleteEmployee}><ArrowDownRegular  className={styles.iconLarge}/>Export</Button> */}
+       <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleAddEmployee}><ArrowClockwiseRegular className={styles.iconLarge}/>Refresh</Button>
+        {/*<Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleDeleteEmployee}><ArrowDownRegular  className={styles.iconLarge}/>Export</Button> */}
          <SearchBox
               placeholder="Search..."
             style={ {backgroundColor: themestate ? "rgb(41,41,41)" : ""}}
@@ -1375,34 +1422,9 @@ const HRReviewer = () => {
        <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleRemoveFilters}> Remove all</Button>
    </div>
         </div>
-//           <div className={styles.filterPanel} >
-//             <Checkbox label="Employee Fill" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
-//             <Checkbox label="Manager Fill" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
-//             <Checkbox label="Reviewer Fill" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
-//             <Checkbox label="Revised Fill" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
-//             <Checkbox label="Appraisal" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
-//             <Checkbox label="Choose Dept" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
-//             <Checkbox label="Choose Manager" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
-//             <Checkbox label="Choose Reviewer" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
-//             <Checkbox label="Date Cap" style={themestate?{color:'white', }:{}} onChange={()=>newSelectedFilters.push('Employee Fill')}/>
-            
-             
-//             <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}}onClick={handleApplyFilters}> Apply </Button>
-// <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleRemoveFilters}> Remove all</Button>
-//    </div>
-        // </Modal>
+
       )}
-      {/* {selectedFilters.length > 0 && (
-            <div>
-              <h3>Filters:</h3>
-              <ul>
-                {selectedFilters.map((filter, index) => (
-                  <li key={index}>{filter}</li>
-                ))}
-              </ul>
-            </div>
-          )} */}
-     {/* </div> */}
+      
      <div style={{ maxHeight: '72vh', overflowY: 'auto' }}>
   <Table>
     <TableHeader>

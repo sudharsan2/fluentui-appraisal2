@@ -435,7 +435,7 @@ const MGReviewer = () => {
  
  
   const fetchtodoEmployeeData = () => {
-    axios.get('http://172.235.21.99:5051/user/getEmployeeforMgappraisaltodo',{
+    axios.get('http://127.0.0.1:9000/user/getEmployeeforMgappraisaltodo',{
       headers: {
         Authorization: `Bearer ${'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE2OTYwMTcyLCJpYXQiOjE3MTY4NzM3NzIsImp0aSI6ImI2OTc0N2U4NjEzZTQwYTk4OTg5Y2IzMDVjMDhhNDE4IiwidXNlcl9pZCI6MSwidXNlcm5hbWUiOiJrYXV0aGFtIiwiZW1haWwiOiJrYXV0aGFtQGdtYWlsLmNvbSIsImVtcElkIjoiMDAxIiwicm9sZSI6WyJIUiJdfQ.EkkcWJhHZcNDau3FI_H5YebcDDfUUoKpuh3zyQM7qZo'}`
       }
@@ -450,7 +450,7 @@ const MGReviewer = () => {
   };
  
   const fetchwaitingEmployeeData = () => {
-    axios.get('http://172.235.21.99:5051/user/getEmployeeforMgappraisalWaiting',{
+    axios.get('http://127.0.0.1:9000/user/getEmployeeforMgappraisalWaiting',{
       headers: {
         Authorization: `Bearer ${'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE2OTYwMTcyLCJpYXQiOjE3MTY4NzM3NzIsImp0aSI6ImI2OTc0N2U4NjEzZTQwYTk4OTg5Y2IzMDVjMDhhNDE4IiwidXNlcl9pZCI6MSwidXNlcm5hbWUiOiJrYXV0aGFtIiwiZW1haWwiOiJrYXV0aGFtQGdtYWlsLmNvbSIsImVtcElkIjoiMDAxIiwicm9sZSI6WyJIUiJdfQ.EkkcWJhHZcNDau3FI_H5YebcDDfUUoKpuh3zyQM7qZo'}`
       }

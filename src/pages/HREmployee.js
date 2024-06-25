@@ -197,161 +197,6 @@ const useStyles = makeStyles({
   }
 });
 
-const data = {
-  tab1: [
-    {
-      empid: 1,
-      name: "John Doe",
-      dept: "Engineering",
-      doj: "2020-01-15",
-      appraisal: "Excellent",
-      manager: "Jane Doe",
-    },
-    {
-      empid: 2,
-      name: "Jane Smith",
-      dept: "Product",
-      doj: "2019-03-25",
-      appraisal: "Good",
-      manager: "John Doe",
-    },
-    {
-        empid: 11,
-        name: "John Doe",
-        dept: "Engineering",
-        doj: "2020-01-15",
-        appraisal: "Excellent",
-        manager: "Jane Doe",
-      },
-      {
-        empid: 12,
-        name: "Jane Smith",
-        dept: "Product",
-        doj: "2019-03-25",
-        appraisal: "Good",
-        manager: "John Doe",
-      },
-      {
-        empid: 21,
-        name: "John Doe",
-        dept: "Engineering",
-        doj: "2020-01-15",
-        appraisal: "Excellent",
-        manager: "Jane Doe",
-      },
-      {
-        empid: 22,
-        name: "Jane Smith",
-        dept: "Product",
-        doj: "2019-03-25",
-        appraisal: "Good",
-        manager: "John Doe",
-      },
-      {
-        empid: 31,
-        name: "John Doe",
-        dept: "Engineering",
-        doj: "2020-01-15",
-        appraisal: "Excellent",
-        manager: "Jane Doe",
-      },
-      {
-        empid: 32,
-        name: "Jane Smith",
-        dept: "Product",
-        doj: "2019-03-25",
-        appraisal: "Good",
-        manager: "John Doe",
-      },
-      {
-        empid: 41,
-        name: "John Doe",
-        dept: "Engineering",
-        doj: "2020-01-15",
-        appraisal: "Excellent",
-        manager: "Jane Doe",
-      },
-      {
-        empid: 42,
-        name: "Jane Smith",
-        dept: "Product",
-        doj: "2019-03-25",
-        appraisal: "Good",
-        manager: "John Doe",
-      },
-      {
-        empid: 51,
-        name: "John Doe",
-        dept: "Engineering",
-        doj: "2020-01-15",
-        appraisal: "Excellent",
-        manager: "Jane Doe",
-      },
-      {
-        empid: 52,
-        name: "Jane Smith",
-        dept: "Product",
-        doj: "2019-03-25",
-        appraisal: "Good",
-        manager: "John Doe",
-      },
-    
-  ],
-  tab2: [
-    {
-      empid: 3,
-      name: "Alice Johnson",
-      dept: "Design",
-      doj: "2021-07-19",
-      appraisal: "Excellent",
-      manager: "Emily Davis",
-    },
-    {
-      empid: 4,
-      name: "Bob Brown",
-      dept: "QA",
-      doj: "2018-11-05",
-      appraisal: "Satisfactory",
-      manager: "James White",
-    },
-  ],
-  tab3: [
-    {
-      empid: 5,
-      name: "Charlie Davis",
-      dept: "DevOps",
-      doj: "2022-02-20",
-      appraisal: "Excellent",
-      manager: "Michael Black",
-    },
-    {
-      empid: 6,
-      name: "Dana Wilson",
-      dept: "Data Science",
-      doj: "2017-05-12",
-      appraisal: "Good",
-      manager: "Sarah Green",
-    },
-  ],
-  tab4: [
-    {
-      empid: 7,
-      name: "Eve Martinez",
-      dept: "HR",
-      doj: "2016-09-28",
-      appraisal: "Good",
-      manager: "Laura Blue",
-    },
-    {
-      empid: 8,
-      name: "Franklin Lee",
-      dept: "Marketing",
-      doj: "2015-12-15",
-      appraisal: "Excellent",
-      manager: "David Yellow",
-    },
-  ],
-};
 
 const labels = {
   'Attendance & Punctuality':'attendance_and_punctuality',
@@ -385,6 +230,13 @@ const HREmployee = (props) => {
   const [open, setOpen] = React.useState(false);
   const [selectedTab1, setSelectedTab1] = React.useState('tab1');
   const [selectedTab2, setSelectedTab2] = React.useState('tab1');
+  const [DeleteUsers,SetDeleteUsers] = useState([]);
+  const [disableEdit, setDisableEdit] = useState(false);
+
+  const [dob, setDob] = useState('');
+  const [appraisalDate, setAppraisalDate] = useState('');
+  const [joiningDate, setJoiningDate] = useState('');
+  const [reportingDate, setReportingDate] = useState('');
 
   // const [value, setValue] = useState(4);
   
@@ -424,6 +276,7 @@ const HREmployee = (props) => {
   const [edit,setEdit] = useState(false);
  
   const [modalVisible, setModalVisible] = useState(false);
+  const [editModalVisible,setEditModalVisible] = useState(false);
   const [form] = Form.useForm();
   const [options, setOptions] = useState([]);
   const [options1, setOptions1] = useState([]);
@@ -438,6 +291,10 @@ const HREmployee = (props) => {
   const [value, setValue] = useState(4);
 
   const [formdataemployee,setformdataemployee] = useState({});
+
+
+  const [initialValues, setInitialValues] = useState({});
+  const [formEdit] = Form.useForm();
 
   // const navLinkGroups = [
   //   {
@@ -475,7 +332,7 @@ const HREmployee = (props) => {
   //   const currentMonth = currentDate.getMonth(); // 0-based index, January is 0
   //   const nextMonth = (currentMonth + 1) % 12;
  
-  //   axios.get('http://172.235.21.99:5051/user/employee/list')
+  //   axios.get('http://127.0.0.1:9000/user/employee/list')
   //     .then(response => {
   //       setData(response.data);
   //     })
@@ -538,7 +395,7 @@ const HREmployee = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://172.235.21.99:5051/user/managerlist");
+        const response = await axios.get("http://127.0.0.1:9000/user/managerlist");
         setOptions(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -559,7 +416,7 @@ const HREmployee = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://172.235.21.99:5051/user/reviewerlist");
+        const response = await axios.get("http://127.0.0.1:9000/user/reviewerlist");
         setOptions1(response.data);
         console.log({"response":response.data});
       } catch (error) {
@@ -573,7 +430,7 @@ const HREmployee = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://172.235.21.99:5051/user/departmentlist");
+        const response = await axios.get("http://127.0.0.1:9000/user/departmentlist");
         setOptions2(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -597,7 +454,7 @@ const HREmployee = (props) => {
   }, [addedDetails]);
 
   const fetchEmployeeData = () => {
-    axios.get('http://127.0.0.1:8000/user/employee/list')
+    axios.get('http://127.0.0.1:9000/user/employee/list')
       .then(response => {
         setData(response.data);
         console.log({"data1": response.data})
@@ -609,7 +466,7 @@ const HREmployee = (props) => {
 
   const fetchEmployeeData1 = () => {
     setTimeout(() => {
-      axios.get('http://127.0.0.1:8000/user/employee/list')
+      axios.get('http://127.0.0.1:9000/user/employee/list')
         .then(response => {
           setData(response.data);
           console.log({"data1": response.data})
@@ -643,7 +500,7 @@ const HREmployee = (props) => {
   }, [data]);
  
   // useEffect(() => {
-  //   axios.get('http://172.235.21.99:5051/user/employee/list')
+  //   axios.get('http://127.0.0.1:9000/user/employee/list')
   //     .then(response => {
   //       setData(response.data);
   //     })
@@ -664,6 +521,9 @@ const HREmployee = (props) => {
     setModalVisible(false);
   };
  
+  const handleEditModalClose = () => {
+    setEditModalVisible(false);
+  };
  
   const handleTabSelect2 = (event,data) => {
     console.log({"currentmonth":currentMonthEmployees})
@@ -682,14 +542,17 @@ const HREmployee = (props) => {
  
  
   const handleItemsChange = (id) => {
+    // event.stopPropagation();
+    let newSelectedItems;
+    let newTrueSelectedIds;
     setSelectedItems((prev) => {
-      const newSelectedItems = {
+     newSelectedItems = {
         ...prev,
         [id]: !prev[id],
       };
  
       // Update the array of true selected IDs based on the new selectedItems state
-      const newTrueSelectedIds = Object.keys(newSelectedItems).filter(
+      newTrueSelectedIds = Object.keys(newSelectedItems).filter(
         (key) => newSelectedItems[key] === true
       );
  
@@ -698,6 +561,114 @@ const HREmployee = (props) => {
  
       return newSelectedItems;
     });
+    if(newTrueSelectedIds.length > 1){
+      setDisableEdit(false)
+    }
+    else if(newTrueSelectedIds.length > 0 && newTrueSelectedIds.length < 1.1){
+      setDisableEdit(true)
+      const selectedEmpId = newTrueSelectedIds[0];
+      const selectedEmployee = data.find(emp => emp.employee_id === selectedEmpId);
+      console.log("change", selectedEmployee)
+      if (selectedEmployee) {
+        function toISODateString(dateString) {
+          const date = new Date(dateString);
+          date.setUTCHours(18, 30, 0, 0);
+          return date;
+        }
+        
+        setDob(selectedEmployee.dob)
+        setAppraisalDate(selectedEmployee.appraisal_date)
+        setJoiningDate(selectedEmployee.date_of_joining)
+        setReportingDate(selectedEmployee.date_of_reporting)
+        const newInitialValues = {
+          "employee_id": selectedEmployee.employee_id,
+          "employee_name": selectedEmployee.employee_name,
+          "employee_mail": selectedEmployee.employee_mail,
+          // "dob": toISODateString(selectedEmployee.dob),
+          // "appraisal_date": selectedEmployee.appraisal_date,
+          "designation": selectedEmployee.designation,
+          "dept_name": selectedEmployee.department.dept_name,
+          "reporting_manager": selectedEmployee.manager,
+          // "date_of_joining": selectedEmployee.date_of_joining,
+          // "date_of_reporting": selectedEmployee.date_of_reporting,
+          "experience_in_domain_before_focusr": selectedEmployee.experience_in_domain_before_focusr,
+          "reviewer_name": selectedEmployee.reviewer_name
+      }
+
+        // setoriginalempId(selectedEmployee.empId)
+        setInitialValues(newInitialValues);
+        formEdit.setFieldsValue(newInitialValues);
+        console.log("Selected Employee:", selectedEmployee); // Debugging step
+        console.log("Initial Values Set:", newInitialValues); // Debugging step
+      }
+    }
+    else{
+      setDisableEdit(false)
+    }
+    
+
+  };
+
+  // const handleItemsChange = (id) => {
+   
+  //   setSelectedItems((prev) => {
+  //     const newSelectedItems = {
+  //       ...prev,
+  //       [id]: !prev[id],
+  //     };
+ 
+  //     // Update the array of true selected IDs based on the new selectedItems state
+  //     const newTrueSelectedIds = Object.keys(newSelectedItems).filter(
+  //       (key) => newSelectedItems[key] === true
+  //     );
+ 
+  //     // Update the itemSelected state with the new array of true selected IDs
+  //     setItemSelected(newTrueSelectedIds);
+
+      // if (newTrueSelectedIds.length > 0) {
+      //   const selectedEmpId = newTrueSelectedIds[0];
+      //   const selectedEmployee = data.find(emp => emp.employee_id === selectedEmpId);
+      //   console.log("change", selectedEmployee)
+      //   if (selectedEmployee) {
+      //     const newInitialValues = {
+      //       "employee_id": selectedEmployee.employee_id,
+      //       "employee_name": selectedEmployee.employee_name,
+      //       "employee_mail": selectedEmployee.employee_mail,
+      //       "dob": selectedEmployee.dob,
+      //       "appraisal_date": selectedEmployee.appraisal_date,
+      //       "designation": selectedEmployee.designation,
+      //       "dept_name": "Department",
+      //       "reporting_manager": "selectedEmployee.manager",
+      //       "date_of_joining": selectedEmployee.date_of_joining,
+      //       "date_of_reporting": selectedEmployee.date_of_reporting,
+      //       "experience_in_domain_before_focusr": selectedEmployee.experience_in_domain_before_focusr,
+      //       "reviewer": "Reviewer"
+      //   }
+
+      //     // setoriginalempId(selectedEmployee.empId)
+      //     setInitialValues(newInitialValues);
+      //     formEdit.setFieldsValue(newInitialValues);
+      //     console.log("Selected Employee:", selectedEmployee); // Debugging step
+      //     console.log("Initial Values Set:", newInitialValues); // Debugging step
+      //   }
+      // }
+
+  //     console.log({"selectedItems":newTrueSelectedIds})
+ 
+  //     return newSelectedItems;
+  //   });
+  // };
+
+  const handleCheckboxChange = (event, empId) => {
+    event.stopPropagation();
+    handleItemsChange(empId);
+    SetDeleteUsers(prevDeleteUsers => [...prevDeleteUsers, empId]); 
+    // if (counter ===0){
+    //     setoriginalempId(empId)
+    // };
+    console.log("clicked")
+    setOpen(false);
+    
   };
  
  
@@ -709,12 +680,12 @@ const HREmployee = (props) => {
  
   const handleRowClick = async (employee) => {
     try {
-      const response1 = await axios.get(`http://127.0.0.1:8000/user/team-member/remarks/${employee.employee_id}`);
+      const response1 = await axios.get(`http://127.0.0.1:9000/user/team-member/remarks/${employee.employee_id}`);
       setformdataemployee(response1.data);
       
       
     } catch (err) {
-      setformdataemployee({ "question_1": "blahhhhh" });
+      setformdataemployee({  });
 
       
 
@@ -753,6 +724,7 @@ const HREmployee = (props) => {
       setActiveOptionId(data?.nextOption?.value); 
       // Assuming optionValue is the id
       console.log({"active":data?.nextOption?.value})
+      formEdit.setFieldsValue({reporting_manager:data?.nextOption?.text})
     },
     [setActiveOptionId]
   );
@@ -762,6 +734,7 @@ const HREmployee = (props) => {
       setActiveOptionId1(data?.nextOption?.value); 
       // Assuming optionValue is the id
       console.log({"active":data?.nextOption?.value})
+      formEdit.setFieldsValue({reviewer_name:data?.nextOption?.text})
     },
     [setActiveOptionId1]
   );
@@ -770,37 +743,23 @@ const HREmployee = (props) => {
     (_, data) => {
       setActiveOptionId2(data?.nextOption?.value); 
       // Assuming optionValue is the id
+      formEdit.setFieldsValue({dept_name:data?.nextOption?.text})
       console.log({"active":data?.nextOption?.value})
     },
     [setActiveOptionId2]
   );
 
-  // const onActiveOptionChange3 = React.useCallback(
-  //   (_, data) => {
-  //     setActiveOptionId3(data?.nextOption?.value); 
-  //     // Assuming optionValue is the id
-  //     console.log({"active":data?.nextOption?.value})
-  //     try {
-  //       const result = await axios.post(`http://172.235.21.99:5051/user/employee/changeFormStatus/${parameter}`, {
-  //         "status":"sharedtomanager"
-  //       });
-  //        // Extract and set the token from the response
-  //     } catch (error) {
-  //       console.error('Error sending data to the API', error);
-  //     }
-  //   },
-  //   [setActiveOptionId1]
-  // );
+  
   
   const onActiveOptionChange3 = React.useCallback(
     async (_, data) => {
       const optionValue = data?.nextOption?.value;
-      setActiveOptionId3(optionValue); // Assuming optionValue is the id
+      setActiveOptionId3(optionValue); 
       console.log({ "active": optionValue });
   
       try {
-        const result = await axios.post(`http://172.235.21.99:5051/user/employee/changeFormStatus/${optionValue}`, {
-          "empId" : formdataemployee.employee_id,
+        const result = await axios.post(`http://127.0.0.1:9000/user/employee/addReviewer/${optionValue}`, {
+          "empId" : selectedEmployee.employee_id,
           "status": "sharedtomanager"
         });
         // Handle result if needed
@@ -815,7 +774,7 @@ const HREmployee = (props) => {
 
   const handlesharetoManager = async (parameter) => {
     try {
-      const result = await axios.post(`http://172.235.21.99:5051/user/employee/changeFormStatus/${parameter}`, {
+      const result = await axios.post(`http://127.0.0.1:9000/user/employee/changeFormStatus/${parameter}`, {
         "status":"sharedtomanager"
       });
        // Extract and set the token from the response
@@ -826,7 +785,7 @@ const HREmployee = (props) => {
 
   const handleShareLinkClick = async (parameter) => {
     try {
-      const result = await axios.post('http://172.235.21.99:5051/user/form-links', {
+      const result = await axios.post('http://127.0.0.1:9000/user/form-links', {
         "empId": parameter, // Include the parameter in the request data
       });
       const token = result.data.token; // Extract the token from the response
@@ -900,7 +859,7 @@ const HREmployee = (props) => {
   const handleDeleteEmployee = async () => {
     console.log(JSON.stringify({ ids: itemSelected }));
     try {
-      const response = await fetch('http://172.235.21.99:5051/user/employee/multi-delete/', {
+      const response = await fetch('http://127.0.0.1:9000/user/employee/multi-delete/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -927,7 +886,7 @@ const HREmployee = (props) => {
   const handleEditEmployee1 = async () => {
     console.log(JSON.stringify({ ids: itemSelected }));
     try {
-      const response = await fetch(`http://172.235.21.99:5051/user/employee/${itemSelected}`, {
+      const response = await fetch(`http://127.0.0.1:9000/user/employee/${itemSelected}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -958,6 +917,49 @@ const HREmployee = (props) => {
   
     // Helper function to extract the date part from an ISO string
     const getDateOnly = (isoString) => {
+      console.log({"dateandtime":isoString})
+      if (typeof isoString === 'string') {
+        return isoString.split('T')[0];
+      } else if (isoString instanceof Date) {
+        return isoString.toISOString().split('T')[0];
+      }
+      console.log(isoString)
+      return isoString; // Return as is if it's neither a string nor a Date
+    };
+  
+    // Update the date fields with the date-only part
+    values.appraisal_date = getDateOnly(values.appraisal_date);
+    values.date_of_joining = getDateOnly(values.date_of_joining);
+    values.date_of_reporting = getDateOnly(values.date_of_reporting);
+    values.dob = getDateOnly(values.dob);
+
+    const empdetails = {...values,"manager":activeOptionId, "reviewer":activeOptionId1,"department":activeOptionId2}
+    setaddedDetails(empdetails)
+    try {
+      const response = await axios.post('http://127.0.0.1:9000/user/employee/list', empdetails, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      if (response.status === 200 || response.status === 201) {
+        message.success('Employee added successfully');
+        setModalVisible(false); // Close modal after submission
+        form.resetFields(); // Reset form fields
+      } else {
+        message.error('Failed to add employee');
+      }
+    } catch (error) {
+      console.error('Error adding employee:', error);
+      message.error('An error occurred');
+    }
+  };
+
+  const handleEditEmployee = async (values) => {
+    console.log('Form values:', values);
+  
+    // Helper function to extract the date part from an ISO string
+    const getDateOnly = (isoString) => {
       if (typeof isoString === 'string') {
         return isoString.split('T')[0];
       } else if (isoString instanceof Date) {
@@ -976,21 +978,21 @@ const HREmployee = (props) => {
     const empdetails = {...values,"reviewer":activeOptionId, "manager":activeOptionId1,"department":activeOptionId2}
     setaddedDetails(empdetails)
     try {
-      const response = await axios.post('http://172.235.21.99:5051/user/employee/list', empdetails, {
+      const response = await axios.put(`http://127.0.0.1:9000/user/employee/${itemSelected[0]}`, empdetails, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
   
       if (response.status === 200 || response.status === 201) {
-        message.success('Employee added successfully');
-        setModalVisible(false); // Close modal after submission
-        form.resetFields(); // Reset form fields
+        message.success('Employee edited successfully');
+        setModalVisible(false); 
+        form.resetFields(); 
       } else {
-        message.error('Failed to add employee');
+        message.error('Failed to edited employee');
       }
     } catch (error) {
-      console.error('Error adding employee:', error);
+      console.error('Error Editing employee:', error);
       message.error('An error occurred');
     }
   };
@@ -1170,7 +1172,7 @@ return (
             </div>
             </div>
             <TabList
-                defaultSelectedValue='tab1'
+                defaultSelectedValue={selectedTab1}
                 appearance="subtle"
                 onTabSelect={handleTabSelect}
                 style={{marginLeft:"3vw", marginTop:"3vh"}}
@@ -1529,10 +1531,11 @@ return (
       <div className={styles.controls}>
       <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={() => setModalVisible(true)}><AddRegular className={styles.iconLarge}/>Add Employee</Button>
          <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleDeleteEmployee}><PersonDeleteRegular className={styles.iconLarge}/>Delete Employee</Button>
-       <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={() => setModalVisible(true)}><EditRegular className={styles.iconLarge}/>Edit Employee</Button>
+       {disableEdit&&<Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={() => setEditModalVisible(true)}><EditRegular className={styles.iconLarge}/>Edit Employee</Button>
+        }
       <div>
       <Modal
-        visible={modalVisible}
+        open={modalVisible}
         className="modalcon"
         onCancel={handleModalClose}
         footer={null}
@@ -1580,6 +1583,7 @@ return (
     <Col span={12}>
       <Form.Item label="Date of Birth" name="dob">
         <DatePicker
+          placeholder='hello'
           style={{
             borderRadius: 0,
             border: 0,
@@ -1614,7 +1618,7 @@ return (
       </Form.Item>
     </Col>
     <Col span={12}>
-      <Form.Item label="department" name="dept_name">
+      <Form.Item label="Department" name="dept_name">
       <Dropdown
           aria-labelledby={`${dropdownId}-underline`}
           placeholder="Select dep"
@@ -1723,6 +1727,204 @@ return (
 
       </Modal>
     </div>
+    <div>
+      <Modal
+        open={editModalVisible}
+        className="modalcon"
+        onCancel={handleEditModalClose}
+        footer={null}
+        style={{ borderRadius: '0px', paddingTop:20,  }}
+        bodyStyle={{ borderRadius: 0 }}
+      >
+        <Form form={formEdit} onFinish={handleEditEmployee} style={{ borderRadius: 0, paddingTop: 20 }}>
+  <Row gutter={16}>
+    <Col span={12}>
+      <Form.Item label="Employee ID" name="employee_id">
+        <Input
+          style={{
+            fontWeight: 'bold',
+            borderRadius: 0,
+            border: 0,
+            borderBottom: '1px solid rgb(180,180,180)',
+          }}
+        />
+      </Form.Item>
+    </Col>
+    <Col span={12}>
+      <Form.Item label="Employee Name" name="employee_name">
+        <Input
+          style={{
+            borderRadius: 0,
+            border: 0,
+            borderBottom: '1px solid rgb(180,180,180)',
+          }}
+        />
+      </Form.Item>
+    </Col>
+  </Row>
+  <Row gutter={16}>
+    <Col span={12}>
+      <Form.Item label="Employee Mail" name="employee_mail">
+        <Input
+          style={{
+            borderRadius: 0,
+            border: 0,
+            borderBottom: '1px solid rgb(180,180,180)',
+          }}
+        />
+      </Form.Item>
+    </Col>
+    <Col span={12}>
+      <Form.Item label="Date of Birth" name="dob">
+        <DatePicker
+        className='datepickersudharsan'
+        placeholder={dob}
+          style={{
+            borderRadius: 0,
+            border: 0,
+            borderBottom: '1px solid rgb(180,180,180)',
+          }}
+        />
+      </Form.Item>
+    </Col>
+    <Col span={12}>
+      <Form.Item label="Appraisal date" name="appraisal_date">
+        <DatePicker
+        placeholder={appraisalDate}
+          style={{
+            borderRadius: 0,
+            border: 0,
+            borderBottom: '1px solid rgb(180,180,180)',
+          }}
+        />
+      </Form.Item>
+    </Col>
+  </Row>
+  <Row gutter={16}>
+    <Col span={12}>
+      <Form.Item label="Designation" name="designation">
+        <Input
+          style={{
+            borderRadius: 0,
+            border: 0,
+            borderBottom: '1px solid rgb(180,180,180)',
+          }}
+          
+        />
+      </Form.Item>
+    </Col>
+    <Col span={12}>
+      <Form.Item label="Department" name="dept_name">
+      <Dropdown
+          aria-labelledby={`${dropdownId}-underline`}
+          placeholder="Select dep"
+          appearance="underline"
+          style={{minWidth:"10px"}}
+          onActiveOptionChange={onActiveOptionChange2}
+          {...props}
+        >
+          {options2.map((option) => (
+            <Option key={option.id} text={option.dept_name} value={option.id}>
+              {option.dept_name}
+            </Option>
+          ))}
+        </Dropdown>
+      </Form.Item>
+    </Col>
+    <Col span={12}>
+      <Form.Item name="reporting_manager" label="Manager">
+        <Dropdown
+          aria-labelledby={`${dropdownId}-underline`}
+          placeholder="Select a manager"
+          appearance="underline"
+          style={{minWidth:"10px"}}
+          onActiveOptionChange={onActiveOptionChange}
+          {...props}
+        >
+          {options.map((option) => (
+            <Option key={option.id} text={option.username} value={option.id}>
+              {option.username}
+            </Option>
+          ))}
+        </Dropdown>
+      </Form.Item>
+    </Col>
+  </Row>
+  <Row gutter={16}>
+    <Col span={12}>
+      <Form.Item label="Date of Joining" name="date_of_joining">
+        <DatePicker
+        placeholder={joiningDate}
+          style={{
+            borderRadius: 0,
+            border: 0,
+            borderBottom: '1px solid rgb(180,180,180)',
+          }}
+        />
+      </Form.Item>
+    </Col>
+    <Col span={12}>
+      <Form.Item label="Date of Reporting" name="date_of_reporting">
+        <DatePicker
+        placeholder={reportingDate}
+          style={{
+            borderRadius: 0,
+            border: 0,
+            borderBottom: '1px solid rgb(180,180,180)',
+          }}
+        />
+      </Form.Item>
+    </Col>
+  </Row>
+  <Row gutter={16}>
+    <Col span={12}>
+      <Form.Item label="Experience Before Focusr" name="experience_in_domain_before_focusr">
+        <Input
+          type="number"
+          style={{
+            borderRadius: 0,
+            border: 0,
+            borderBottom: '1px solid rgb(180,180,180)',
+          }}
+        />
+      </Form.Item>
+    </Col>
+    
+  </Row>
+  <Row gutter={16}>
+    <Col span={12}>
+      <Form.Item label="Reviewer" name="reviewer_name">
+        {/* <label id={`${dropdownId}-underline`}>Reviewer</label> */}
+        <Dropdown
+          aria-labelledby={`${dropdownId}-underline`}
+          placeholder="Select a reviewer"
+          appearance="underline"
+          style={{minWidth:"10px"}}
+          onActiveOptionChange={onActiveOptionChange1}
+          {...props}
+        >
+          {options1.map((option) => (
+            <Option key={option.id} text={option.username} value={option.id}>
+              {option.username}
+            </Option>
+          ))}
+        </Dropdown>
+      </Form.Item>
+    </Col>
+  </Row>
+  <Row>
+    <Col span={24}>
+      <Form.Item>
+        <Button type="primary" htmlType="submit">
+          Submit
+        </Button>
+      </Form.Item>
+    </Col>
+  </Row>
+</Form>
+
+      </Modal>
+    </div>
  
  
  
@@ -1783,18 +1985,15 @@ return (
             <TableSelectionCell
               checked={!!selectedItems[item.employee_id]}
               style={{ zIndex: 1000 }}
-              onChange={(event) => {
-                event.stopPropagation();
-                handleItemsChange(item.employee_id);
-                setOpen(false);
-              }}
+              onClick={(event) => event.stopPropagation()}
+              onChange={(event) => handleCheckboxChange(event, item.employee_id)}
             />
             <TableCell>{item.employee_id}</TableCell>
             <TableCell>{item.employee_name}</TableCell>
             <TableCell>{item.department.dept_name}</TableCell>
             <TableCell>{item.date_of_joining}</TableCell>
-            <TableCell>{}</TableCell>
-            <TableCell>{item.reporting_manager}</TableCell>
+            <TableCell>{item.appraisal_date}</TableCell>
+            <TableCell>{item.manager}</TableCell>
           </TableRow>
         )))}
      
@@ -1803,18 +2002,15 @@ return (
             <TableSelectionCell
               checked={!!selectedItems[item.employee_id]}
               style={{ zIndex: 1000 }}
-              onChange={(event) => {
-                event.stopPropagation();
-                handleItemsChange(item.employee_id);
-                setOpen(false);
-              }}
+              onClick={(event) => event.stopPropagation()}
+              onChange={(event) => handleCheckboxChange(event, item.employee_id)}
             />
             <TableCell>{item.employee_id}</TableCell>
             <TableCell>{item.employee_name}</TableCell>
             <TableCell>{item.department.dept_name}</TableCell>
             <TableCell>{item.date_of_joining}</TableCell>
-            <TableCell>{}</TableCell>
-            <TableCell>{item.reporting_manager}</TableCell>
+            <TableCell>{item.appraisal_date}</TableCell>
+            <TableCell>{item.manager}</TableCell>
           </TableRow>
         )))}
  
@@ -1823,18 +2019,15 @@ return (
             <TableSelectionCell
               checked={!!selectedItems[item.employee_id]}
               style={{ zIndex: 1000 }}
-              onChange={(event) => {
-                event.stopPropagation();
-                handleItemsChange(item.employee_id);
-                setOpen(false);
-              }}
+              onClick={(event) => event.stopPropagation()}
+              onChange={(event) => handleCheckboxChange(event, item.employee_id)}
             />
             <TableCell>{item.employee_id}</TableCell>
             <TableCell>{item.employee_name}</TableCell>
             <TableCell>{item.department.dept_name}</TableCell>
             <TableCell>{item.date_of_joining}</TableCell>
             <TableCell>{item.appraisal_date}</TableCell>
-            <TableCell>{item.reporting_manager}</TableCell>
+            <TableCell>{item.manager}</TableCell>
           </TableRow>
         )))}
       </TableBody>
@@ -1850,7 +2043,3 @@ export default HREmployee;
  
  
  
-//  <div style={{display:"flex"}}>
-//                     <Add24Filled style={{color:'rgb(1,105,185)'}}/>
-//                     <Link style={{marginLeft:"10px"}}>Add Reviewer</Link>
-//                     </div>

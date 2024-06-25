@@ -92,227 +92,230 @@
   .modalcon{
     border-radius: 0px;
   }
+
+  .ant-picker-input>input::placeholder {
+    color: red;
+ }
   
-  /*           <OverlayDrawer
-        size="large"
-        position="end"
-        open={open}
-        onOpenChange={(_, state) => {
-          setOpen(state.open);
-          handleTabSelect1('tab1');
-        }}
-        style={{height:'calc(100vh - 48px)',marginTop:"48px", backgroundColor:themestate?"rgb(51, 51, 51)":""}}
-      >
-        <DrawerHeader
-        >
-          <DrawerHeaderTitle
-            action={
-              <Button
-                appearance="subtle"
-                aria-label="Close"
-                icon={<Dismiss24Regular style={{color: themestate?"white":""}}/>}
-                onClick={() => setOpen(false)}
-              />
-            }
-          >
-             
-          </DrawerHeaderTitle>
-        </DrawerHeader>
-        {open && selectedEmployee && (
-        <DrawerBody>
-        <div>
-          <div style={{marginLeft:"3vw", marginTop:"2vh",display:"flex",width:"100%"}}>
-            <Avatar color="brand" initials="BR" name="brand color avatar" size={96}/>
-            <div style={{display:"flex",marginLeft:"2vw", flexDirection:"column",justifyContent:"center",width:"60%"}}>
-            <Text  size={700} style={{marginBottom:"2vh", fontWeight:"bold",color:themestate?"white":""}}> {selectedEmployee.name}</Text>
-            <div style={{display:"flex" ,width:"100%",justifyContent: "space-between"}}>
-            <Text  size={250} style={{fontWeight:"bold",color:themestate?"white":""}}> {selectedEmployee.empid} </Text>
-            <div style={{display:"flex"}}>
-            <Timer20Regular style={{color:'rgb(1,105,185)'}}/>
-            <Text  size={250} style={{marginLeft:"3px",fontWeight:"bold",color:themestate?"white":""}}> Yet to fill the employee form</Text>
-            </div>
-            <div style={{display:"flex"}}>
-            <Calendar20Regular style={{color:'rgb(1,105,185)'}}/>
-            <Text  size={250} style={{marginLeft:"3px", fontWeight:"bold",color:themestate?"white":""}}> 1 May 2024</Text>
-            </div>
-            </div>
-            </div>
-            </div>
-            <TabList
-                defaultSelectedValue='tab1'
-                appearance="subtle"
-                onTabSelect={handleTabSelect}
-                style={{marginLeft:"3vw", marginTop:"3vh"}}
-            >
-                <Tab value="tab1" className={themestate ? "tab dark drawer" : "tab"} style= {{border:'1px solid transparent'}}>Employee Info</Tab>
-                <Tab value="tab2" className={themestate ? "tab dark drawer" : "tab"} style= {{border:'1px solid transparent'}}>Employee Form</Tab>
-                
-                
-            </TabList>
-        {selectedTab1 === 'tab1' && (
-        <div className={styles.container}>
-        
-              
-                <div className={styles.section}>
-                  <div className={styles.heading} style={{color:themestate?"white":""}}>Name and Emp ID :</div>
-                  <div style={{color:themestate?"white":""}}>{selectedEmployee.name}</div>
-                  <div style={{color:themestate?"white":""}}>{selectedEmployee.empid}</div>
+  .datepickersudharsan div input:-ms-input-placeholder {
+    color: red; /* For Internet Explorer 10-11 */
+  }
+  
+  .datepickersudharsan div input::-ms-input-placeholder {
+    color: red; /* For Microsoft Edge */
+  }
+  
+  /* .formpage {
+    background-image: url('../media/bg_3.png');
+    background-size: cover;
+    background-attachment: fixed;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1000000;
+} */
 
-                  <div className={styles.gridrow}>
-                    <div className={styles.heading} style={{color:themestate?"white":""}}>Email</div>
-                    <div style={{color:themestate?"white":""}}>{selectedEmployee.email}</div>
-                  </div>
-                  <div className={styles.gridrow}>
-                    <div className={styles.heading} style={{color:themestate?"white":""}}>Current Status</div>
-                    <div style={{color:themestate?"white":""}}>{selectedEmployee.status}</div>
-                  </div>
-                  <div className={styles.gridrow}>
-                    <div className={styles.heading} style={{color:themestate?"white":""}}>Role</div>
-                    <div style={{color:themestate?"white":""}}>{selectedEmployee.role}</div>
-                  </div>
-                  <div className={styles.gridrow}>
-                    <div className={styles.heading} style={{color:themestate?"white":""}}>Department</div>
-                    <div style={{color:themestate?"white":""}}>{selectedEmployee.dept}</div>
-                  </div>
-                  <div className={styles.gridrow}>
-                    <div className={styles.editDetails}>
-                      <EditRegular className={styles.editIcon} />
-                      <span >Edit Details</span>
-                    </div>
-                  </div>
-                </div>
-                <div className={styles.section}>
-                  <div className={styles.heading} style={{color:themestate?"white":""}}>Manager Info</div>
-                  <div style={{color:themestate?"white":""}}>{selectedEmployee.manager}</div>
-                  <div style={{color:themestate?"white":""}}>{selectedEmployee.managerId}</div>
-                  <div className={styles.gridrow}>
-                    <div className={styles.row}>
-                      <div className={styles.heading} style={{color:themestate?"white":""}}>Date of Joining</div>
-                      <div style={{marginLeft:"10px",color:themestate?"white":""}} >{selectedEmployee.doj}</div>
-                    </div>
-                  </div>
-                  <div className={styles.gridrow}>
-                    <div className={styles.row}>
-                      <div className={styles.heading} style={{color:themestate?"white":""}}>Date of Starting</div>
-                      <div style={{marginLeft:"10px"}}>{selectedEmployee.dos}</div>
-                    </div>
-                  </div>
-                  <div className={styles.gridrow}>
-                    <div className={styles.row}>
-                      <div className={styles.heading} style={{color:themestate?"white":""}}>Appraisal Date</div>
-                      <div style={{marginLeft:"10px",color:themestate?"white":""}}>{selectedEmployee.appraisal}</div>
-                    </div>
-                  </div>
-                  <div className={styles.gridrow}>
-                    <div className={styles.row}>
-                      <div className={styles.heading} style={{color:themestate?"white":""}}>Total Experience</div>
-                      <div style={{marginLeft:"10px",color:themestate?"white":""}}>{selectedEmployee.totalExperience}</div>
-                    </div>
-                  </div>
-                  <div className={styles.gridrow}>
-                    <div className={styles.row}>
-                      <div className={styles.heading} style={{color:themestate?"white":""}}>Experience in FocusR</div>
-                      <div style={{marginLeft:"10px",color:themestate?"white":""}}>{selectedEmployee.focusRExperience}</div>
-                    </div>
-                  </div>
-                </div>
-              
-            
-          
-        </div>
-        )}
+.inner-div {
+    position: relative;
+    overflow-y: scroll; /* Enable scrolling */
+    
+}
 
-        {selectedTab1 === 'tab2' && (
-                <div className={styles.container}>
-        
-              
-                <div className={styles.section}>
-                  <div className={styles.heading} style={{color:themestate?"white":""}}>Name and Emp ID :</div>
-                  <div style={{color:themestate?"white":""}}>{selectedEmployee.name}</div>
-                  <div style={{color:themestate?"white":""}}>{selectedEmployee.empid}</div>
+/* Hide scrollbar for WebKit-based browsers (Chrome, Safari) */
+.inner-div::-webkit-scrollbar {
+    display: none;
+}
 
-                  <div className={styles.gridrow}>
-                    <div className={styles.heading} style={{color:themestate?"white":""}}>Email</div>
-                    <div style={{color:themestate?"white":""}}>{selectedEmployee.email}</div>
-                  </div>
-                  <div className={styles.gridrow}>
-                    <div className={styles.heading} style={{color:themestate?"white":""}}>Current Status</div>
-                    <div style={{color:themestate?"white":""}}>{selectedEmployee.status}</div>
-                  </div>
-                  <div className={styles.gridrow}>
-                    <div className={styles.heading} style={{color:themestate?"white":""}}>Role</div>
-                    <div style={{color:themestate?"white":""}}>{selectedEmployee.role}</div>
-                  </div>
-                  <div className={styles.gridrow}>
-                    <div className={styles.heading} style={{color:themestate?"white":""}}>Department</div>
-                    <div style={{color:themestate?"white":""}}>{selectedEmployee.dept}</div>
-                  </div>
-                  <div className={styles.gridrow}>
-                    <div className={styles.editDetails}>
-                      <EditRegular className={styles.editIcon} />
-                      <span>Edit Details</span>
-                    </div>
-                  </div>
-                </div>
-                <div className={styles.section}>
-                  <div className={styles.heading}>
-                  <div style={{display:"flex"}}>
-                    <ShareMultiple24Filled style={{color:'rgb(1,105,185)'}}/>
-                    <Link style={{marginLeft:"10px"}}>Share Form Link</Link>
-                    </div> 
-                  
-                  </div>
-                  
-                  <div className={styles.gridrow}>
-                    <div className={styles.row}>
-                      <div className={styles.heading} style={{color:themestate?"white":""}}>Date of Joining</div>
-                      <div style={{marginLeft:"10px",color:themestate?"white":""}}>{selectedEmployee.doj}</div>
-                    </div>
-                  </div>
-                  <div className={styles.gridrow}>
-                    <div className={styles.row}>
-                      <div className={styles.heading} style={{color:themestate?"white":""}}>Date of Starting</div>
-                      <div style={{marginLeft:"10px",color:themestate?"white":""}}>{selectedEmployee.dos}</div>
-                    </div>
-                  </div>
-                  <div className={styles.gridrow}>
-                    <div className={styles.row}>
-                      <div className={styles.heading} style={{color:themestate?"white":""}}>Appraisal Date</div>
-                      <div style={{marginLeft:"10px",color:themestate?"white":""}}>{selectedEmployee.appraisal}</div>
-                    </div>
-                  </div>
-                  <div className={styles.gridrow}>
-                    <div className={styles.row}>
-                    <div className={styles.heading}>
-                  <div style={{display:"flex"}}>
-                    <Add24Filled style={{color:'rgb(1,105,185)'}}/>
-                    <Link style={{marginLeft:"10px"}}>Add Reviewer</Link>
-                    </div> 
-                  
-                  </div>
-                      <div style={{marginLeft:"10px",color:themestate?"white":""}}>{selectedEmployee.totalExperience}</div>
-                    </div>
-                  </div>
-                  <div className={styles.gridrow}>
-                    <div className={styles.row}>
-                    <div className={styles.heading}>
-                  <div style={{display:"flex"}}>
-                    <ShareIos24Filled style={{color:'rgb(1,105,185)'}}/>
-                    <Link style={{marginLeft:"10px"}}>Share to Thangamani</Link>
-                    </div> 
-                  
-                  </div>
-                      <div style={{marginLeft:"10px"}}>{selectedEmployee.focusRExperience}</div>
-                    </div>
-                  </div>
-                </div>
-              
-            
-          
-        </div>
-        )}
-     
-        </div>
-        </DrawerBody>
-         )}
-      </OverlayDrawer> */
+/* Hide scrollbar for Firefox */
+.inner-div {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+}
+
+
+/* .outer-container {
+  background-image: url('../media/bg_2.jpg');
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+ 
+  margin: 0;
+  padding: 0;
+} */
+.split-container {
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgb(19, 19, 19, 0.5);
+  display: flex;
+  width: 50vw;
+  height: 50vh;
+  background-color: rgb(255, 255, 255);
+}
+
+.text-container{
+  margin-left: 10px;
+  border-radius: 0 0 0px 10px;
+  box-shadow: 0 0 10px 0.2;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.image-container{
+ 
+  flex: 1.5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.text-container {
+  background-color: #f0f0f000;  
+}
+
+.text-container h1 {
+  font-size: 2em;
+  margin: 0;
+  position: relative;
+  
+
+}
+
+
+
+.image-container img {
+  flex: 2;
+  overflow: hidden;
+  border-radius: 8px 0 0 8px;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  
+}
+
+@media (max-width: 1200px) {
+  .image-container {
+    display: none;
+  }
+
+  
+
+
+
+  .text-container{
+    background-color: rgb(255, 255, 255, 0.8);
+    border-radius: 10px 10px 10px 10px;
+    
+   
+  }
+  
+  /* .split-container {
+    background-image: url('../media/formstart.jpg');
+    background-size:contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: rgb(255, 255, 255);
+    width: 60%;  
+    border-radius: 10px 10px 10px 10px;
+  } */
+
+  .text-container h1 {
+  
+    position: static;
+    text-align: center;
+  }
+}
+
+@media (max-height: 700px) {
+  .image-container {
+    display: none;
+  }
+
+  
+
+
+
+  .text-container{
+    background-color: rgb(255, 255, 255, 0.8);
+    border-radius: 10px 10px 10px 10px;
+    
+   
+  }
+  
+  /* .split-container {
+    background-image: url('../media/formstart.jpg');
+    background-size:contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: rgb(255, 255, 255);
+    height: fit-content;
+    width: 60%;  
+    border-radius: 10px 10px 10px 10px;
+  } */
+
+  .text-container h1 {
+    font-size: 1.5em;
+    position: static;
+    text-align: center;
+  }
+}
+
+
+
+@media (max-height: 400px) {
+  .image-container {
+    display: none;
+  }
+
+  
+
+
+
+  .text-container{
+    background-color: rgb(255, 255, 255, 0.8);
+    border-radius: 10px 10px 10px 10px;
+    
+   
+  }
+  
+  /* .split-container {
+    background-image: url('../media/screensize.jpg');
+    background-size:contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: rgb(255, 255, 255);
+    height: 50%;
+    width: 50%; 
+    border-radius: 10px 10px 10px 10px;
+  } */
+  span 
+  {
+      border: solid 1px black;
+  }
+  .text-container  {
+   display: none;
+  }
+}
+
+
+/* .eye-icon {
+  position: absolute;
+  top: 56%;
+  right: 20%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #808c83;
+} */
+ 

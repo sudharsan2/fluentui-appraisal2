@@ -409,7 +409,7 @@ const HREmployee = (props) => {
     props.form.setFieldsValue({ manager: data.optionValue });
   };
 
-
+  
 
   
 
@@ -768,7 +768,7 @@ const HREmployee = (props) => {
         console.error('Error sending data to the API', error);
       }
     },
-    [setActiveOptionId3] // Make sure to include `parameter` in the dependency array if it's from props or state
+    [] // Make sure to include `parameter` in the dependency array if it's from props or state
   );
   
 

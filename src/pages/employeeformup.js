@@ -2,6 +2,7 @@
 // import axios from 'axios';
 // import { TextField, Button, MenuItem, FormControl, InputLabel, Typography, Container, Select } from '@mui/material';
 // import { useParams } from 'react-router-dom';
+// import { DismissSquareRegular, CalendarInfoRegular, CalendarLtr28Regular, CalendarSparkle28Regular, Bookmark28Regular, CalendarCheckmark28Regular, Open20Regular  } from '@fluentui/react-icons';
 // import {
 //   Field,
 //   makeStyles,
@@ -11,7 +12,9 @@
 //   RadioGroup, Radio,
 //   DefaultButton, Stack,
 // } from "@fluentui/react-components";
- 
+// // import imgurl2 from '../media/formstart.jpg';
+// import imgurl1 from '../media/logo1000.png';
+// import { Modal } from 'antd';
 // const useStyles = makeStyles({
 //   base: {
 //     display: "flex",
@@ -24,7 +27,21 @@
 //     padding: `${tokens.spacingVerticalMNudge} ${tokens.spacingHorizontalMNudge}`,
 //     marginBottom: tokens.spacingHorizontalNone,
 //     rowGap: tokens.spacingVerticalMNudge,
+//     marginTop:'20px',
 //   },
+//   field1: {
+//     display: "grid",
+//     gridRowGap: tokens.spacingVerticalXXS,
+//     padding: `${tokens.spacingVerticalMNudge} ${tokens.spacingHorizontalMNudge}`,
+//     marginBottom: tokens.spacingHorizontalNone,
+//     rowGap: tokens.spacingVerticalMNudge,
+//     backgroundColor:'blue'
+//   },
+//   details:{
+//     display:'flex',
+    
+    
+//   }
 // });
  
  
@@ -33,7 +50,8 @@
 //   const styles = useStyles();
 //   const selectId = useId();
 //   const classes = useStyles();
- 
+//   const [start, setStart] = useState(false);
+//   const [isOpen, setIsOpen] = useState(true);
 //   const [formData, setFormData] = useState({
 //     name: null,
 //     employee_id: null,
@@ -88,7 +106,7 @@
 //   const { token } = useParams();
 //   const [response1, setResponse1] = useState({});
 //   const [change, setChange] = useState(false);
- 
+//   // const imgurl2 = url('../media/formstart.jpg')
  
  
  
@@ -100,10 +118,10 @@
 //         formData.name = response1.employee_name;
 //         formData.employee_id = response1.employee_id;
 //         formData.designation = response1.designation;
-//         formData.date_of_joining = response1.date_of_joining;
+//         formData.data_of_joining  = response1.date_of_joining;
 //         formData.appraisal_due_date = response1.appraisal_date;
 //         formData.department = response.data.department.dept_name;
-//         // formData.manager = response1.manager;
+//         // formData.reporting_manager = response1.manager;
 //         formData.previous_experience = response1.previous_experience;
 //         formData.exact_experience = response1.exact_experience;
 //         formData.total_experience = response1.total_experience;
@@ -116,6 +134,9 @@
 //     fetchData();
 //   }, [change]);
  
+
+//   // const year = response1.date_of_joining.getFullYear();
+
 //   const handleInputChange = (e) => {
 //     const { name, value } = e.target;
 //     setFormData({ ...formData, [name]: value });
@@ -153,9 +174,9 @@
 //       alert('An error occurred while processing your request.');
 //     }
 //   };
+  
  
  
-
 //   formData.name = response1.employee_name;
 //   formData.employee_id = response1.employee_id;
 //   formData.designation = response1.designation;
@@ -168,161 +189,54 @@
 //   formData.total_experience = response1.total_experience;
 //   formData.performance_review_period = response1.performance_review_period;
  
-//   return !response1.submitted ? (
+//   return !response1.submitted ? start?(
  
-//     <div style={{
-//       backgroundImage: "url('../media/ace.jpg')",
-//       backgroundSize: "cover",
-     
-//       backgroundAttachment: "fixed",
-//       display: "flex",
-//       flexDirection: "column",
-//       justifyContent: "center",
-//       alignItems: "center"
+//     <div className='formpage'>
+ 
+ 
+//     <div className='inner-div'>
+//     <Container sx={{
+//     backgroundColor: "rgb(0, 81, 161)",
+//     width: "65vw", 
+//     display: "flex", 
+//     flexDirection: "column", 
+//     justifyContent: "center", 
+//     alignItems: "center", 
+//     borderRadius: "10px 10px 0 0", 
+//     borderTop: "none",  
+//     paddingTop: "0.5em", 
+//     paddingBottom: "0.5em", 
+//     fontSize: "40px", 
+//     color: "white", 
+//     marginTop: '5vh',
+//     '@media (max-width: 768px)': { 
+//         backgroundColor: "rgb(0, 81, 161)",
+//         width: '95vw'
+//     }
 // }}>
+//         <Typography >FOCUSR APPRAISAL - FORM</Typography>
  
- 
- 
-//       <div style={{
-//         backgroundColor: "#0270C5",
-//         marginTop: "6vh", width: 'fit-content', marginBottom: "0vh", borderRadius: "10px 10px 0px 0px", paddingTop: "1.5%", paddingBottom: "1.5%", paddingLeft: '18%', paddingRight: '12%'
-//       }}>
-//         <Typography variant="h4" color="white" style={{
-//           textAlign: 'left'
-//         }}>FOCUSR APPRAISAL - FORM</Typography>
- 
-//       </div>
+//       </Container>
  
  
  
  
 //       <Container sx={{
-//         backgroundColor: "#E8F1F9",
-//         width: "65vw", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", borderRadius: "0px 0px 10px 10px", borderTop: "none", marginBottom: "5vh", paddingTop: "2em"
+//         backgroundColor: "rgba(197, 229, 255, 0.95)",
+//         width: "65vw", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", borderRadius: "0px 0px 10px 10px", borderTop: "none", marginBottom: "5vh", paddingTop: "2em", '@media (max-width: 768px)': {
+//           width: '95vw'}
 //       }}>
  
 //         <form onSubmit={handleSubmit}>
  
  
  
-//         <div  className={classes.field}>
-//         <Typography variant="subtitle1">Employee Name: {response1.employee_name}</Typography>
- 
-// <Typography variant="subtitle1">Employee Code: {response1.employee_id}</Typography>
-       
-//         </div>          
-//         <div  className={classes.field}>
-//           <Typography variant="subtitle1">Designation: {response1.designation} </Typography>
-         
-//         </div>
-//         <div  className={classes.field}>
-//           <Typography variant="subtitle1">Date of Joining: {response1.date_of_joining}</Typography>
-//           {/* <Textarea
-//             fullWidth
-//             name="dateOfJoining"
-//             placeholder='Enter your Date of Joining'
-//             value={response1.date_of_joining}
-//             onChange={handleInputChange}
-//             margin="normal"
-//             variant="outlined"
-//           /> */}
-//         </div>
-//         {/* Continue adding input fields for other questions in a similar manner */}
-//         <div  className={classes.field}>
-//             <Typography variant="subtitle1">Appraisal Due date: {response1.appraisal_due_date}</Typography>
-//             {/* <Textarea
-//                 fullWidth
-//                 name="appraisal_due_date"
-//                 value={response1.appraisal_due_date}
-               
-//                 onChange={handleInputChange}
-//                 margin="normal"
-//                 variant="outlined"
-//             /> */}
-//             </div>
-//             <div  className={classes.field}>
-//             <Typography variant="subtitle1">Department: {formData.department.dept_name}</Typography>
-//             {/* <Textarea
-//                 fullWidth
-//                 name="department"
-//                 value={response1.department}
-//                 onChange={handleInputChange}
-//                 margin="normal"
-//                 variant="outlined"
-//             /> */}
-//             </div>
-//             <div  className={classes.field}>
-//             <Typography variant="subtitle1">Reporting Manager: {response1.reporting_manager}</Typography>
-//             {/* <Textarea
-//                 fullWidth
-//                 name="reporting_manager"
-//                 value={response1.reporting_manager}
-//                 onChange={handleInputChange}
-//                 margin="normal"
-//                 variant="outlined"
-//             /> */}
-//             </div>
-//             <div  className={classes.field}>
-//             <Typography variant="subtitle1">Reviewer: {response1.reviewer}</Typography>
-//             {/* <Textarea
-//                 fullWidth
-//                 name="reviewer"
-//                 value={formData.reviewer}
-//                 onChange={handleInputChange}
-//                 margin="normal"
-//                 variant="outlined"
-//             /> */}
-//             </div>
-//             {/* Add remaining input fields for other questions */}
-//             <div  className={classes.field}>
-//             <Typography variant="subtitle1">Exact Previous Relevant Experience in domain (Before Joining FocusR - in years): {response1.previous_experience}</Typography>
-//             {/* <Textarea
-//                 fullWidth
-//                 name="exact_experience"
-//                 value={formData.exact_experience}
-//                 onChange={handleInputChange}
-//                 margin="normal"
-//                 variant="outlined"
-//             /> */}
-//             </div>
-//             <div  className={classes.field}>
-//             <Typography variant="subtitle1">Exact experience in FocusR (in years): {response1.exact_experience}</Typography>
-//             {/* <Textarea
-//                 fullWidth
-//                 name="focusRExp"
-//                 value={formData.focusRExp}
-//                 onChange={handleInputChange}
-//                 margin="normal"
-//                 variant="outlined"
-//           />*/}
-//             </div>
-//             <div  className={classes.field}>
-//             <Typography variant="subtitle1">Appropriate Total experience (in years): {response1.total_experience}</Typography>
-//             {/* <Textarea
-//                 fullWidth
-//                 name="total_experience"
-//                 value={formData.total_experience}
-//                 onChange={handleInputChange}
-//                 margin="normal"
-//                 variant="outlined"
-//             /> */}
-//             </div>
-//             <div  className={classes.field}>
-//             <Typography variant="subtitle1">Performance Review Period: {response1.performance_review_period}</Typography>
-//             {/* <Textarea
-//                 fullWidth
-//                 name="performance_review_period"
-//                 value={formData. performance_review_period}
-//                 onChange={handleInputChange}
-//                 margin="normal"
-//                 variant="outlined"
-//             /> */}
-//             </div>
+
            
  
 //           <div className={classes.field}>
 //             <Typography variant="subtitle1">
-//               1. Team Member to state your understanding of your roles and responsibilities / objectives as agreed in last year’s appraisal / during joining. Managers to review and comment on the same
+//               1. Team Member to state your understanding of your roles and responsibilities / objectives as agreed in last yearâ€™s appraisal / during joining. Managers to review and comment on the same
 //               <span style={{ color: 'red' }}> *</span>
 //             </Typography>
 //             <Field size="large">
@@ -341,7 +255,7 @@
  
 //           {/* Add remaining input fields for other questions */}
 //           <div className={classes.field}>
-//             <Typography variant="subtitle1">2.Last Year’s Accomplishments <span style={{ color: 'red' }}> *</span>  </Typography>
+//             <Typography variant="subtitle1">2.Last Yearâ€™s Accomplishments <span style={{ color: 'red' }}> *</span>  </Typography>
 //             <Field size="large"
 //             >
 //              <Textarea
@@ -402,12 +316,12 @@
 //           <div className={classes.field} styles={{ text: { color: 'black' } }} >
 //             <Typography variant="subtitle1">5.Team Member / Manager: Rating Performance Description <span style={{ color: 'red' }}> *</span>  </Typography>
  
-//             <div>
+//             <div >
 //               <Typography variant="subtitle1">Attendance & Punctuality</Typography>
 //               <RadioGroup
-//                 name="attendanceRating"
-//                 selectedValue={formData.attendance_and_punctuality}
-//                 onSelectedValueChange={handleRadioChange}
+//                 name="attendance_and_punctuality"
+//                 value={formData.attendance_and_punctuality}
+//                 onChange={handleSelectChange}
 //                 required
 //               >
 //                 <Radio value="O" label={<span style={{ color: 'black' }}>Outstanding</span>} />
@@ -420,7 +334,7 @@
  
  
 //             {/* Question 2: Technical Skills */}
-//             <div>
+//             <div className={classes.field}>
 //               <Typography variant="subtitle1">6.Technical Skills <span style={{ color: 'red' }}> *</span>  </Typography>
 //               <RadioGroup
 //                 name="technical_skills"
@@ -439,7 +353,7 @@
  
  
  
-//             <div>
+//             <div className={classes.field}>
 //               <Typography variant="subtitle1">7.Utilization and Productivity <span style={{ color: 'red' }}> *</span>  </Typography>
 //               <RadioGroup
 //                 name="utilization_and_productivity"
@@ -456,7 +370,7 @@
 //               </RadioGroup>
 //             </div>
  
-//             <div>
+//             <div className={classes.field}>
 //               <Typography variant="subtitle1">8.Time Management & Organizational Skills <span style={{ color: 'red' }}> *</span>  </Typography>
 //               <RadioGroup
 //                 name="quality_of_work"
@@ -473,7 +387,7 @@
 //               </RadioGroup>
 //             </div>
  
-//             <div>
+//             <div className={classes.field}>
 //               <Typography variant="subtitle1">9.Interpersonal Skills <span style={{ color: 'red' }}> *</span>  </Typography>
 //               <RadioGroup
 //                 name="interpersonal_skills"
@@ -490,7 +404,7 @@
 //               </RadioGroup>
 //             </div>
  
-//             <div>
+//             <div className={classes.field}>
 //               <Typography variant="subtitle1">10.Communication - Verbal & Written <span style={{ color: 'red' }}> *</span>  </Typography>
 //               <RadioGroup
 //                 name="communication"
@@ -507,7 +421,7 @@
 //               </RadioGroup>
 //             </div>
  
-//             <div>
+//             <div className={classes.field}>
 //               <Typography variant="subtitle1">11.Initiative, Innovation & Creativity <span style={{ color: 'red' }}> *</span>  </Typography>
 //               <RadioGroup
 //                 name="initiative_innovative_creativity"
@@ -524,7 +438,7 @@
 //               </RadioGroup>
 //             </div>
  
-//             <div>
+//             <div className={classes.field}>
 //               <Typography variant="subtitle1">12.Teamwork <span style={{ color: 'red' }}> *</span>  </Typography>
 //               <RadioGroup
 //                 name="teamwork"
@@ -542,7 +456,7 @@
 //             </div>
  
  
-//             <div>
+//             <div className={classes.field}>
 //               <Typography variant="subtitle1">13.Client Focused <span style={{ color: 'red' }}> *</span>  </Typography>
 //               <RadioGroup
 //                 name="client_focused"
@@ -558,7 +472,7 @@
 //                 <Radio value="U" label={<span style={{ color: 'black' }}>Unacceptable</span>} />
 //               </RadioGroup>
 //             </div>
-//             <div>
+//             <div className={classes.field}>
 //               <Typography variant="subtitle1">14.Planning and Organizational Skills <span style={{ color: 'red' }}> *</span>  </Typography>
 //               <RadioGroup
 //                 name="planning_and_organizing"
@@ -575,7 +489,7 @@
 //               </RadioGroup>
 //             </div>
  
-//             <div>
+//             <div className={classes.field}>
 //               <Typography variant="subtitle1">15.Value Addition <span style={{ color: 'red' }}> *</span>  </Typography>
 //               <RadioGroup
 //                 name="new_knowledge"
@@ -716,17 +630,71 @@
 //         </form>
 //       </Container>
 //     </div >
-//     // </div>
+//      </div>
  
 //   ) :
+//   <div className='outer-container'>
+//   <div style={{ position: 'absolute', top: '20px', right: '20px', height: '60px', width: 'auto' }}>
+//     <img src={imgurl1} alt="Description" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+//   </div>
+
+//   <div className="split-container">
+//     <div className="text-container">
+//       <h1 style={{ color: 'rgb(52, 52, 52)', marginTop: '20px' }}>Appraisal Form</h1>
+//       <div style={{ marginTop: '20px', marginBottom: '10px' }}>
+//         <h2 style={{ marginLeft: '5px', marginRight: '5px' }}>{response1.employee_name} {response1.employee_name}</h2>
+//         <h4 style={{ marginLeft: '5px', marginRight: '5px', display:'flex',alignItems:'center' }}>{response1.employee_id} <Open20Regular onClick={()=>setIsOpen(true)}/></h4>
+
+       
+
+//         <Modal
+//       title="Details"
+//       visible={isOpen}
+//       onCancel={()=> setIsOpen(false)}
+//       style={{width:'30vw'}}
+//       footer={[
+//         <Button key="close" onClick={() => setIsOpen(false)}>
+//           Close
+//         </Button>,
+//       ]}
+//     >
+//       {response1 ? (
+//         <div>
+
+//            <h2 style={{ display: 'flex', alignItems: 'center', fontWeight:'lighter'  }}>Designation : {response1.designation}</h2>
+//            <h2 style={{ display: 'flex', alignItems: 'center', fontWeight:'lighter' }}>Date of Birth : {response1.dob}</h2>
+//         <h2 style={{ display: 'flex', alignItems: 'center', fontWeight:'lighter' }}>Date of Joining : {response1.date_of_joining}</h2>
+        
+//         <h2 style={{ display: 'flex', alignItems: 'center', fontWeight:'lighter' }}>Date of Appraisal : {response1.appraisal_date}</h2>
+//         <h2 style={{ display: 'flex', alignItems: 'center', fontWeight:'lighter' }}>Experience before FocusR : {response1.experience_in_domain_before_focusr}</h2>
+//           {/* Display other details as needed */}
+//         </div>
+//       ) : (
+//         <p>Loading details...</p>
+//       )}
+//     </Modal>
+        
+        
+//       </div>
+//       <Button style={{ marginBottom: '20px' }} type="submit" variant="contained" color="primary" onClick={() => { setStart(true) }}>Start</Button>
+//     </div>
+//     <div className="image-container">
+//       {/* <img src={imgurl2} alt="Description" /> */}
+//     </div>
+//   </div>
+// </div>
+//     :
  
-//     (<div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: '100vh' }}>
+//     (<div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: '100vh', }}>
 //       <Typography variant="subtitle1">`you have already Submitted the Form `</Typography>
-//     </div>);
+//     </div>)
 // };
  
 // export default FormPage;
  
+
+
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { TextField, Button, MenuItem, FormControl, InputLabel, Typography, Container, Select } from '@mui/material';
@@ -741,7 +709,7 @@ import {
   RadioGroup, Radio,
   DefaultButton, Stack,
 } from "@fluentui/react-components";
-// import imgurl2 from '../media/formstart.jpg';
+import imgurl2 from '../media/formstart.jpg';
 import imgurl1 from '../media/logo1000.png';
 import { Modal } from 'antd';
 const useStyles = makeStyles({
@@ -768,8 +736,8 @@ const useStyles = makeStyles({
   },
   details:{
     display:'flex',
-    
-    
+   
+   
   }
 });
  
@@ -785,7 +753,7 @@ const FormPage = () => {
     name: null,
     employee_id: null,
     designation: null,
-    data_of_joining: null,
+    date_of_joining: null,
     appraisal_due_date: null,
     department: {},
     reporting_manager: null,
@@ -820,6 +788,8 @@ const FormPage = () => {
     traning_need_analysis: null,
     self_rating: null,
     kpi_agreed: null,
+    organize_plans: null,
+    organization_feedback: null,
     empolyee_name: null,
     employee_date: null,
     manager_name: null,
@@ -831,6 +801,32 @@ const FormPage = () => {
     canSeeManagerComments: false,
     canSeeReviewerComments: false,
 });
+ 
+const [formData1, setFormData1] = useState({
+  question_1: null,
+  question_2: null,
+  question_3: null,
+  question_4: null,
+  attendance_and_punctuality: null,
+  technical_skills: null,
+  utilization_and_productivity: null,
+  quality_of_work: null,
+  interpersonal_skills: null,
+  communication: null,
+  initiative_innovative_creativity: null,
+  teamwork: null,
+  client_focused: null,
+  planning_and_organizing: null,
+  new_knowledge: null,
+  top3LikeOrganization:null,
+  top3disLikeOrganization:null,
+  suggestionToImprove:null,
+  future5years:null,
+  indispencible :null,
+  exploreSkills:null,
+  traning_need_analysis: null,
+  self_rating: null
+})
  
   const { token } = useParams();
   const [response1, setResponse1] = useState({});
@@ -847,10 +843,10 @@ const FormPage = () => {
         formData.name = response1.employee_name;
         formData.employee_id = response1.employee_id;
         formData.designation = response1.designation;
-        formData.data_of_joining  = response1.date_of_joining;
+        formData.date_of_joining  = response1.date_of_joining;
         formData.appraisal_due_date = response1.appraisal_date;
         formData.department = response.data.department.dept_name;
-        // formData.reporting_manager = response1.manager;
+        formData.reporting_manager = response1.manager;
         formData.previous_experience = response1.previous_experience;
         formData.exact_experience = response1.exact_experience;
         formData.total_experience = response1.total_experience;
@@ -861,24 +857,26 @@ const FormPage = () => {
     };
  
     fetchData();
-  }, [change]);
+  }, [change, token]);
  
-
+ 
   // const year = response1.date_of_joining.getFullYear();
-
+ 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData1({ ...formData1, [name]: value });
+    setFormData ({ ...formData, [name]: value})
   };
  
   const handleSelectChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData1({ ...formData1, [name]: value });
+    setFormData ({ ...formData, [name]: value})
   };
  
-  const handleRadioChange = (e, value) => {
-    setFormData({ ...formData, attendanceRating: value });
-  };
+  // const handleRadioChange = (e, value) => {
+  //   setFormData1({ ...formData, attendance_and_punctuality: value });
+  // };
  
  
   const handleSubmit = async (event) => {
@@ -898,12 +896,25 @@ const FormPage = () => {
       const response2 = await axios.post(`http://127.0.0.1:9000/user/team-member/remarks/${response1.employee_id}`, formData);
      
       setChange(true)
+      setStart(false);
     } catch (error) {
       console.error('Error:', error);
       alert('An error occurred while processing your request.');
     }
   };
-  
+ 
+  const allFieldsFilled = () => {
+    for (const key in formData1) {
+      if (formData1[key] === null || formData1[key] === "") {
+        console.log(`Field '${key}' is either null or empty.`);
+        return false;
+      }
+    }
+    console.log('All fields are filled.');
+    return true;
+  };
+ 
+ 
  
  
   formData.name = response1.employee_name;
@@ -926,19 +937,19 @@ const FormPage = () => {
     <div className='inner-div'>
     <Container sx={{
     backgroundColor: "rgb(0, 81, 161)",
-    width: "65vw", 
-    display: "flex", 
-    flexDirection: "column", 
-    justifyContent: "center", 
-    alignItems: "center", 
-    borderRadius: "10px 10px 0 0", 
+    width: "65vw",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: "10px 10px 0 0",
     borderTop: "none",  
-    paddingTop: "0.5em", 
-    paddingBottom: "0.5em", 
-    fontSize: "40px", 
-    color: "white", 
+    paddingTop: "0.5em",
+    paddingBottom: "0.5em",
+    fontSize: "40px",
+    color: "white",
     marginTop: '5vh',
-    '@media (max-width: 768px)': { 
+    '@media (max-width: 768px)': {
         backgroundColor: "rgb(0, 81, 161)",
         width: '95vw'
     }
@@ -960,7 +971,7 @@ const FormPage = () => {
  
  
  
-
+ 
            
  
           <div className={classes.field}>
@@ -971,7 +982,7 @@ const FormPage = () => {
             <Field size="large">
             <Textarea
         name="question_1"
-        value={formData.question_1}
+        value={formData1.question_1}
         onChange={handleInputChange}
         required
        
@@ -989,7 +1000,7 @@ const FormPage = () => {
             >
              <Textarea
           name="question_2"
-          value={formData.question_2}
+          value={formData1.question_2}
           onChange={handleInputChange}
           required
          
@@ -1010,7 +1021,7 @@ const FormPage = () => {
             >
               <Textarea
           name="question_3"
-          value={formData.question_3}
+          value={formData1.question_3}
           onChange={handleInputChange}
           required
          
@@ -1028,7 +1039,7 @@ const FormPage = () => {
             >
                <Textarea
           name="question_4"
-          value={formData.question_4}
+          value={formData1.question_4}
           onChange={handleInputChange}
           required
          
@@ -1048,9 +1059,9 @@ const FormPage = () => {
             <div >
               <Typography variant="subtitle1">Attendance & Punctuality</Typography>
               <RadioGroup
-                name="attendanceRating"
-                selectedValue={formData.attendance_and_punctuality}
-                onSelectedValueChange={handleRadioChange}
+                name="attendance_and_punctuality"
+                value={formData1.attendance_and_punctuality}
+                onChange={handleSelectChange}
                 required
               >
                 <Radio value="O" label={<span style={{ color: 'black' }}>Outstanding</span>} />
@@ -1067,7 +1078,7 @@ const FormPage = () => {
               <Typography variant="subtitle1">6.Technical Skills <span style={{ color: 'red' }}> *</span>  </Typography>
               <RadioGroup
                 name="technical_skills"
-                value={formData.technical_skills}
+                value={formData1.technical_skills}
                 onChange={handleSelectChange}
                 label="Technical Skills"
                 required
@@ -1086,7 +1097,7 @@ const FormPage = () => {
               <Typography variant="subtitle1">7.Utilization and Productivity <span style={{ color: 'red' }}> *</span>  </Typography>
               <RadioGroup
                 name="utilization_and_productivity"
-                value={formData.utilization_and_productivity}
+                value={formData1.utilization_and_productivity}
                 onChange={handleSelectChange}
                 label="Utilization and Productivity"
                 required
@@ -1103,7 +1114,7 @@ const FormPage = () => {
               <Typography variant="subtitle1">8.Time Management & Organizational Skills <span style={{ color: 'red' }}> *</span>  </Typography>
               <RadioGroup
                 name="quality_of_work"
-                value={formData.quality_of_work}
+                value={formData1.quality_of_work}
                 onChange={handleSelectChange}
                 label="Time Management & Organizational Skills"
                 required
@@ -1120,7 +1131,7 @@ const FormPage = () => {
               <Typography variant="subtitle1">9.Interpersonal Skills <span style={{ color: 'red' }}> *</span>  </Typography>
               <RadioGroup
                 name="interpersonal_skills"
-                value={formData.interpersonal_skills}
+                value={formData1.interpersonal_skills}
                 onChange={handleSelectChange}
                 label="Interpersonal Skills"
                 required
@@ -1137,7 +1148,7 @@ const FormPage = () => {
               <Typography variant="subtitle1">10.Communication - Verbal & Written <span style={{ color: 'red' }}> *</span>  </Typography>
               <RadioGroup
                 name="communication"
-                value={formData.communication}
+                value={formData1.communication}
                 onChange={handleSelectChange}
                 label="Communication - Verbal & Written"
                 required
@@ -1154,7 +1165,7 @@ const FormPage = () => {
               <Typography variant="subtitle1">11.Initiative, Innovation & Creativity <span style={{ color: 'red' }}> *</span>  </Typography>
               <RadioGroup
                 name="initiative_innovative_creativity"
-                value={formData.initiative_innovative_creativity}
+                value={formData1.initiative_innovative_creativity}
                 onChange={handleSelectChange}
                 label="Initiative, Innovation & Creativity"
                 required
@@ -1171,7 +1182,7 @@ const FormPage = () => {
               <Typography variant="subtitle1">12.Teamwork <span style={{ color: 'red' }}> *</span>  </Typography>
               <RadioGroup
                 name="teamwork"
-                value={formData.teamwork}
+                value={formData1.teamwork}
                 onChange={handleSelectChange}
                 label="Teamwork"
                 required
@@ -1189,7 +1200,7 @@ const FormPage = () => {
               <Typography variant="subtitle1">13.Client Focused <span style={{ color: 'red' }}> *</span>  </Typography>
               <RadioGroup
                 name="client_focused"
-                value={formData.client_focused}
+                value={formData1.client_focused}
                 onChange={handleSelectChange}
                 label="Client Focused"
                 required
@@ -1205,7 +1216,7 @@ const FormPage = () => {
               <Typography variant="subtitle1">14.Planning and Organizational Skills <span style={{ color: 'red' }}> *</span>  </Typography>
               <RadioGroup
                 name="planning_and_organizing"
-                value={formData.planning_and_organizing}
+                value={formData1.planning_and_organizing}
                 onChange={handleSelectChange}
                 label="Planning and Organizational Skills"
                 required
@@ -1222,7 +1233,7 @@ const FormPage = () => {
               <Typography variant="subtitle1">15.Value Addition <span style={{ color: 'red' }}> *</span>  </Typography>
               <RadioGroup
                 name="new_knowledge"
-                value={formData.new_knowledge}
+                value={formData1.new_knowledge}
                 onChange={handleSelectChange}
                 label="Value Addition"
                 required
@@ -1250,7 +1261,7 @@ const FormPage = () => {
             <Field size="large">
               <Textarea
                 name="top3LikeOrganization"
-                value={formData.top3LikeOrganization}
+                value={formData1.top3LikeOrganization}
                 onChange={handleInputChange} required />
             </Field>
  
@@ -1263,7 +1274,7 @@ const FormPage = () => {
             <Field size="large">
               <Textarea
                 name="top3disLikeOrganization"
-                value={formData.top3disLikeOrganization}
+                value={formData1.top3disLikeOrganization}
                 onChange={handleInputChange} required />
             </Field>
  
@@ -1275,7 +1286,7 @@ const FormPage = () => {
             >
               <Textarea
                 name="suggestionToImprove"
-                value={formData.suggestionToImprove}
+                value={formData1.suggestionToImprove}
                 onChange={handleInputChange} required />
             </Field>
  
@@ -1287,7 +1298,7 @@ const FormPage = () => {
             >
               <Textarea
                 name="future5years"
-                value={formData.future5years}
+                value={formData1.future5years}
                 onChange={handleInputChange} required />
             </Field>
  
@@ -1299,7 +1310,7 @@ const FormPage = () => {
             >
               <Textarea
                 name="indispencible"
-                value={formData.indispencible}
+                value={formData1.indispencible}
                 onChange={handleInputChange} required />
             </Field>
  
@@ -1311,7 +1322,7 @@ const FormPage = () => {
             >
               <Textarea
                 name="exploreSkills"
-                value={formData.exploreSkills}
+                value={formData1.exploreSkills}
                 onChange={handleInputChange} required />
             </Field>
  
@@ -1325,7 +1336,7 @@ const FormPage = () => {
             >
               <Textarea
                 name="traning_need_analysis"
-                value={formData.traning_need_analysis}
+                value={formData1.traning_need_analysis}
                 onChange={handleInputChange} required />
             </Field>
  
@@ -1345,7 +1356,7 @@ const FormPage = () => {
             <Field size="small">
               <Textarea
                 name="self_rating"
-                value={formData.self_rating}
+                value={formData1.self_rating}
                 onChange={handleInputChange} required />
             </Field>
           </div>
@@ -1354,7 +1365,7 @@ const FormPage = () => {
  
  
           <div style={{ marginBottom: "4vh", marginTop: "2vh", width: "10%", marginLeft: "2vh" }}>
-            <Button type="submit" variant="contained" color="primary" fullWidth onClick={handleSubmit}>Submit</Button>
+            <Button type="submit" variant="contained" disabled={!allFieldsFilled()} color="primary" fullWidth onClick={handleSubmit}>Submit</Button>
           </div>
         </form>
       </Container>
@@ -1366,16 +1377,16 @@ const FormPage = () => {
   <div style={{ position: 'absolute', top: '20px', right: '20px', height: '60px', width: 'auto' }}>
     <img src={imgurl1} alt="Description" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
   </div>
-
+ 
   <div className="split-container">
     <div className="text-container">
       <h1 style={{ color: 'rgb(52, 52, 52)', marginTop: '20px' }}>Appraisal Form</h1>
       <div style={{ marginTop: '20px', marginBottom: '10px' }}>
         <h2 style={{ marginLeft: '5px', marginRight: '5px' }}>{response1.employee_name} {response1.employee_name}</h2>
         <h4 style={{ marginLeft: '5px', marginRight: '5px', display:'flex',alignItems:'center' }}>{response1.employee_id} <Open20Regular onClick={()=>setIsOpen(true)}/></h4>
-
+ 
        
-
+ 
         <Modal
       title="Details"
       visible={isOpen}
@@ -1389,11 +1400,11 @@ const FormPage = () => {
     >
       {response1 ? (
         <div>
-
+ 
            <h2 style={{ display: 'flex', alignItems: 'center', fontWeight:'lighter'  }}>Designation : {response1.designation}</h2>
            <h2 style={{ display: 'flex', alignItems: 'center', fontWeight:'lighter' }}>Date of Birth : {response1.dob}</h2>
         <h2 style={{ display: 'flex', alignItems: 'center', fontWeight:'lighter' }}>Date of Joining : {response1.date_of_joining}</h2>
-        
+       
         <h2 style={{ display: 'flex', alignItems: 'center', fontWeight:'lighter' }}>Date of Appraisal : {response1.appraisal_date}</h2>
         <h2 style={{ display: 'flex', alignItems: 'center', fontWeight:'lighter' }}>Experience before FocusR : {response1.experience_in_domain_before_focusr}</h2>
           {/* Display other details as needed */}
@@ -1402,13 +1413,13 @@ const FormPage = () => {
         <p>Loading details...</p>
       )}
     </Modal>
-        
-        
+       
+       
       </div>
       <Button style={{ marginBottom: '20px' }} type="submit" variant="contained" color="primary" onClick={() => { setStart(true) }}>Start</Button>
     </div>
     <div className="image-container">
-      {/* <img src={imgurl2} alt="Description" /> */}
+      <img src={imgurl2} alt="Description" />
     </div>
   </div>
 </div>
@@ -1420,4 +1431,3 @@ const FormPage = () => {
 };
  
 export default FormPage;
- 

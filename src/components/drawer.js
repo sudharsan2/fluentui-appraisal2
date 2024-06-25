@@ -901,8 +901,8 @@
  
  
 
-import React, { useState } from "react";
-import { useNavigate, Link} from "react-router-dom";
+import React, { useState ,useEffect} from "react";
+import { useNavigate,useLocation, Link} from "react-router-dom";
 import {useSelector, useDispatch} from 'react-redux';
 import {
     NavCategory,
@@ -1097,7 +1097,7 @@ const Settings = bundleIcon(Settings20Filled, Settings20Regular);
  
  
 const NavDrawerDefault = (props) => {
- 
+  const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const lighttheme = useSelector((state) => state.theme.light);
@@ -1109,6 +1109,30 @@ const NavDrawerDefault = (props) => {
   const [isOpen, setIsOpen] = useState(true);
   const [type, setType] = useState("inline");
  
+  const determineSelectedValue = () => {
+    switch (location.pathname) {
+        case '/HRdashboard':
+            return '1';
+        case '/hremployee':
+            return '2';
+        case '/hrmanager':
+            return '3';
+        case '/hrreviewer':
+            return '4';
+        case '/hrsummary':
+            return '5';
+        default:
+            return '1';
+    }
+  };
+ 
+  const [selectedValue, setSelectedValue] = useState(determineSelectedValue());
+ 
+  useEffect(() => {
+    setSelectedValue(determineSelectedValue());
+  }, [location.pathname]);
+
+
   const someClickHandler = (nav) => {
     switch (nav) {
         case 'dashboard':
@@ -1136,8 +1160,9 @@ const NavDrawerDefault = (props) => {
     <div className={styles.root} style={{height: 'calc(100vh - 48px)'}}>
        {/* <div style={themestate?{backgroundColor:darktheme.sidebarcolordark, height: 'calc(100vh - 48px)'}:{backgroundColor:lighttheme.sidebarcolorlight}}> */}
         <NavDrawer
-  defaultSelectedValue="2"
-  defaultSelectedCategoryValue="2"
+  // defaultSelectedValue="2"
+  // defaultSelectedCategoryValue="2"
+  selectedValue ={selectedValue}
   open={isOpen}
   type={type}
   onOpenChange={(_, { open }) => setIsOpen(open)}
@@ -1174,6 +1199,7 @@ const NavDrawerDefault = (props) => {
   {collapse ? (
     <NavDrawerBody
         style={themestate?{backgroundColor:darktheme.sidebarcolordark, cursor:"pointer",WebkitTapHighlightColor: 'transparent'}:{cursor:"pointer",WebkitTapHighlightColor: 'transparent'}}
+        selectedValue ={selectedValue}
      >
       <Tooltip content={'Dashboard'} positioning='after' withArrow={true} appearance={themestate?"inverted":"normal"}>
       <NavItem

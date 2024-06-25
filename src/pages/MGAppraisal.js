@@ -463,6 +463,8 @@ const MGAppraisal = () => {
 
   const [selectedOptions, setSelectedOptions] = useState(Array(labels.length).fill(0));
 
+  const [reload, setReload] = useState(false);
+
 
   const navLinkGroups = [
     {
@@ -518,23 +520,40 @@ const MGAppraisal = () => {
     useEffect(() => {
       fetchtodoEmployeeData();
       fetchwaitingEmployeeData();
-    }, []);
+    }, [reload]);
 
+
+  // const onActiveOptionChange1 = React.useCallback(
+  //  (params) => (_, data) => {
+  //     setActiveOptionId({
+  //       ...activeOptionId,
+  //     [params]:data?.nextOption?.value}); 
+
+  //     setformdata({
+  //       ...formdata,
+  //       [params]:data?.nextOption?.value
+  //     });
+  //     // Assuming optionValue is the id
+  //     console.log({"active":data?.nextOption?.value})
+  //   },
+  //   [setActiveOptionId,setformdata]
+  // );
 
   const onActiveOptionChange1 = React.useCallback(
-   (params) => (_, data) => {
-      setActiveOptionId({
-        ...activeOptionId,
-      [params]:data?.nextOption?.value}); 
-
-      setformdata({
-        ...formdata,
-        [params]:data?.nextOption?.value
-      });
-      // Assuming optionValue is the id
-      console.log({"active":data?.nextOption?.value})
+    (value) => (_, data) => {
+      setActiveOptionId((prevActiveOptionId) => ({
+        ...prevActiveOptionId,
+        [value]: data?.nextOption?.value,
+      }));
+  
+      setformdata((prevFormdata) => ({
+        ...prevFormdata,
+        [value]: data?.nextOption?.value,
+      }));
+  
+      console.log({ "active": data?.nextOption?.value });
     },
-    [setActiveOptionId,setformdata]
+    [setActiveOptionId, setformdata]
   );
 
 
@@ -763,16 +782,39 @@ const MGAppraisal = () => {
    
   };
 
+  // const handlesharetoHR = async (parameter) => {
+  //   try {
+  //     const result = await axios.post(`http://127.0.0.1:9000/user/employee/changeFormStatus/${formdataemployee.id}`, {
+  //       "empId":parameter,"status":"managerfilled","canSeeManagerComments":true
+  //     });
+  //      // Extract and set the token from the response
+  //   } catch (error) {
+  //     console.error('Error sending data to the API', error);
+  //   }
+  // };
+
   const handlesharetoHR = async (parameter) => {
     try {
       const result = await axios.post(`http://127.0.0.1:9000/user/employee/changeFormStatus/${formdataemployee.id}`, {
-        "empId":parameter,"status":"managerfilled","canSeeManagerComments":true
+        "empId": parameter,
+        "status": "managerfilled",
+        "canSeeManagerComments": true
       });
-       // Extract and set the token from the response
+  
+      
+      if (result.status === 200) {
+
+        setReload(!reload)
+        console.log('Data sent successfully', result.data);
+        // Perform any additional actions if needed
+      } else {
+        // console.error('Unexpected response status', result.status);
+      }
     } catch (error) {
       console.error('Error sending data to the API', error);
     }
   };
+  
  
   const handleDeleteEmployee = () => {
     alert("Delete Employee functionality to be implemented");
@@ -950,7 +992,7 @@ const MGAppraisal = () => {
             </div>
             </div>
             <TabList
-                defaultSelectedValue="tab1"
+                defaultSelectedValue={selectedTab1}
                 appearance="subtle"
                 onTabSelect={handleTabSelect}
                 style={{marginLeft:"3vw", marginTop:"3vh"}}
@@ -1291,7 +1333,7 @@ const MGAppraisal = () => {
                 minHeight: '50px',
                 borderColor: !formData1.question_2 && submitted1 ? 'red' : '',
               }}
-              value={formdata.accomplishments}
+              value={formdata.question_2}
               onChange={(e) => handleFieldChange1('question_2', e.target.value)}
               placeholder="Enter your response..."
             />
@@ -1306,7 +1348,7 @@ const MGAppraisal = () => {
                 minHeight: '50px',
                 borderColor: !formData1.question_3 && submitted1 ? 'red' : '',
               }}
-              value={formdata.strengths}
+              value={formdata.question_3}
               onChange={(e) => handleFieldChange1('question_3', e.target.value)}
               placeholder="Enter your response..."
             />
@@ -1321,7 +1363,7 @@ const MGAppraisal = () => {
                 minHeight: '50px',
                 borderColor: !formData1.question_4 && submitted1 ? 'red' : '',
               }}
-              value={formdata.developmentNeeds}
+              value={formdata.question_4}
               onChange={(e) => handleFieldChange1('question_4', e.target.value)}
               placeholder="Enter your response..."
             />
@@ -1357,7 +1399,6 @@ const MGAppraisal = () => {
                   // aria-labelledby={`${dropdownId}-underline`}
                   placeholder={formdata[value]}
                   // appearance="underline"
-                  
                   style={{width:"20px"}}
                   onActiveOptionChange={onActiveOptionChange1(value)}
                   

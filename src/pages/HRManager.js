@@ -618,13 +618,25 @@ const HRManager = () => {
     try {
       const response1 = await axios.get(`http://127.0.0.1:9000/user/team-member/remarks/${employee.employee_id}`);
       setformdataemployee(response1.data);
+      
+      
+    } catch (err) {
+      setformdataemployee({ "question_1": "" , "canSeeManagerComments":"false"});
+
+      
+
+      
+      // console.log({ "question1": formdataemployee.question_1 });
+    }
+    try {
+      
       const response2 = await axios.get(`http://127.0.0.1:9000/user/appraiser/remarks/${employee.employee_id}`);
       setformdatamanager(response2.data);
       
     } catch (err) {
-      setformdataemployee({ "question_1": "blahhhhh" , "canSeeManagerComments":"false"});
+      
 
-      setformdatamanager({"question_1":"hahaha"});
+      setformdatamanager({"question_1":""});
 
       
       // console.log({ "question1": formdataemployee.question_1 });
@@ -1134,7 +1146,7 @@ const HRManager = () => {
               <div className={`${styles.section} ${styles.share}`}>
                 <div className={styles.content} style={{display: "flex"}}>
                   <ShareIos24Filled style={{color:'rgb(1,105,185)'}}/>
-                  <Link style={{ marginLeft: '10px' }} className={styles.shareLink} onClick={() => handlesharetoManager(formdataemployee.id)}>Share to {selectedEmployee.manager}</Link>
+                  <Link style={{ marginLeft: '10px' }} className={styles.shareLink} onClick={() => handlesharetoManager(formdataemployee.id)}>Share to {selectedEmployee.reviewer_name}</Link>
                 </div>
               </div>
               </div>
@@ -1364,8 +1376,9 @@ const HRManager = () => {
        <TableSelectionCell
          checked={!!selectedItems[item.employee_id]}
          style={{ zIndex: 1000 }}
+         onClick={(event) => event.stopPropagation()}
          onChange={(event) => {
-           event.stopPropagation();
+           
            handleItemsChange(item.employee_id);
            setOpen(false);
          }}
@@ -1387,8 +1400,9 @@ const HRManager = () => {
         <TableSelectionCell
           checked={!!selectedItems[item.employee_id]}
           style={{ zIndex: 1000 }}
+          onClick={(event) => event.stopPropagation()}
           onChange={(event) => {
-            event.stopPropagation();
+            
             handleItemsChange(item.employee_id);
             setOpen(false);
           }}

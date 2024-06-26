@@ -1479,8 +1479,9 @@ const HRReviewer = (props) => {
        <TableSelectionCell
          checked={!!selectedItems[item.employee_id]}
          style={{ zIndex: 1000 }}
+         onClick={(event) => event.stopPropagation()}
          onChange={(event) => {
-           event.stopPropagation();
+           
            handleItemsChange(item.employee_id);
            setOpen(false);
          }}
@@ -1502,8 +1503,8 @@ const HRReviewer = (props) => {
         <TableSelectionCell
           checked={!!selectedItems[item.employee_id]}
           style={{ zIndex: 1000 }}
+          onClick={(event) => event.stopPropagation()}
           onChange={(event) => {
-            event.stopPropagation();
             handleItemsChange(item.employee_id);
             setOpen(false);
           }}

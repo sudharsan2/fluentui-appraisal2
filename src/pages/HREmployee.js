@@ -768,7 +768,7 @@ const HREmployee = (props) => {
         console.error('Error sending data to the API', error);
       }
     },
-    [] // Make sure to include `parameter` in the dependency array if it's from props or state
+    [activeOptionId3] // Make sure to include `parameter` in the dependency array if it's from props or state
   );
   
 

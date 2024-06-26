@@ -1426,7 +1426,7 @@ const RVReviewer = () => {
               <div className={`${styles.section} ${styles.share}`}>
                 <div className={styles.content} style={{display: "flex"}}>
                   <ShareIos24Filled style={{color:'rgb(1,105,185)'}}/>
-                  <Link style={{ marginLeft: '10px' }} className={styles.shareLink} onClick={() => handlesharetoHR(selectedEmployee.employee_id)}>Share to {selectedEmployee.manager}</Link>
+                  <Link style={{ marginLeft: '10px' }} className={styles.shareLink} onClick={() => handlesharetoHR(selectedEmployee.employee_id)}>Share to HR</Link>
                 </div>
               </div>
               </div>

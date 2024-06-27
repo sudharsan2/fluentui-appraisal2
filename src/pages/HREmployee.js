@@ -58,7 +58,7 @@ import './page.css';
 import zIndex from "@mui/material/styles/zIndex";
 
 
-import {Modal, Form, Input, DatePicker, Select,  Row, Col, message } from 'antd';
+import {Modal, Form, Input, DatePicker, Select,  Row, Col, message,Rate } from 'antd';
  
 const useStyles = makeStyles({
   root: {
@@ -295,6 +295,7 @@ const HREmployee = (props) => {
 
   const [initialValues, setInitialValues] = useState({});
   const [formEdit] = Form.useForm();
+  const [reload, setReload] = useState(false);
 
   // const navLinkGroups = [
   //   {
@@ -447,7 +448,7 @@ const HREmployee = (props) => {
  
   useEffect(() => {
     fetchEmployeeData();
-  }, []);
+  }, [reload]);
   
   useEffect(() => {
     fetchEmployeeData1();
@@ -683,16 +684,15 @@ const HREmployee = (props) => {
       const response1 = await axios.get(`http://127.0.0.1:9000/user/team-member/remarks/${employee.employee_id}`);
       setformdataemployee(response1.data);
       
+      if (response1.status===500){
+        setformdataemployee({ });
+      }
       
     } catch (err) {
-      setformdataemployee({  });
+      setformdataemployee({ });
 
-      
-
-      
-      // console.log({ "question1": formdataemployee.question_1 });
     }
-    // setformdataemployee({ "question_1": "blahhhhh" });
+    
     setSelectedEmployee(employee);
     setOpen(true);
     
@@ -777,6 +777,10 @@ const HREmployee = (props) => {
       const result = await axios.post(`http://127.0.0.1:9000/user/employee/changeFormStatus/${parameter}`, {
         "status":"sharedtomanager"
       });
+      if (result.status === 200 || result.status === 201) {
+        message.success('Shared to Manager successfully');
+        setReload(!reload)
+      }
        // Extract and set the token from the response
     } catch (error) {
       console.error('Error sending data to the API', error);
@@ -870,6 +874,7 @@ const HREmployee = (props) => {
       if (response.ok) {
        
         // Clear the selectedItems state
+        message.success("Successfully Deleted Selected Employees");
         setSelectedItems({});
         // Optionally clear the itemSelected state
         setItemSelected([]);
@@ -878,7 +883,8 @@ const HREmployee = (props) => {
         // alert('Failed to delete employees');
       }
     } catch (error) {
-      console.error('Error deleting employees:', error);
+      message.error("Error deleting employees");
+      
       // alert('An error occurred while deleting employees');
     }
   };
@@ -1033,6 +1039,7 @@ const HREmployee = (props) => {
           (item.employee_id && item.employee_id.toString().includes(searchQuery)) ||
           (item.department && item.department.toString().toLowerCase().includes(searchQuery.toLowerCase())) ||
           (item.date_of_joining && item.date_of_joining.includes(searchQuery)) ||
+          (item.appraisal_date && item.appraisal_date.includes(searchQuery)) ||
           (item.reporting_manager && item.reporting_manager.toLowerCase().includes(searchQuery.toLowerCase()))
         );
         setFilteredData(filtered);
@@ -1069,6 +1076,7 @@ const filteredcmData = searchQuery
       (item.date_of_joining && item.date_of_joining.includes(searchQuery)) ||
       // Uncomment if 'appraisal' is part of the dataset and needs to be searched
       // (item.appraisal && item.appraisal.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (item.appraisal_date && item.appraisal_date.includes(searchQuery)) ||
       (item.reporting_manager && item.reporting_manager.toLowerCase().includes(searchQuery.toLowerCase()))
     )
   : (currentMonthEmployees || []);
@@ -1096,6 +1104,7 @@ const filterednmData = searchQuery
       (item.date_of_joining && item.date_of_joining.includes(searchQuery)) ||
       // Uncomment if 'appraisal' is part of the dataset and needs to be searched
       // (item.appraisal && item.appraisal.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (item.appraisal_date && item.appraisal_date.includes(searchQuery)) ||
       (item.reporting_manager && item.reporting_manager.toLowerCase().includes(searchQuery.toLowerCase()))
     )
   : (nextMonthEmployees || []);
@@ -1155,14 +1164,14 @@ return (
         <DrawerBody>
         <div>
           <div style={{marginLeft:"3vw", marginTop:"2vh",display:"flex",width:"100%"}}>
-            <Avatar color="brand" initials="BR" name="brand color avatar" size={96}/>
+            <Avatar color="brand" name={selectedEmployee.employee_name} size={96}/>
             <div style={{display:"flex",marginLeft:"2vw", flexDirection:"column",justifyContent:"center",width:"60%"}}>
             <Text  size={700} style={{marginBottom:"2vh", fontWeight:"bold",color:themestate?"white":""}}> {selectedEmployee.employee_name}</Text>
             <div style={{display:"flex" ,width:"100%",justifyContent: "space-between"}}>
             <Text  size={250} style={{fontWeight:"bold",color:themestate?"white":""}}> {selectedEmployee.employee_id} </Text>
             <div style={{display:"flex"}}>
             <Timer20Regular style={{color:'rgb(1,105,185)'}}/>
-            <Text  size={250} style={{marginLeft:"3px",fontWeight:"bold",color:themestate?"white":""}}> Yet to fill the employee form</Text>
+            <Text  size={250} style={{marginLeft:"3px",fontWeight:"bold",color:themestate?"white":""}}>{selectedEmployee.form_status}</Text>
             </div>
             <div style={{display:"flex"}}>
             <Calendar20Regular style={{color:'rgb(1,105,185)'}}/>
@@ -1178,7 +1187,15 @@ return (
                 style={{marginLeft:"3vw", marginTop:"3vh"}}
             >
                 <Tab value="tab1" className={themestate ? "tab dark drawer" : "tab"} style= {{border:'1px solid transparent'}}>Employee Info</Tab>
-                <Tab value="tab2" className={themestate ? "tab dark drawer" : "tab"} style= {{border:'1px solid transparent'}}>Employee Form</Tab>
+                {
+                selectedEmployee && selectedEmployee.form_status === "Yet to Fill the Form" ? null :
+                selectedEmployee && selectedEmployee.form_status === "Yet to Share the Form" ? null :
+                (
+                  <Tab value="tab2" className={themestate ? "tab dark drawer" : "tab"} style={{ border: '1px solid transparent' }}>
+                    Employee Form
+                  </Tab>
+                )
+              }
                
                
             </TabList>
@@ -1203,7 +1220,7 @@ return (
 
         {/* <div className={styles.gridrow} style={{ gridArea: 'email' }}> */}
           <div className={`${styles.section} ${styles.email}`}>
-            <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Email</div>
+            <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Email:</div>
             <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.employee_mail}</div>
           </div>
         {/* </div> */}
@@ -1219,7 +1236,7 @@ return (
       {/* <div className={styles.gridrow} style={{ gridArea: 'status' }}> */}
       <div className={`${styles.section} ${styles.status}`}>
         <div className={styles.heading} style={{ fontWeight: 'bold', color:themestate?"white":""}}>Current Status:</div>
-        <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{formdataemployee.formStatus}</div>
+        <div className={styles.content} style={{color:themestate?"rgb(245,245,245)":""}}>{selectedEmployee.form_status}</div>
       </div>
       {/* </div> */}
 
@@ -1279,7 +1296,7 @@ return (
     </div>
         )}
         {selectedTab1 === 'tab2' && (
-          
+        
         <div style={{ display: 'flex', marginTop: '5px' }}>
           <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
           <Nav
@@ -1302,9 +1319,9 @@ return (
           />
             <div style={{ marginTop: 'auto', padding: '1rem', borderTop: '1px solid #ccc' }}>
             <div style={{display:"flex", justifyContent:"center", alignItems:"center"}}>
-            <Rating value={formdataemployee.self_rating} size="large" onChange={(_, data) => {console.log(data.value); }} />
+            <Rate disabled defaultValue={formdataemployee.self_rating/2}/>
           {/* <Rating value={value} onChange={handleRatingChange} /> */}
-          <p style={{marginLeft:"2px"}}>{2*formdataemployee.self_rating}</p>
+          <p style={{marginLeft:"5px"}}>{formdataemployee.self_rating}</p>
           </div>
         </div>
           </div>
@@ -1533,7 +1550,9 @@ return (
          <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleDeleteEmployee}><PersonDeleteRegular className={styles.iconLarge}/>Delete Employee</Button>
        {disableEdit&&<Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={() => setEditModalVisible(true)}><EditRegular className={styles.iconLarge}/>Edit Employee</Button>
         }
-      <div>
+      
+     
+<div>
       <Modal
         open={modalVisible}
         className="modalcon"
@@ -1544,7 +1563,7 @@ return (
       >
         <Form form={form} onFinish={handleAddEmployee} style={{ borderRadius: 0, paddingTop: 20 }}>
   <Row gutter={16}>
-    <Col span={12}>
+    <Col span={12} style={{ paddingRight: '18px' }}>
       <Form.Item label="Employee ID" name="employee_id">
         <Input
           style={{
@@ -1556,7 +1575,7 @@ return (
         />
       </Form.Item>
     </Col>
-    <Col span={12}>
+    <Col span={12} style={{ paddingLeft: '25px' }} >
       <Form.Item label="Employee Name" name="employee_name">
         <Input
           style={{
@@ -1569,7 +1588,7 @@ return (
     </Col>
   </Row>
   <Row gutter={16}>
-    <Col span={12}>
+    <Col span={12} style={{ paddingRight: '18px' }}>
       <Form.Item label="Employee Mail" name="employee_mail">
         <Input
           style={{
@@ -1580,7 +1599,7 @@ return (
         />
       </Form.Item>
     </Col>
-    <Col span={12}>
+    <Col span={12} style={{ paddingLeft: '25px' }}>
       <Form.Item label="Date of Birth" name="dob">
         <DatePicker
           placeholder='hello'
@@ -1592,7 +1611,9 @@ return (
         />
       </Form.Item>
     </Col>
-    <Col span={12}>
+    </Row>
+    <Row gutter={16}>
+    <Col span={12} style={{ paddingRight: '18px' }}>
       <Form.Item label="Appraisal date" name="appraisal_date">
         <DatePicker
           style={{
@@ -1603,9 +1624,7 @@ return (
         />
       </Form.Item>
     </Col>
-  </Row>
-  <Row gutter={16}>
-    <Col span={12}>
+    <Col span={12} style={{ paddingLeft: '25px' }}>
       <Form.Item label="Designation" name="designation">
         <Input
           style={{
@@ -1613,17 +1632,21 @@ return (
             border: 0,
             borderBottom: '1px solid rgb(180,180,180)',
           }}
-          
+         
         />
       </Form.Item>
     </Col>
-    <Col span={12}>
+    </Row>
+    <Row gutter={16}>
+    <Col span={12} style={{ paddingRight: '18px' }}>
       <Form.Item label="Department" name="dept_name">
       <Dropdown
           aria-labelledby={`${dropdownId}-underline`}
-          placeholder="Select dep"
+          placeholder="Select department"
           appearance="underline"
-          style={{minWidth:"10px"}}
+          style={{minWidth:"10px",borderBottomStyle:"ridge", whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',}}
           onActiveOptionChange={onActiveOptionChange2}
           {...props}
         >
@@ -1635,13 +1658,15 @@ return (
         </Dropdown>
       </Form.Item>
     </Col>
-    <Col span={12}>
+    <Col span={12} style={{ paddingLeft: '25px' }}>
       <Form.Item name="reporting_manager" label="Manager">
         <Dropdown
           aria-labelledby={`${dropdownId}-underline`}
-          placeholder="Select a manager"
+          placeholder="Select  manager"
           appearance="underline"
-          style={{minWidth:"10px"}}
+          style={{minWidth:"10px", borderBottomStyle:"ridge", whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',}}
           onActiveOptionChange={onActiveOptionChange}
           {...props}
         >
@@ -1655,7 +1680,7 @@ return (
     </Col>
   </Row>
   <Row gutter={16}>
-    <Col span={12}>
+    <Col span={12} style={{ paddingRight: '18px' }}>
       <Form.Item label="Date of Joining" name="date_of_joining">
         <DatePicker
           style={{
@@ -1666,7 +1691,7 @@ return (
         />
       </Form.Item>
     </Col>
-    <Col span={12}>
+    <Col span={12} style={{ paddingLeft: '25px' }}>
       <Form.Item label="Date of Reporting" name="date_of_reporting">
         <DatePicker
           style={{
@@ -1679,7 +1704,7 @@ return (
     </Col>
   </Row>
   <Row gutter={16}>
-    <Col span={12}>
+    <Col span={12} style={{ paddingRight: '18px' }}>
       <Form.Item label="Experience Before Focusr" name="experience_in_domain_before_focusr">
         <Input
           type="number"
@@ -1691,17 +1716,16 @@ return (
         />
       </Form.Item>
     </Col>
-    
-  </Row>
-  <Row gutter={16}>
-    <Col span={12}>
+    <Col span={12} style={{ paddingLeft: '25px' }}>
       <Form.Item label="Reviewer" name="reviewer">
         {/* <label id={`${dropdownId}-underline`}>Reviewer</label> */}
         <Dropdown
           aria-labelledby={`${dropdownId}-underline`}
-          placeholder="Select a reviewer"
+          placeholder="Select  reviewer"
           appearance="underline"
-          style={{minWidth:"10px"}}
+          style={{minWidth:"10px" ,borderBottomStyle:"ridge", whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',}}
           onActiveOptionChange={onActiveOptionChange1}
           {...props}
         >
@@ -1724,7 +1748,7 @@ return (
     </Col>
   </Row>
 </Form>
-
+ 
       </Modal>
     </div>
     <div>
@@ -1738,7 +1762,7 @@ return (
       >
         <Form form={formEdit} onFinish={handleEditEmployee} style={{ borderRadius: 0, paddingTop: 20 }}>
   <Row gutter={16}>
-    <Col span={12}>
+    <Col span={12} style={{ paddingRight: '18px' }}>
       <Form.Item label="Employee ID" name="employee_id">
         <Input
           style={{
@@ -1750,7 +1774,7 @@ return (
         />
       </Form.Item>
     </Col>
-    <Col span={12}>
+    <Col span={12} style={{ paddingLeft: '25px' }}>
       <Form.Item label="Employee Name" name="employee_name">
         <Input
           style={{
@@ -1763,7 +1787,7 @@ return (
     </Col>
   </Row>
   <Row gutter={16}>
-    <Col span={12}>
+    <Col span={12} style={{ paddingRight: '18px' }}>
       <Form.Item label="Employee Mail" name="employee_mail">
         <Input
           style={{
@@ -1774,7 +1798,7 @@ return (
         />
       </Form.Item>
     </Col>
-    <Col span={12}>
+    <Col span={12} style={{ paddingLeft: '25px' }}>
       <Form.Item label="Date of Birth" name="dob">
         <DatePicker
         className='datepickersudharsan'
@@ -1787,7 +1811,9 @@ return (
         />
       </Form.Item>
     </Col>
-    <Col span={12}>
+    </Row>
+    <Row gutter={16}>
+    <Col span={12} style={{ paddingRight: '18px' }}>
       <Form.Item label="Appraisal date" name="appraisal_date">
         <DatePicker
         placeholder={appraisalDate}
@@ -1799,9 +1825,7 @@ return (
         />
       </Form.Item>
     </Col>
-  </Row>
-  <Row gutter={16}>
-    <Col span={12}>
+    <Col span={12} style={{ paddingLeft: '25px' }}>
       <Form.Item label="Designation" name="designation">
         <Input
           style={{
@@ -1809,17 +1833,21 @@ return (
             border: 0,
             borderBottom: '1px solid rgb(180,180,180)',
           }}
-          
+         
         />
       </Form.Item>
     </Col>
-    <Col span={12}>
+    </Row>
+    <Row gutter={16}>
+    <Col span={12} style={{ paddingRight: '18px' }}>
       <Form.Item label="Department" name="dept_name">
       <Dropdown
           aria-labelledby={`${dropdownId}-underline`}
           placeholder="Select dep"
           appearance="underline"
-          style={{minWidth:"10px"}}
+          style={{minWidth:"10px",borderBottomStyle:"ridge", whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis'}}
           onActiveOptionChange={onActiveOptionChange2}
           {...props}
         >
@@ -1831,13 +1859,15 @@ return (
         </Dropdown>
       </Form.Item>
     </Col>
-    <Col span={12}>
+    <Col span={12} style={{ paddingLeft: '25px' }}>
       <Form.Item name="reporting_manager" label="Manager">
         <Dropdown
           aria-labelledby={`${dropdownId}-underline`}
           placeholder="Select a manager"
           appearance="underline"
-          style={{minWidth:"10px"}}
+          style={{minWidth:"10px",borderBottomStyle:"ridge", whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis'}}
           onActiveOptionChange={onActiveOptionChange}
           {...props}
         >
@@ -1851,7 +1881,7 @@ return (
     </Col>
   </Row>
   <Row gutter={16}>
-    <Col span={12}>
+    <Col span={12} style={{ paddingRight: '18px' }}>
       <Form.Item label="Date of Joining" name="date_of_joining">
         <DatePicker
         placeholder={joiningDate}
@@ -1863,7 +1893,7 @@ return (
         />
       </Form.Item>
     </Col>
-    <Col span={12}>
+    <Col span={12} style={{ paddingLeft: '25px' }}>
       <Form.Item label="Date of Reporting" name="date_of_reporting">
         <DatePicker
         placeholder={reportingDate}
@@ -1877,7 +1907,7 @@ return (
     </Col>
   </Row>
   <Row gutter={16}>
-    <Col span={12}>
+    <Col span={12} style={{ paddingRight: '18px' }}>
       <Form.Item label="Experience Before Focusr" name="experience_in_domain_before_focusr">
         <Input
           type="number"
@@ -1889,17 +1919,16 @@ return (
         />
       </Form.Item>
     </Col>
-    
-  </Row>
-  <Row gutter={16}>
-    <Col span={12}>
+    <Col span={12} style={{ paddingLeft: '25px' }}>
       <Form.Item label="Reviewer" name="reviewer_name">
         {/* <label id={`${dropdownId}-underline`}>Reviewer</label> */}
         <Dropdown
           aria-labelledby={`${dropdownId}-underline`}
           placeholder="Select a reviewer"
           appearance="underline"
-          style={{minWidth:"10px"}}
+          style={{minWidth:"10px",borderBottomStyle:"ridge", whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis'}}
           onActiveOptionChange={onActiveOptionChange1}
           {...props}
         >
@@ -1922,7 +1951,7 @@ return (
     </Col>
   </Row>
 </Form>
-
+ 
       </Modal>
     </div>
  

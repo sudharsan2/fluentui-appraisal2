@@ -2,6 +2,7 @@ import React,{useState, useEffect} from "react";
 import {useSelector, useDispatch} from 'react-redux';
 import {Stack, Nav} from '@fluentui/react';
 import axios from 'axios';
+import { Rate,message } from 'antd';
 import {
   Dropdown,
   makeStyles,
@@ -214,7 +215,20 @@ const useStyles = makeStyles({
   content: {
     fontSize: '13px',
     marginLeft: '10px'
-  }
+  },
+  customRate: {
+    display: 'flex',
+    flexDirection: 'column',
+    '& .ant-rate-star-first, .ant-rate-star-second': {
+      color: '#a9a9a9', // Darker grey color for unselected stars
+    },
+    '& .ant-rate-star-full .ant-rate-star-second': {
+      color: '#fadb14 !important', // Golden color for selected stars
+    },
+    '& .ant-rate-star-half .ant-rate-star-second': {
+      color: '#fadb14 !important', // Golden color for half-selected stars
+    },
+  },
 });
 
 const data = {
@@ -465,6 +479,8 @@ const MGAppraisal = () => {
 
   const [reload, setReload] = useState(false);
 
+  const [refresh, setRefresh] = useState(false);
+
 
   const navLinkGroups = [
     {
@@ -520,7 +536,7 @@ const MGAppraisal = () => {
     useEffect(() => {
       fetchtodoEmployeeData();
       fetchwaitingEmployeeData();
-    }, [reload]);
+    }, [reload,refresh]);
 
 
   // const onActiveOptionChange1 = React.useCallback(
@@ -692,6 +708,9 @@ const MGAppraisal = () => {
       const result = await axios.post(`http://127.0.0.1:9000/user/appraiser/remarks/${formdataemployee.employee_id}`,formdata
         
       );
+      if (result.status === 201) {
+        message.success('Form submission successfull');
+      }
        // Extract and set the token from the response
     } catch (error) {
       console.error('Error sending data to the API', error);
@@ -712,8 +731,9 @@ const MGAppraisal = () => {
   };
 
 
-  const handleRatingChange = (event, newValue) => {
-    setValue(newValue); 
+  const handleRatingChange = (newValue) => {
+    console.log({"self_rating":newValue})
+    setformdata({...formdata,['self_rating']:2*newValue}); 
   };
  
   const handleTabSelect = (event,data) => {
@@ -754,8 +774,9 @@ const MGAppraisal = () => {
   };
  
   
-  const handleAddEmployee = () => {
-    alert("Add Employee functionality to be implemented");
+  const handleRefresh = () => {
+    setRefresh(!refresh);
+    message.success("Data has been Refreshed");
   };
  
   const handleRowClick = async (employee) => {
@@ -801,9 +822,8 @@ const MGAppraisal = () => {
         "canSeeManagerComments": true
       });
   
-      
       if (result.status === 200) {
-
+        message.success('Shared to HR successfully');
         setReload(!reload)
         console.log('Data sent successfully', result.data);
         // Perform any additional actions if needed
@@ -872,7 +892,7 @@ const MGAppraisal = () => {
   } = useTableFeatures(
     {
       columns, 
-      items: data[selectedTab],
+      // items: data[selectedTab],
     },
     [
       useTableSort({
@@ -897,7 +917,7 @@ const MGAppraisal = () => {
       (item.date_of_joining && item.date_of_joining.includes(searchQuery)) ||
      
       // (item.appraisal && item.appraisal.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (item.reporting_manager && item.reporting_manager.toLowerCase().includes(searchQuery.toLowerCase()))
+      (item.manager_name && item.manager_name.toLowerCase().includes(searchQuery.toLowerCase()))
     )
   :todoEmployees;
  
@@ -924,7 +944,7 @@ const MGAppraisal = () => {
   (item.date_of_joining && item.date_of_joining.includes(searchQuery)) ||
   // Uncomment if 'appraisal' is part of the dataset and needs to be searched
   // (item.appraisal && item.appraisal.toLowerCase().includes(searchQuery.toLowerCase())) ||
-  (item.reporting_manager && item.reporting_manager.toLowerCase().includes(searchQuery.toLowerCase()))
+  (item.manager_name && item.manager_namer.toLowerCase().includes(searchQuery.toLowerCase()))
 )
    
   :waitingEmployees;
@@ -975,18 +995,18 @@ const MGAppraisal = () => {
         <DrawerBody>
         <div>
         <div style={{marginLeft:"3vw", marginTop:"2vh",display:"flex",width:"100%"}}>
-            <Avatar color="brand" initials="BR" name="brand color avatar" size={96}/>
+            <Avatar color="brand"  name={selectedEmployee.employee_name} size={96}/>
             <div style={{display:"flex",marginLeft:"2vw", flexDirection:"column",justifyContent:"center",width:"60%"}}>
-            <Text  size={700} style={{marginBottom:"2vh", fontWeight:"bold",color:themestate?"white":""}}> {selectedEmployee.name}</Text>
+            <Text  size={700} style={{marginBottom:"2vh", fontWeight:"bold",color:themestate?"white":""}}> {selectedEmployee.employee_name}</Text>
             <div style={{display:"flex" ,width:"100%",justifyContent: "space-between"}}>
-            <Text  size={250} style={{fontWeight:"bold",color:themestate?"white":""}}> {selectedEmployee.empid} </Text>
+            <Text  size={250} style={{fontWeight:"bold",color:themestate?"white":""}}> {selectedEmployee.employee_id} </Text>
             <div style={{display:"flex"}}>
             <Timer20Regular style={{color:'rgb(1,105,185)'}}/>
             <Text  size={250} style={{marginLeft:"3px",fontWeight:"bold",color:themestate?"white":""}}> Yet to fill the employee form</Text>
             </div>
             <div style={{display:"flex"}}>
             <Calendar20Regular style={{color:'rgb(1,105,185)'}}/>
-            <Text  size={250} style={{marginLeft:"3px", fontWeight:"bold",color:themestate?"white":""}}> 1 May 2024</Text>
+            <Text  size={250} style={{marginLeft:"3px", fontWeight:"bold",color:themestate?"white":""}}>{selectedEmployee.appraisal_date}</Text>
             </div>
             </div>
             </div>
@@ -999,7 +1019,7 @@ const MGAppraisal = () => {
             >
                 <Tab value="tab1" className={themestate ? "tab dark drawer" : "tab"} style= {{border:'1px solid transparent'}}>Employee Info</Tab>
                 <Tab value="tab2" className={themestate ? "tab dark drawer" : "tab"} style= {{border:'1px solid transparent'}}>Employee Form</Tab>
-                <Tab value="tab3" className={themestate ? "tab dark drawer" : "tab"} style= {{border:'1px solid transparent'}}>Add Comments</Tab>
+                <Tab value="tab3" className={themestate ? "tab dark drawer" : "tab"} style= {{border:'1px solid transparent'}}>{formdata&&formdata.formStatus==='managerfilled'?"Your Comments":"Add Comments"}</Tab>
                 
                 
             </TabList>
@@ -1117,8 +1137,12 @@ const MGAppraisal = () => {
             }),
           }}
           />
-            <div style={{ marginTop: 'auto', padding: '1rem', borderTop: '1px solid #ccc' }}>
-          <Rating value={value} onChange={handleRatingChange} />
+          <div style={{display:"flex",alignItems:"center"}} >
+            <div className={styles.customRate} style={{ marginTop: 'auto', padding: '1rem', borderTop: '1px solid #ccc' }}>
+            <Rate disabled defaultValue={formdataemployee.self_rating/2}/>
+           
+            </div>
+            <p>{formdataemployee.self_rating}</p>
         </div>
           </div>
 
@@ -1287,9 +1311,10 @@ const MGAppraisal = () => {
             link: getNavLinkStyle,
           }}
           />
-            <div style={{ marginTop: 'auto', padding: '1rem', borderTop: '1px solid #ccc' }}>
-          <Rating styles={{color:themestate?"white":""}} value={value} onChange={handleRatingChange} />
-          <Button  onClick={() => setValue(0)}>Clear Rating</Button>
+            <div className={styles.customRate} style={{ marginTop: 'auto', padding: '1rem', borderTop: '1px solid #ccc' }}>
+            {formdata&&formdata.formStatus==='managerfilled'?<Rate disabled defaultValue={formdata.self_rating}/>:<Rate allowHalf onChange={(event, newValue) => {handleRatingChange(event);}} />}
+          {/* <Rating styles={{color:themestate?"white":""}} value={value} onChange={handleRatingChange} /> */}
+          {/* <Button  onClick={() => setValue(0)}>Clear Rating</Button> */}
         </div>
           </div>
 
@@ -1299,8 +1324,8 @@ const MGAppraisal = () => {
             
               <div className={`${styles.section} ${styles.share}`}>
                 <div className={styles.content} style={{display: "flex"}}>
-                  <ShareIos24Filled style={{color:'rgb(1,105,185)'}}/>
-                  <Link style={{ marginLeft: '10px' }} className={styles.shareLink} onClick={() => handlesharetoHR(selectedEmployee.employee_id)}>Share to HR</Link>
+                {formdata&&formdata.formStatus==='managerfilled'?null:<ShareIos24Filled style={{color:'rgb(1,105,185)'}}/>}
+                {formdata&&formdata.formStatus==='managerfilled'?null:<Link style={{ marginLeft: '10px' }} className={styles.shareLink} onClick={() => handlesharetoHR(selectedEmployee.employee_id)}>Share to HR</Link>}
                 </div>
               </div>
               </div>
@@ -1321,6 +1346,7 @@ const MGAppraisal = () => {
                   value={formdata.question_1}
                   onChange={(e) => handleFieldChange1('question_1', e.target.value)}
                   placeholder="Enter your response..."
+                  readOnly= {formdata&&formdata.formStatus==='managerfilled'?true:false}
                 />
           </Field>
           </div>
@@ -1336,6 +1362,7 @@ const MGAppraisal = () => {
               value={formdata.question_2}
               onChange={(e) => handleFieldChange1('question_2', e.target.value)}
               placeholder="Enter your response..."
+              readOnly= {formdata&&formdata.formStatus==='managerfilled'?true:false}
             />
           </Field>
           </div>
@@ -1351,6 +1378,7 @@ const MGAppraisal = () => {
               value={formdata.question_3}
               onChange={(e) => handleFieldChange1('question_3', e.target.value)}
               placeholder="Enter your response..."
+              readOnly= {formdata&&formdata.formStatus==='managerfilled'?true:false}
             />
           </Field>
           </div>
@@ -1366,11 +1394,12 @@ const MGAppraisal = () => {
               value={formdata.question_4}
               onChange={(e) => handleFieldChange1('question_4', e.target.value)}
               placeholder="Enter your response..."
+              readOnly= {formdata&&formdata.formStatus==='managerfilled'?true:false}
             />
           </Field>
           </div>
           {errorMessage1 && <div style={{ color: 'red', marginTop: '0.5rem' }}>{errorMessage1}</div>}
-          <Button style={{marginTop: '5px', backgroundColor: 'blue', color: 'white'}} onClick={handleSubmit}>Submit</Button>
+          {formdata&&formdata.formStatus==='managerfilled'?null:<Button style={{marginTop: '5px', backgroundColor: 'blue', color: 'white'}} onClick={handleSubmit}>Submit</Button>}
         </div>
       )}
 
@@ -1414,7 +1443,7 @@ const MGAppraisal = () => {
             </div>
           ))}
           {errorMessage2 && <div style={{ color: 'red', marginTop: '0.5rem' }}>{errorMessage2}</div>}
-          <Button style={{marginTop: '5px', backgroundColor: 'blue', color: 'white'}} onClick={handleSubmit}>Submit</Button>
+          {formdata&&formdata.formStatus==='managerfilled'?null:<Button style={{marginTop: '5px', backgroundColor: 'blue', color: 'white'}} onClick={handleSubmit}>Submit</Button>}
         </div>
       )}
 
@@ -1422,7 +1451,7 @@ const MGAppraisal = () => {
               <div style={{ marginTop: '1rem' }}>
                 <div style={{ marginTop: '1rem' }}>
                 <Field label="Enter your comments for this part">
-                  <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px', borderColor: !formData3.likes && submitted3 ? 'red' : '' }} value={formdata.part4ManagerComments} onChange={(e) => handleFieldChange3('part4ManagerComments', e.target.value)} placeholder="Enter your response..." />
+                  <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px', borderColor: !formData3.likes && submitted3 ? 'red' : '' }} value={formdata.part4ManagerComments} onChange={(e) => handleFieldChange3('part4ManagerComments', e.target.value)} placeholder="Enter your response..." readOnly= {formdata&&formdata.formStatus==='managerfilled'?true:false} />
                 </Field>
                 </div>
                 {/* <div style={{ marginTop: '1rem' }}>
@@ -1436,7 +1465,7 @@ const MGAppraisal = () => {
                 </Field>
                 </div> */}
                 {errorMessage3 && <div style={{ color: 'red', marginTop: '0.5rem' }}>{errorMessage3}</div>}
-                <Button style={{marginTop: '5px', backgroundColor: 'blue', color: 'white'}} onClick={handleSubmit}>Submit</Button>
+                {formdata&&formdata.formStatus==='managerfilled'?null:<Button style={{marginTop: '5px', backgroundColor: 'blue', color: 'white'}} onClick={handleSubmit}>Submit</Button>}
               </div>
             )}
 
@@ -1444,7 +1473,7 @@ const MGAppraisal = () => {
               <div style={{ marginTop: '1rem' }}>
                 <div style={{ marginTop: '1rem' }}>
                 <Field label="Enter your comments for this part">
-                <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px', borderColor: !formData4.works && submitted4 ? 'red' : '' }} value={formdata.part5ManagerComments} onChange={(e) => handleFieldChange4('part5ManagerComments', e.target.value)} placeholder="Enter your response..." />
+                <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px', borderColor: !formData4.works && submitted4 ? 'red' : '' }} value={formdata.part5ManagerComments} onChange={(e) => handleFieldChange4('part5ManagerComments', e.target.value)} placeholder="Enter your response..." readOnly= {formdata&&formdata.formStatus==='managerfilled'?true:false}/>
                 </Field>
                 </div>
                 {/* <div style={{ marginTop: '1rem' }}>
@@ -1463,7 +1492,7 @@ const MGAppraisal = () => {
                 </Field>
                 </div> */}
                 {errorMessage4 && <div style={{ color: 'red', marginTop: '0.5rem' }}>{errorMessage4}</div>}
-                <Button style={{marginTop: '5px', backgroundColor: 'blue', color: 'white'}} onClick={handleSubmit}>Submit</Button>
+                {formdata&&formdata.formStatus==='managerfilled'?null:<Button style={{marginTop: '5px', backgroundColor: 'blue', color: 'white'}} onClick={handleSubmit}>Submit</Button>}
               </div>
             )}
           </div>
@@ -1495,12 +1524,12 @@ const MGAppraisal = () => {
       >
         <Tab    className={themestate ? "tab dark" : "tab"} style= {{border:'1px solid transparent'}} value="tab1">To do</Tab>
         <Tab  className={themestate ? "tab dark" : "tab"} style= {{border:'1px solid transparent'}} value="tab2">Waiting for HR</Tab>
-        <Tab className={themestate ? "tab dark" : "tab"} style= {{border:'1px solid transparent'}} value="tab3">Review pending</Tab>
+        {/* <Tab className={themestate ? "tab dark" : "tab"} style= {{border:'1px solid transparent'}} value="tab3">Review pending</Tab> */}
         {/* <Tab value="tab3">Employee</Tab> */}
         
       </TabList>
       <div className={styles.controls}>
-      <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleAddEmployee}><ArrowClockwiseRegular className={styles.iconLarge}/>Refresh</Button>
+      <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleRefresh}><ArrowClockwiseRegular className={styles.iconLarge}/>Refresh</Button>
         <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleDeleteEmployee}><ArrowDownRegular  className={styles.iconLarge}/>Export</Button>
         <SearchBox
               placeholder="Search..."
@@ -1595,7 +1624,7 @@ const MGAppraisal = () => {
        <TableCell>{item.department.dept_name}</TableCell>
        <TableCell>{item.date_of_joining}</TableCell>
        <TableCell>{item.appraisal_date}</TableCell>
-       <TableCell>{item.reporting_manager}</TableCell>
+       <TableCell>{item.manager_name}</TableCell>
      </TableRow>
      
       ))}
@@ -1618,7 +1647,7 @@ const MGAppraisal = () => {
         <TableCell>{item.department.dept_name}</TableCell>
         <TableCell>{item.date_of_joining}</TableCell>
         <TableCell>{item.appraisal_date}</TableCell>
-        <TableCell>{item.reporting_manager}</TableCell>
+        <TableCell>{item.manager_name}</TableCell>
       </TableRow>
      
       ))}

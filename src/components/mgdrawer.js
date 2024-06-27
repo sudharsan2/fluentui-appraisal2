@@ -901,8 +901,8 @@
  
  
 
-import React, { useState } from "react";
-import { useNavigate, Link} from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate,useLocation, Link} from "react-router-dom";
 import {useSelector, useDispatch} from 'react-redux';
 import {
     NavCategory,
@@ -1107,6 +1107,27 @@ const MGNavDrawerDefault = (props) => {
   const labelId = useId("type-label");
   const [isOpen, setIsOpen] = useState(true);
   const [type, setType] = useState("inline");
+
+  const location = useLocation();
+  const determineSelectedValue = () => {
+    switch (location.pathname) {
+        case '/mgappraisal':
+            return '1';
+        case '/mgreviewer':
+            return '2';
+        case '/mgsummary':
+            return '3';
+        
+        default:
+            return '1';
+    }
+  };
+ 
+  const [selectedValue, setSelectedValue] = useState(determineSelectedValue());
+ 
+  useEffect(() => {
+    setSelectedValue(determineSelectedValue());
+  }, [location.pathname]);
  
   const someClickHandler = (nav) => {
     switch (nav) {
@@ -1117,11 +1138,9 @@ const MGNavDrawerDefault = (props) => {
             navigate("/mgreviewer");
             break;
         case 'summary':
-            navigate("/hrmanager");
+            navigate("/mgsummary");
             break;   
-        case 'reviewer':
-            navigate("/hrreviewer");
-            break;  
+        
        
         default:
             console.error("Unknown navigation target:", nav);
@@ -1133,8 +1152,9 @@ const MGNavDrawerDefault = (props) => {
     <div className={styles.root} style={{height: 'calc(100vh - 48px)'}}>
        {/* <div style={themestate?{backgroundColor:darktheme.sidebarcolordark, height: 'calc(100vh - 48px)'}:{backgroundColor:lighttheme.sidebarcolorlight}}> */}
         <NavDrawer
-  defaultSelectedValue="1"
-  defaultSelectedCategoryValue="1"
+  // defaultSelectedValue="1"
+  // defaultSelectedCategoryValue="1"
+  selectedValue ={selectedValue}
   open={isOpen}
   type={type}
   onOpenChange={(_, { open }) => setIsOpen(open)}

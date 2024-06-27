@@ -20,7 +20,9 @@ import HRReviewer from './pages/HRReviewer';
 import HRSummary from './pages/HRSummary';
 import MGAppraisal from './pages/MGAppraisal';
 import MGReviewer from './pages/MGReviewer';
+import MGSummary from './pages/MGSummary'
 import RVReviewer from './pages/RVReviewer';
+import RVSummary from './pages/RVSummary'
 // import FormPage from './pages/employeeformup';
 
 function App() {
@@ -38,7 +40,9 @@ function App() {
         <Route path='hrsummary' element={<CustomLayout><NavDrawerDefault><HRSummary/></NavDrawerDefault></CustomLayout>}/>
         <Route path='mgappraisal' element={<CustomLayout><MGNavDrawerDefault><MGAppraisal/></MGNavDrawerDefault></CustomLayout>}/>
         <Route path='mgreviewer' element={<CustomLayout><MGNavDrawerDefault><MGReviewer/></MGNavDrawerDefault></CustomLayout>}/>
+        <Route path='mgsummary' element={<CustomLayout><MGNavDrawerDefault><MGSummary/></MGNavDrawerDefault></CustomLayout>}/>
         <Route path='rvreviewer' element={<CustomLayout><RVNavDrawerDefault><RVReviewer/></RVNavDrawerDefault></CustomLayout>}/>
+        <Route path='rvsummary' element={<CustomLayout><RVNavDrawerDefault><RVSummary/></RVNavDrawerDefault></CustomLayout>}/>
 
         <Route path='form/:token' element={<FormPage/>}/>
         

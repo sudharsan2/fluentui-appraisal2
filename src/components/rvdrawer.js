@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate, Link} from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate,useLocation, Link} from "react-router-dom";
 import {useSelector, useDispatch} from 'react-redux';
 import {
     NavCategory,
@@ -204,6 +204,25 @@ const RVNavDrawerDefault = (props) => {
   const labelId = useId("type-label");
   const [isOpen, setIsOpen] = useState(true);
   const [type, setType] = useState("inline");
+
+  const location = useLocation();
+  const determineSelectedValue = () => {
+    switch (location.pathname) {
+        case '/rvreviewer':
+            return '1';
+        case '/rvsummary':
+            return '2';
+        
+        default:
+            return '1';
+    }
+  };
+ 
+  const [selectedValue, setSelectedValue] = useState(determineSelectedValue());
+ 
+  useEffect(() => {
+    setSelectedValue(determineSelectedValue());
+  }, [location.pathname]);
  
   const someClickHandler = (nav) => {
     switch (nav) {
@@ -212,7 +231,7 @@ const RVNavDrawerDefault = (props) => {
             navigate("/rvreviewer");
             break;
         case 'summary':
-            navigate("/rvreviewer");
+            navigate("/rvsummary");
             break;   
        
        
@@ -226,8 +245,9 @@ const RVNavDrawerDefault = (props) => {
     <div className={styles.root} style={{height: 'calc(100vh - 48px)'}}>
        {/* <div style={themestate?{backgroundColor:darktheme.sidebarcolordark, height: 'calc(100vh - 48px)'}:{backgroundColor:lighttheme.sidebarcolorlight}}> */}
         <NavDrawer
-  defaultSelectedValue="1"
-  defaultSelectedCategoryValue="1"
+  // defaultSelectedValue="1"
+  // defaultSelectedCategoryValue="1"
+  selectedValue ={selectedValue}
   open={isOpen}
   type={type}
   onOpenChange={(_, { open }) => setIsOpen(open)}
@@ -272,7 +292,7 @@ const RVNavDrawerDefault = (props) => {
         target="_blank"
         icon={<LayerDiagonalPersonRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
         onClick={() => someClickHandler('review')}
-        value="2"
+        value="1"
         className={themestate? styles.navItemdark : styles.navItemlight}
       >
        
@@ -286,7 +306,7 @@ const RVNavDrawerDefault = (props) => {
         target="_blank"
         icon={<PersonStarRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
         onClick={() => someClickHandler('summary')}
-        value="3"
+        value="2"
         className={themestate? styles.navItemdark : styles.navItemlight}
       >
        
@@ -306,7 +326,7 @@ const RVNavDrawerDefault = (props) => {
         target="_blank"
         icon={<LayerDiagonalPersonRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
         onClick={() => someClickHandler('review')}
-        value="2"
+        value="1"
         className={themestate? styles.navItemdark : styles.navItemlight}
         style={{ marginTop: "10px", fontSize:"17px"}}  
         >
@@ -319,7 +339,7 @@ const RVNavDrawerDefault = (props) => {
         target="_blank"
         icon={<PersonStarRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
         onClick={() => someClickHandler('summary')}
-        value="3"
+        value="2"
         className={themestate? styles.navItemdark : styles.navItemlight}
         style={{ marginTop: "10px", fontSize:"17px"}}  
         >

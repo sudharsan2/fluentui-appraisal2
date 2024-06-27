@@ -1,6 +1,7 @@
 import React,{useState, useEffect} from "react";
 import {useSelector, useDispatch} from 'react-redux';
-import {Stack, Nav, Dropdown } from '@fluentui/react';
+import {Stack, Nav } from '@fluentui/react';
+import { Rate, message } from 'antd';
 import axios from 'axios';
 import {
   makeStyles,
@@ -38,7 +39,9 @@ import {
   BreadcrumbButton,
   BreadcrumbDivider,
   BreadcrumbProps,
+  useId,
   Option,
+  Dropdown
 } from "@fluentui/react-components";
 import {AddRegular, PersonDeleteRegular , EditRegular, SearchRegular, FilterRegular, FilterDismissRegular, FilterAddRegular, ChartMultipleFilled,ChartMultipleRegular,Dismiss24Regular ,Timer20Regular,Calendar20Regular, ArrowDownRegular, ArrowClockwiseRegular,ShareMultiple24Filled ,Add24Filled,ShareIos24Filled  } from "@fluentui/react-icons"; // Import the icons
 import './page.css';
@@ -220,7 +223,20 @@ const useStyles = makeStyles({
   content: {
     fontSize: '13px',
     marginLeft: '10px'
-  }
+  },
+  customRate: {
+    display: 'flex',
+    flexDirection: 'column',
+    '& .ant-rate-star-first, .ant-rate-star-second': {
+      color: '#a9a9a9', // Darker grey color for unselected stars
+    },
+    '& .ant-rate-star-full .ant-rate-star-second': {
+      color: '#fadb14 !important', // Golden color for selected stars
+    },
+    '& .ant-rate-star-half .ant-rate-star-second': {
+      color: '#fadb14 !important', // Golden color for half-selected stars
+    },
+  },
 });
 
 const data = {
@@ -473,12 +489,13 @@ const RVReviewer = () => {
   const [formdataemployee,setformdataemployee] = useState({});
 
   const [formdata, setformdata] = useState({});
-
+  const [refresh, setRefresh] = useState(false);
+  const [reload, setReload] = useState(false);
   
 
   const [formdatamanager, setformdatamanager] = useState({});
 
-
+  const dropdownId = useId("dropdown");
 
   const navLinkGroups = [
     {
@@ -533,7 +550,7 @@ const RVReviewer = () => {
   useEffect(() => {
     fetchtodoEmployeeData();
     fetchwaitingEmployeeData();
-  }, []);
+  }, [refresh,reload]);
 
 
   const handleSubmit = async () => {
@@ -541,6 +558,9 @@ const RVReviewer = () => {
       const result = await axios.post(`http://127.0.0.1:9000/user/reviewer/remarks/${formdataemployee.employee_id}`,formdata
         
       );
+      if (result.status === 201) {
+        message.success('Form submission successfull');
+      }
        // Extract and set the token from the response
     } catch (error) {
       console.error('Error sending data to the API', error);
@@ -549,15 +569,16 @@ const RVReviewer = () => {
 
 
   const onActiveOptionChange1 = React.useCallback(
-    (params) => (_, data) => {
-       setActiveOptionId({
-         ...activeOptionId,
-       [params]:data?.nextOption?.value}); 
- 
-       setformdata({
-         ...formdata,
-         [params]:data?.nextOption?.value
-       });
+    (value) => (_, data) => {
+       setActiveOptionId((prevActiveOptionId) => ({
+        ...prevActiveOptionId,
+        [value]: data?.nextOption?.value,
+      }));
+  
+      setformdata((prevFormdata) => ({
+        ...prevFormdata,
+        [value]: data?.nextOption?.value,
+      }));
        // Assuming optionValue is the id
        console.log({"active":data?.nextOption?.value})
      },
@@ -674,8 +695,8 @@ const RVReviewer = () => {
   };
 
 
-  const handleRatingChange = (event, newValue) => {
-    setValue(newValue); 
+  const handleRatingChange = (newValue) => {
+    setformdata({...formdata,['self_rating']:2*newValue}); 
   };
 
 
@@ -729,8 +750,9 @@ const RVReviewer = () => {
   };
  
   
-  const handleAddEmployee = () => {
-    alert("Add Employee functionality to be implemented");
+  const handleRefresh = () => {
+    setRefresh(!refresh);
+    message.success("Data has been Refreshed")
   };
  
   const handleRowClick = async (employee) => {
@@ -750,6 +772,7 @@ const RVReviewer = () => {
       const response2 = await axios.get(`http://127.0.0.1:9000/user/appraiser/remarks/${employee.employee_id}`);
       
       setformdatamanager(response2.data);
+      setformdata({});
       // console.log({ "question1": formdataemployee.question_1 });
     }
     // setformdataemployee({ "question_1": "blahhhhh" });
@@ -765,6 +788,10 @@ const RVReviewer = () => {
       const result = await axios.post(`http://127.0.0.1:9000/user/employee/changeFormStatus/${formdataemployee.id}`, {
         "empId":parameter,"status":"reviewerfilled", "canSeeReviewerComments":true
       });
+      if (result.status === 200) {
+        message.success('Shared to HR successfully');
+        setReload(!reload);
+      }
        // Extract and set the token from the response
     } catch (error) {
       console.error('Error sending data to the API', error);
@@ -926,24 +953,24 @@ const RVReviewer = () => {
         <DrawerBody>
         <div>
         <div style={{marginLeft:"3vw", marginTop:"2vh",display:"flex",width:"100%"}}>
-            <Avatar color="brand" initials="BR" name="brand color avatar" size={96}/>
+            <Avatar color="brand"  name={selectedEmployee.employee_name} size={96}/>
             <div style={{display:"flex",marginLeft:"2vw", flexDirection:"column",justifyContent:"center",width:"60%"}}>
-            <Text  size={700} style={{marginBottom:"2vh", fontWeight:"bold",color:themestate?"white":""}}> {selectedEmployee.name}</Text>
+            <Text  size={700} style={{marginBottom:"2vh", fontWeight:"bold",color:themestate?"white":""}}>{selectedEmployee.employee_name}</Text>
             <div style={{display:"flex" ,width:"100%",justifyContent: "space-between"}}>
-            <Text  size={250} style={{fontWeight:"bold",color:themestate?"white":""}}> {selectedEmployee.empid} </Text>
+            <Text  size={250} style={{fontWeight:"bold",color:themestate?"white":""}}>{selectedEmployee.employee_id}</Text>
             <div style={{display:"flex"}}>
             <Timer20Regular style={{color:'rgb(1,105,185)'}}/>
             <Text  size={250} style={{marginLeft:"3px",fontWeight:"bold",color:themestate?"white":""}}> Yet to fill the employee form</Text>
             </div>
             <div style={{display:"flex"}}>
             <Calendar20Regular style={{color:'rgb(1,105,185)'}}/>
-            <Text  size={250} style={{marginLeft:"3px", fontWeight:"bold",color:themestate?"white":""}}> 1 May 2024</Text>
+            <Text  size={250} style={{marginLeft:"3px", fontWeight:"bold",color:themestate?"white":""}}>{selectedEmployee.appraisal_date}</Text>
             </div>
             </div>
             </div>
             </div>
             <TabList
-                defaultSelectedValue="tab1"
+                defaultSelectedValue={selectedTab1}
                 appearance="subtle"
                 onTabSelect={handleTabSelect}
                 style={{marginLeft:"3vw", marginTop:"3vh"}}
@@ -951,7 +978,7 @@ const RVReviewer = () => {
                 <Tab value="tab1" className={themestate ? "tab dark drawer" : "tab"} style= {{border:'1px solid transparent'}}>Employee Info</Tab>
                 <Tab value="tab2" className={themestate ? "tab dark drawer" : "tab"} style= {{border:'1px solid transparent'}}>Employee Comments</Tab>
                 <Tab value="tab3" className={themestate ? "tab dark drawer" : "tab"} style= {{border:'1px solid transparent'}}>Manager Comments</Tab>
-                <Tab value="tab4" className={themestate ? "tab dark drawer" : "tab"} style= {{border:'1px solid transparent'}}>Add Comments</Tab>
+                {formdata&&formdata.formStatus==='reviewerfilled'?<Tab value="tab4" className={themestate ? "tab dark drawer" : "tab"} style= {{border:'1px solid transparent'}}>Your Comments</Tab>:<Tab value="tab4" className={themestate ? "tab dark drawer" : "tab"} style= {{border:'1px solid transparent'}}>Add Comments</Tab>}
                 
                 
             </TabList>
@@ -1070,7 +1097,7 @@ const RVReviewer = () => {
           }}
           />
             <div style={{ marginTop: 'auto', padding: '1rem', borderTop: '1px solid #ccc' }}>
-          <Rating value={formdataemployee.self_rating} onChange={handleRatingChange} />
+            <Rate disabled defaultValue={formdataemployee.self_rating}/>
         </div>
           </div>
 
@@ -1244,7 +1271,7 @@ const RVReviewer = () => {
           }}
           />
             <div style={{ marginTop: 'auto', padding: '1rem', borderTop: '1px solid #ccc' }}>
-          <Rating value={formdatamanager.self_rating} onChange={handleRatingChange} />
+            <Rate disabled defaultValue={formdatamanager.self_rating}/>
         </div>
           </div>
 
@@ -1413,9 +1440,9 @@ const RVReviewer = () => {
             link: getNavLinkStyle,
           }}
           />
-            <div style={{ marginTop: 'auto', padding: '1rem', borderTop: '1px solid #ccc' }}>
-          <Rating styles={{color:themestate?"white":""}} value={formdata.self_rating} onChange={handleRatingChange} />
-          <Button  onClick={() => setValue(0)}>Clear Rating</Button>
+            <div className={styles.customRate} style={{ marginTop: 'auto', padding: '1rem', borderTop: '1px solid #ccc' }}>
+            {formdata&&formdata.formStatus==='reviewerfilled'?<Rate disabled defaultValue={formdata.self_rating/2}/>:<Rate onChange={(event, newValue) => {handleRatingChange(event);}} />}
+          {/* <Button  onClick={() => setValue(0)}>Clear Rating</Button> */}
         </div>
           </div>
 
@@ -1425,8 +1452,8 @@ const RVReviewer = () => {
             
               <div className={`${styles.section} ${styles.share}`}>
                 <div className={styles.content} style={{display: "flex"}}>
-                  <ShareIos24Filled style={{color:'rgb(1,105,185)'}}/>
-                  <Link style={{ marginLeft: '10px' }} className={styles.shareLink} onClick={() => handlesharetoHR(selectedEmployee.employee_id)}>Share to HR</Link>
+                {formdata&&formdata.formStatus==='reviewerfilled'?null:<ShareIos24Filled style={{color:'rgb(1,105,185)'}}/>}
+                  {formdata&&formdata.formStatus==='reviewerfilled'?null:<Link style={{ marginLeft: '10px' }} className={styles.shareLink} onClick={() => handlesharetoHR(selectedEmployee.employee_id)}>Share to HR</Link>}
                 </div>
               </div>
               </div>
@@ -1443,10 +1470,12 @@ const RVReviewer = () => {
                     width: '500px',
                     minHeight: '50px',
                     borderColor: !formData1.roleResponse && submitted1 ? 'red' : '',
+                    
                   }}
                   value={formdata.question_1}
                   onChange={(e) => handleFieldChange1('question_1', e.target.value)}
                   placeholder="Enter your response..."
+                  readOnly ={formdata&&formdata.formStatus==='reviewerfilled'?true:false}
                 />
           </Field>
           </div>
@@ -1459,9 +1488,10 @@ const RVReviewer = () => {
                 minHeight: '50px',
                 borderColor: !formData1.question_2 && submitted1 ? 'red' : '',
               }}
-              value={formdata.accomplishments}
+              value={formdata.question_2}
               onChange={(e) => handleFieldChange1('question_2', e.target.value)}
               placeholder="Enter your response..."
+              readOnly ={formdata&&formdata.formStatus==='reviewerfilled'?true:false}
             />
           </Field>
           </div>
@@ -1474,9 +1504,10 @@ const RVReviewer = () => {
                 minHeight: '50px',
                 borderColor: !formData1.question_3 && submitted1 ? 'red' : '',
               }}
-              value={formdata.strengths}
+              value={formdata.question_3}
               onChange={(e) => handleFieldChange1('question_3', e.target.value)}
               placeholder="Enter your response..."
+              readOnly ={formdata&&formdata.formStatus==='reviewerfilled'?true:false}
             />
           </Field>
           </div>
@@ -1489,14 +1520,15 @@ const RVReviewer = () => {
                 minHeight: '50px',
                 borderColor: !formData1.question_4 && submitted1 ? 'red' : '',
               }}
-              value={formdata.developmentNeeds}
+              value={formdata.question_4}
               onChange={(e) => handleFieldChange1('question_4', e.target.value)}
               placeholder="Enter your response..."
+              readOnly ={formdata&&formdata.formStatus==='reviewerfilled'?true:false}
             />
           </Field>
           </div>
           {errorMessage1 && <div style={{ color: 'red', marginTop: '0.5rem' }}>{errorMessage1}</div>}
-          <Button style={{marginTop: '5px', backgroundColor: 'blue', color: 'white'}} onClick={handleSubmit}>Submit</Button>
+          {formdata&&formdata.formStatus==='reviewerfilled'?null:<Button style={{marginTop: '5px', backgroundColor: 'blue', color: 'white'}} onClick={handleSubmit}>Submit</Button>}
         </div>
       )}
 
@@ -1541,7 +1573,7 @@ const RVReviewer = () => {
             </div>
           ))}
           {errorMessage2 && <div style={{ color: 'red', marginTop: '0.5rem' }}>{errorMessage2}</div>}
-          <Button style={{marginTop: '5px', backgroundColor: 'blue', color: 'white'}} onClick={handleSubmit}>Submit</Button>
+          {formdata&&formdata.formStatus==='reviewerfilled'?null:<Button style={{marginTop: '5px', backgroundColor: 'blue', color: 'white'}} onClick={handleSubmit}>Submit</Button>}
         </div>
       )}
 
@@ -1549,7 +1581,7 @@ const RVReviewer = () => {
               <div style={{ marginTop: '1rem' }}>
                 <div style={{ marginTop: '1rem' }}>
                 <Field label="Enter your comments for this part">
-                  <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px', borderColor: !formData3.likes && submitted3 ? 'red' : '' }} value={formdata.part4ManagerComments} onChange={(e) => handleFieldChange3('part4ManagerComments', e.target.value)} placeholder="Enter your response..." />
+                  <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px', borderColor: !formData3.likes && submitted3 ? 'red' : '' }} value={formdata.part4ManagerComments} onChange={(e) => handleFieldChange3('part4ManagerComments', e.target.value)} placeholder="Enter your response..."  readOnly ={formdata&&formdata.formStatus==='reviewerfilled'?true:false}/>
                 </Field>
                 </div>
                 {/* <div style={{ marginTop: '1rem' }}>
@@ -1563,7 +1595,7 @@ const RVReviewer = () => {
                 </Field>
                 </div> */}
                 {errorMessage3 && <div style={{ color: 'red', marginTop: '0.5rem' }}>{errorMessage3}</div>}
-                <Button style={{marginTop: '5px', backgroundColor: 'blue', color: 'white'}} onClick={handleSubmit}>Submit</Button>
+                {formdata&&formdata.formStatus==='reviewerfilled'?null:<Button style={{marginTop: '5px', backgroundColor: 'blue', color: 'white'}} onClick={handleSubmit}>Submit</Button>}
               </div>
             )}
 
@@ -1571,7 +1603,7 @@ const RVReviewer = () => {
               <div style={{ marginTop: '1rem' }}>
                 <div style={{ marginTop: '1rem' }}>
                 <Field label="Enter your comments for this part">
-                <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px', borderColor: !formData4.works && submitted4 ? 'red' : '' }} value={formdata.part5ManagerComments} onChange={(e) => handleFieldChange4('part5ManagerComments', e.target.value)} placeholder="Enter your response..." />
+                <Textarea style={{ marginTop: '0.5rem', width: '500px', minHeight: '50px', borderColor: !formData4.works && submitted4 ? 'red' : '' }} value={formdata.part5ManagerComments} onChange={(e) => handleFieldChange4('part5ManagerComments', e.target.value)} placeholder="Enter your response..." readOnly ={formdata&&formdata.formStatus==='reviewerfilled'?true:false} />
                 </Field>
                 </div>
                 {/* <div style={{ marginTop: '1rem' }}>
@@ -1590,7 +1622,7 @@ const RVReviewer = () => {
                 </Field>
                 </div> */}
                 {errorMessage4 && <div style={{ color: 'red', marginTop: '0.5rem' }}>{errorMessage4}</div>}
-                <Button style={{marginTop: '5px', backgroundColor: 'blue', color: 'white'}} onClick={handleSubmit}>Submit</Button>
+                {formdata&&formdata.formStatus==='reviewerfilled'?null:<Button style={{marginTop: '5px', backgroundColor: 'blue', color: 'white'}} onClick={handleSubmit}>Submit</Button>}
               </div>
             )}
           </div>
@@ -1628,7 +1660,7 @@ const RVReviewer = () => {
         
       </TabList>
       <div className={styles.controls}>
-      <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleAddEmployee}><ArrowClockwiseRegular className={styles.iconLarge}/>Refresh</Button>
+      <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleRefresh}><ArrowClockwiseRegular className={styles.iconLarge}/>Refresh</Button>
         <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleDeleteEmployee}><ArrowDownRegular  className={styles.iconLarge}/>Export</Button>
         <SearchBox
               placeholder="Search..."
@@ -1723,7 +1755,7 @@ const RVReviewer = () => {
        <TableCell>{item.department.dept_name}</TableCell>
        <TableCell>{item.date_of_joining}</TableCell>
        <TableCell>{item.appraisal_date}</TableCell>
-       <TableCell>{item.reporting_manager}</TableCell>
+       <TableCell>{item.manager_name}</TableCell>
      </TableRow>
      
       ))}
@@ -1746,7 +1778,7 @@ const RVReviewer = () => {
         <TableCell>{item.department.dept_name}</TableCell>
         <TableCell>{item.date_of_joining}</TableCell>
         <TableCell>{item.appraisal_date}</TableCell>
-        <TableCell>{item.reporting_manager}</TableCell>
+        <TableCell>{item.manager_name}</TableCell>
       </TableRow>
      
       ))}

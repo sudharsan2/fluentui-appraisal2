@@ -995,7 +995,7 @@ const [formData1, setFormData1] = useState({
  
           {/* Add remaining input fields for other questions */}
           <div className={classes.field}>
-            <Typography variant="subtitle1">2.Last Yearâ€™s Accomplishments <span style={{ color: 'red' }}> *</span>  </Typography>
+            <Typography variant="subtitle1">2.Last Year's Accomplishments <span style={{ color: 'red' }}> *</span>  </Typography>
             <Field size="large"
             >
              <Textarea
@@ -1064,11 +1064,11 @@ const [formData1, setFormData1] = useState({
                 onChange={handleSelectChange}
                 required
               >
-                <Radio value="O" label={<span style={{ color: 'black' }}>Outstanding</span>} />
-                <Radio value="E" label={<span style={{ color: 'black' }}>Exceeds expectations</span>} />
-                <Radio value="M" label={<span style={{ color: 'black' }}>Meets expectations</span>} />
-                <Radio value="NI" label={<span style={{ color: 'black' }}>Needs improvement</span>} />
-                <Radio value="U" label={<span style={{ color: 'black' }}>Unacceptable</span>} />
+                <Radio value="Outstanding" label={<span style={{ color: 'black' }}>Outstanding</span>} />
+                <Radio value="Exceeds expectations" label={<span style={{ color: 'black' }}>Exceeds expectations</span>} />
+                <Radio value="Meets expectations" label={<span style={{ color: 'black' }}>Meets expectations</span>} />
+                <Radio value="Needs improvement" label={<span style={{ color: 'black' }}>Needs improvement</span>} />
+                <Radio value="Unacceptable" label={<span style={{ color: 'black' }}>Unacceptable</span>} />
               </RadioGroup>
             </div>
  
@@ -1083,11 +1083,11 @@ const [formData1, setFormData1] = useState({
                 label="Technical Skills"
                 required
               >
-                <Radio value="O" label={<span style={{ color: 'black' }}>Outstanding</span>} />
-                <Radio value="E" label={<span style={{ color: 'black' }}>Exceeds expectations</span>} />
-                <Radio value="M" label={<span style={{ color: 'black' }}>Meets expectations</span>} />
-                <Radio value="NI" label={<span style={{ color: 'black' }}>Needs improvement</span>} />
-                <Radio value="U" label={<span style={{ color: 'black' }}>Unacceptable</span>} />
+                <Radio value="Outstanding" label={<span style={{ color: 'black' }}>Outstanding</span>} />
+                <Radio value="Exceeds expectations" label={<span style={{ color: 'black' }}>Exceeds expectations</span>} />
+                <Radio value="Meets expectations" label={<span style={{ color: 'black' }}>Meets expectations</span>} />
+                <Radio value="Needs improvement" label={<span style={{ color: 'black' }}>Needs improvement</span>} />
+                <Radio value="Unacceptable" label={<span style={{ color: 'black' }}>Unacceptable</span>} />
               </RadioGroup>
             </div>
  
@@ -1102,11 +1102,11 @@ const [formData1, setFormData1] = useState({
                 label="Utilization and Productivity"
                 required
               >
-                <Radio value="O" label={<span style={{ color: 'black' }}>Outstanding</span>} />
-                <Radio value="E" label={<span style={{ color: 'black' }}>Exceeds expectations</span>} />
-                <Radio value="M" label={<span style={{ color: 'black' }}>Meets expectations</span>} />
-                <Radio value="NI" label={<span style={{ color: 'black' }}>Needs improvement</span>} />
-                <Radio value="U" label={<span style={{ color: 'black' }}>Unacceptable</span>} />
+                <Radio value="Outstanding" label={<span style={{ color: 'black' }}>Outstanding</span>} />
+                <Radio value="Exceeds expectations" label={<span style={{ color: 'black' }}>Exceeds expectations</span>} />
+                <Radio value="Meets expectations" label={<span style={{ color: 'black' }}>Meets expectations</span>} />
+                <Radio value="Needs improvement" label={<span style={{ color: 'black' }}>Needs improvement</span>} />
+                <Radio value="Unacceptable" label={<span style={{ color: 'black' }}>Unacceptable</span>} />
               </RadioGroup>
             </div>
  
@@ -1119,11 +1119,11 @@ const [formData1, setFormData1] = useState({
                 label="Time Management & Organizational Skills"
                 required
               >
-                <Radio value="O" label={<span style={{ color: 'black' }}>Outstanding</span>} />
-                <Radio value="E" label={<span style={{ color: 'black' }}>Exceeds expectations</span>} />
-                <Radio value="M" label={<span style={{ color: 'black' }}>Meets expectations</span>} />
-                <Radio value="NI" label={<span style={{ color: 'black' }}>Needs improvement</span>} />
-                <Radio value="U" label={<span style={{ color: 'black' }}>Unacceptable</span>} />
+                <Radio value="Outstanding" label={<span style={{ color: 'black' }}>Outstanding</span>} />
+                <Radio value="Exceeds expectations" label={<span style={{ color: 'black' }}>Exceeds expectations</span>} />
+                <Radio value="Meets expectations" label={<span style={{ color: 'black' }}>Meets expectations</span>} />
+                <Radio value="Needs improvement" label={<span style={{ color: 'black' }}>Needs improvement</span>} />
+                <Radio value="Unacceptable" label={<span style={{ color: 'black' }}>Unacceptable</span>} />
               </RadioGroup>
             </div>
  
@@ -1136,11 +1136,11 @@ const [formData1, setFormData1] = useState({
                 label="Interpersonal Skills"
                 required
               >
-                <Radio value="O" label={<span style={{ color: 'black' }}>Outstanding</span>} />
-                <Radio value="E" label={<span style={{ color: 'black' }}>Exceeds expectations</span>} />
-                <Radio value="M" label={<span style={{ color: 'black' }}>Meets expectations</span>} />
-                <Radio value="NI" label={<span style={{ color: 'black' }}>Needs improvement</span>} />
-                <Radio value="U" label={<span style={{ color: 'black' }}>Unacceptable</span>} />
+                <Radio value="Outstanding" label={<span style={{ color: 'black' }}>Outstanding</span>} />
+                <Radio value="Exceeds expectations" label={<span style={{ color: 'black' }}>Exceeds expectations</span>} />
+                <Radio value="Meets expectations" label={<span style={{ color: 'black' }}>Meets expectations</span>} />
+                <Radio value="Needs improvement" label={<span style={{ color: 'black' }}>Needs improvement</span>} />
+                <Radio value="Unacceptable" label={<span style={{ color: 'black' }}>Unacceptable</span>} />
               </RadioGroup>
             </div>
  
@@ -1153,11 +1153,11 @@ const [formData1, setFormData1] = useState({
                 label="Communication - Verbal & Written"
                 required
               >
-                <Radio value="O" label={<span style={{ color: 'black' }}>Outstanding</span>} />
-                <Radio value="E" label={<span style={{ color: 'black' }}>Exceeds expectations</span>} />
-                <Radio value="M" label={<span style={{ color: 'black' }}>Meets expectations</span>} />
-                <Radio value="NI" label={<span style={{ color: 'black' }}>Needs improvement</span>} />
-                <Radio value="U" label={<span style={{ color: 'black' }}>Unacceptable</span>} />
+                <Radio value="Outstanding" label={<span style={{ color: 'black' }}>Outstanding</span>} />
+                <Radio value="Exceeds expectations" label={<span style={{ color: 'black' }}>Exceeds expectations</span>} />
+                <Radio value="Meets expectations" label={<span style={{ color: 'black' }}>Meets expectations</span>} />
+                <Radio value="Needs improvement" label={<span style={{ color: 'black' }}>Needs improvement</span>} />
+                <Radio value="Unacceptable" label={<span style={{ color: 'black' }}>Unacceptable</span>} />
               </RadioGroup>
             </div>
  
@@ -1170,11 +1170,11 @@ const [formData1, setFormData1] = useState({
                 label="Initiative, Innovation & Creativity"
                 required
               >
-                <Radio value="O" label={<span style={{ color: 'black' }}>Outstanding</span>} />
-                <Radio value="E" label={<span style={{ color: 'black' }}>Exceeds expectations</span>} />
-                <Radio value="M" label={<span style={{ color: 'black' }}>Meets expectations</span>} />
-                <Radio value="NI" label={<span style={{ color: 'black' }}>Needs improvement</span>} />
-                <Radio value="U" label={<span style={{ color: 'black' }}>Unacceptable</span>} />
+                <Radio value="Outstanding" label={<span style={{ color: 'black' }}>Outstanding</span>} />
+                <Radio value="Exceeds expectations" label={<span style={{ color: 'black' }}>Exceeds expectations</span>} />
+                <Radio value="Meets expectations" label={<span style={{ color: 'black' }}>Meets expectations</span>} />
+                <Radio value="Needs improvement" label={<span style={{ color: 'black' }}>Needs improvement</span>} />
+                <Radio value="Unacceptable" label={<span style={{ color: 'black' }}>Unacceptable</span>} />
               </RadioGroup>
             </div>
  
@@ -1187,11 +1187,11 @@ const [formData1, setFormData1] = useState({
                 label="Teamwork"
                 required
               >
-                <Radio value="O" label={<span style={{ color: 'black' }}>Outstanding</span>} />
-                <Radio value="E" label={<span style={{ color: 'black' }}>Exceeds expectations</span>} />
-                <Radio value="M" label={<span style={{ color: 'black' }}>Meets expectations</span>} />
-                <Radio value="NI" label={<span style={{ color: 'black' }}>Needs improvement</span>} />
-                <Radio value="U" label={<span style={{ color: 'black' }}>Unacceptable</span>} />
+               <Radio value="Outstanding" label={<span style={{ color: 'black' }}>Outstanding</span>} />
+                <Radio value="Exceeds expectations" label={<span style={{ color: 'black' }}>Exceeds expectations</span>} />
+                <Radio value="Meets expectations" label={<span style={{ color: 'black' }}>Meets expectations</span>} />
+                <Radio value="Needs improvement" label={<span style={{ color: 'black' }}>Needs improvement</span>} />
+                <Radio value="Unacceptable" label={<span style={{ color: 'black' }}>Unacceptable</span>} />
               </RadioGroup>
             </div>
  
@@ -1205,11 +1205,11 @@ const [formData1, setFormData1] = useState({
                 label="Client Focused"
                 required
               >
-                <Radio value="O" label={<span style={{ color: 'black' }}>Outstanding</span>} />
-                <Radio value="E" label={<span style={{ color: 'black' }}>Exceeds expectations</span>} />
-                <Radio value="M" label={<span style={{ color: 'black' }}>Meets expectations</span>} />
-                <Radio value="NI" label={<span style={{ color: 'black' }}>Needs improvement</span>} />
-                <Radio value="U" label={<span style={{ color: 'black' }}>Unacceptable</span>} />
+                <Radio value="Outstanding" label={<span style={{ color: 'black' }}>Outstanding</span>} />
+                <Radio value="Exceeds expectations" label={<span style={{ color: 'black' }}>Exceeds expectations</span>} />
+                <Radio value="Meets expectations" label={<span style={{ color: 'black' }}>Meets expectations</span>} />
+                <Radio value="Needs improvement" label={<span style={{ color: 'black' }}>Needs improvement</span>} />
+                <Radio value="Unacceptable" label={<span style={{ color: 'black' }}>Unacceptable</span>} />
               </RadioGroup>
             </div>
             <div className={classes.field}>
@@ -1221,11 +1221,11 @@ const [formData1, setFormData1] = useState({
                 label="Planning and Organizational Skills"
                 required
               >
-                <Radio value="O" label={<span style={{ color: 'black' }}>Outstanding</span>} />
-                <Radio value="E" label={<span style={{ color: 'black' }}>Exceeds expectations</span>} />
-                <Radio value="M" label={<span style={{ color: 'black' }}>Meets expectations</span>} />
-                <Radio value="NI" label={<span style={{ color: 'black' }}>Needs improvement</span>} />
-                <Radio value="U" label={<span style={{ color: 'black' }}>Unacceptable</span>} />
+                <Radio value="Outstanding" label={<span style={{ color: 'black' }}>Outstanding</span>} />
+                <Radio value="Exceeds expectations" label={<span style={{ color: 'black' }}>Exceeds expectations</span>} />
+                <Radio value="Meets expectations" label={<span style={{ color: 'black' }}>Meets expectations</span>} />
+                <Radio value="Needs improvement" label={<span style={{ color: 'black' }}>Needs improvement</span>} />
+                <Radio value="Unacceptable" label={<span style={{ color: 'black' }}>Unacceptable</span>} />
               </RadioGroup>
             </div>
  
@@ -1238,11 +1238,11 @@ const [formData1, setFormData1] = useState({
                 label="Value Addition"
                 required
               >
-                <Radio value="O" label={<span style={{ color: 'black' }}>Outstanding</span>} />
-                <Radio value="E" label={<span style={{ color: 'black' }}>Exceeds expectations</span>} />
-                <Radio value="M" label={<span style={{ color: 'black' }}>Meets expectations</span>} />
-                <Radio value="NI" label={<span style={{ color: 'black' }}>Needs improvement</span>} />
-                <Radio value="U" label={<span style={{ color: 'black' }}>Unacceptable</span>} />
+                <Radio value="Outstanding" label={<span style={{ color: 'black' }}>Outstanding</span>} />
+                <Radio value="Exceeds expectations" label={<span style={{ color: 'black' }}>Exceeds expectations</span>} />
+                <Radio value="Meets expectations" label={<span style={{ color: 'black' }}>Meets expectations</span>} />
+                <Radio value="Needs improvement" label={<span style={{ color: 'black' }}>Needs improvement</span>} />
+                <Radio value="Unacceptable" label={<span style={{ color: 'black' }}>Unacceptable</span>} />
               </RadioGroup>
             </div>
  
@@ -1382,8 +1382,8 @@ const [formData1, setFormData1] = useState({
     <div className="text-container">
       <h1 style={{ color: 'rgb(52, 52, 52)', marginTop: '20px' }}>Appraisal Form</h1>
       <div style={{ marginTop: '20px', marginBottom: '10px' }}>
-        <h2 style={{ marginLeft: '5px', marginRight: '5px' }}>{response1.employee_name} {response1.employee_name}</h2>
-        <h4 style={{ marginLeft: '5px', marginRight: '5px', display:'flex',alignItems:'center' }}>{response1.employee_id} <Open20Regular onClick={()=>setIsOpen(true)}/></h4>
+        <h2 style={{ marginLeft: '5px', marginRight: '5px' }}>{response1.employee_name} </h2>
+        <h4 style={{ marginLeft: '5px', marginRight: '5px', display:'flex',alignItems:'center' }}>{response1.employee_id} <Open20Regular  onClick={()=>setIsOpen(true)}/></h4>
  
        
  
@@ -1426,7 +1426,7 @@ const [formData1, setFormData1] = useState({
     :
  
     (<div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: '100vh', }}>
-      <Typography variant="subtitle1">`you have already Submitted the Form `</Typography>
+      <Typography variant="subtitle1">{"Thanks for Submitting the Form 😊"}</Typography>
     </div>)
 };
  

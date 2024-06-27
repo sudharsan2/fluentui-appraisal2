@@ -2,6 +2,7 @@ import React,{useState, useEffect} from "react";
 import axios from 'axios';
 import {useSelector, useDispatch} from 'react-redux';
 import {Stack, Nav, Dropdown } from '@fluentui/react';
+import { Rate,message } from 'antd';
 import {
   makeStyles,
   shorthands,
@@ -430,14 +431,17 @@ const MGReviewer = () => {
   ];
   const [todoEmployees, settodoEmployees] = useState([]);
   const [ waitingEmployees, setwaitingEmployees] = useState([]);
-  const [selectedTab2, setSelectedTab2] = useState('1');
+  const [selectedTab2, setSelectedTab2] = useState('tab1');
+
+  const [refresh, setRefresh] = useState(false);
  
  
  
   const fetchtodoEmployeeData = () => {
-    axios.get('http://127.0.0.1:9000/user/getEmployeeforMgappraisaltodo',{
+    const token2 = localStorage.getItem("accessToken");
+    axios.get('http://127.0.0.1:9000/user/getEmployeeforMgreviewertodo',{
       headers: {
-        Authorization: `Bearer ${'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE2OTYwMTcyLCJpYXQiOjE3MTY4NzM3NzIsImp0aSI6ImI2OTc0N2U4NjEzZTQwYTk4OTg5Y2IzMDVjMDhhNDE4IiwidXNlcl9pZCI6MSwidXNlcm5hbWUiOiJrYXV0aGFtIiwiZW1haWwiOiJrYXV0aGFtQGdtYWlsLmNvbSIsImVtcElkIjoiMDAxIiwicm9sZSI6WyJIUiJdfQ.EkkcWJhHZcNDau3FI_H5YebcDDfUUoKpuh3zyQM7qZo'}`
+        Authorization: `Bearer ${token2}`
       }
     })
       .then(response => {
@@ -450,14 +454,15 @@ const MGReviewer = () => {
   };
  
   const fetchwaitingEmployeeData = () => {
-    axios.get('http://127.0.0.1:9000/user/getEmployeeforMgappraisalWaiting',{
+    const token2 = localStorage.getItem("accessToken");
+    axios.get('http://127.0.0.1:9000/user/getEmployeeforMgreviewerFilled',{
       headers: {
-        Authorization: `Bearer ${'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE2OTYwMTcyLCJpYXQiOjE3MTY4NzM3NzIsImp0aSI6ImI2OTc0N2U4NjEzZTQwYTk4OTg5Y2IzMDVjMDhhNDE4IiwidXNlcl9pZCI6MSwidXNlcm5hbWUiOiJrYXV0aGFtIiwiZW1haWwiOiJrYXV0aGFtQGdtYWlsLmNvbSIsImVtcElkIjoiMDAxIiwicm9sZSI6WyJIUiJdfQ.EkkcWJhHZcNDau3FI_H5YebcDDfUUoKpuh3zyQM7qZo'}`
+        Authorization: `Bearer ${token2}`
       }
     })
       .then(response => {
         setwaitingEmployees(response.data);
-        console.log({"data1": response.data})
+        console.log({"data2": response.data})
       })
       .catch(error => {
         console.error('There was an error fetching the data!', error);
@@ -467,26 +472,30 @@ const MGReviewer = () => {
   useEffect(() => {
     fetchtodoEmployeeData();
     fetchwaitingEmployeeData();
-  }, []);
+  }, [refresh]);
 
   
   const handleRowClick = async (employee) => {
     try {
-      const response1 = await axios.get(`https://api.example.com/data/${employee.employee_id}`);
-      // setformdataemployee(response.data);
-      const response2 = await axios.get(`https://api.example.com/data/${employee.employee_id}`);
-      // setformdatamanager(response2.data);
-      const response3 = await axios.get(`https://api.example.com/data/${employee.employee_id}`);
-      // setformdatareviewer(response3.data);
+      const response1 = await axios.get(`http://127.0.0.1:9000/user/team-member/remarks/${employee.employee_id}`);
+      setformdataemployee(response1.data);
+      const response2 = await axios.get(`http://127.0.0.1:9000/user/appraiser/remarks/${employee.employee_id}`);
+      setformdatamanager(response2.data);
+      const response3 = await axios.get(`http://127.0.0.1:9000/user/reviewer/remarks/${employee.employee_id}`);
+      setformdatareviewer(response3.data);
     } catch (err) {
-      setformdataemployee({ "question_1": "blahhhhh" });
+      const response1 = await axios.get(`http://127.0.0.1:9000/user/team-member/remarks/${employee.employee_id}`);
+      setformdataemployee(response1.data);
+      const response2 = await axios.get(`http://127.0.0.1:9000/user/appraiser/remarks/${employee.employee_id}`);
+      setformdatamanager(response2.data);
+      setformdataemployee(response1.data);
 
-      setformdatamanager({"question_1":"hahaha"});
+      setformdatamanager(response2.data);
 
-      setformdatareviewer({"question_1":"uhuhuhu"});
+      setformdatareviewer({});
       // console.log({ "question1": formdataemployee.question_1 });
     }
-    setformdataemployee({ "question_1": "blahhhhh" });
+    setformdataemployee({  });
     setSelectedEmployee(employee);
     setOpen(true);
     
@@ -522,8 +531,8 @@ const MGReviewer = () => {
     setSelectedTab1(value);
   };
 
-  const handleTabSelect2 = (value) => {
-    setSelectedTab2(value);
+  const handleTabSelect2 = (event,data) => {
+    setSelectedTab2(data.value);
   };
  
   const handleTabChange = (event, data) => {
@@ -563,8 +572,9 @@ const MGReviewer = () => {
   };
  
   
-  const handleAddEmployee = () => {
-    alert("Add Employee functionality to be implemented");
+  const handleRefresh = () => {
+    setRefresh(!refresh);
+    message.success("Data has been Refreshed");
   };
  
   // const handleRowClick = (employee) => {
@@ -648,7 +658,7 @@ const MGReviewer = () => {
       (item.date_of_joining && item.date_of_joining.includes(searchQuery)) ||
      
       // (item.appraisal && item.appraisal.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (item.reporting_manager && item.reporting_manager.toLowerCase().includes(searchQuery.toLowerCase()))
+      (item.manager_name && item.manager_name.toLowerCase().includes(searchQuery.toLowerCase()))
     )
   :todoEmployees;
  
@@ -675,7 +685,7 @@ const MGReviewer = () => {
   (item.date_of_joining && item.date_of_joining.includes(searchQuery)) ||
   // Uncomment if 'appraisal' is part of the dataset and needs to be searched
   // (item.appraisal && item.appraisal.toLowerCase().includes(searchQuery.toLowerCase())) ||
-  (item.reporting_manager && item.reporting_manager.toLowerCase().includes(searchQuery.toLowerCase()))
+  (item.manager_name && item.manager_name.toLowerCase().includes(searchQuery.toLowerCase()))
 )
    
   :waitingEmployees;
@@ -727,24 +737,24 @@ const MGReviewer = () => {
         <DrawerBody>
         <div>
         <div style={{marginLeft:"3vw", marginTop:"2vh",display:"flex",width:"100%"}}>
-            <Avatar color="brand" initials="BR" name="brand color avatar" size={96}/>
+            <Avatar color="brand" name={selectedEmployee.employee_name} size={96}/>
             <div style={{display:"flex",marginLeft:"2vw", flexDirection:"column",justifyContent:"center",width:"60%"}}>
-            <Text  size={700} style={{marginBottom:"2vh", fontWeight:"bold",color:themestate?"white":""}}> {selectedEmployee.name}</Text>
+            <Text  size={700} style={{marginBottom:"2vh", fontWeight:"bold",color:themestate?"white":""}}>{selectedEmployee.employee_name}</Text>
             <div style={{display:"flex" ,width:"100%",justifyContent: "space-between"}}>
-            <Text  size={250} style={{fontWeight:"bold",color:themestate?"white":""}}> {selectedEmployee.empid} </Text>
+            <Text  size={250} style={{fontWeight:"bold",color:themestate?"white":""}}>{selectedEmployee.employee_id}</Text>
             <div style={{display:"flex"}}>
             <Timer20Regular style={{color:'rgb(1,105,185)'}}/>
             <Text  size={250} style={{marginLeft:"3px",fontWeight:"bold",color:themestate?"white":""}}> Yet to fill the employee form</Text>
             </div>
             <div style={{display:"flex"}}>
             <Calendar20Regular style={{color:'rgb(1,105,185)'}}/>
-            <Text  size={250} style={{marginLeft:"3px", fontWeight:"bold",color:themestate?"white":""}}> 1 May 2024</Text>
+            <Text  size={250} style={{marginLeft:"3px", fontWeight:"bold",color:themestate?"white":""}}>{selectedEmployee.appraisal_date}</Text>
             </div>
             </div>
             </div>
             </div>
             <TabList
-                defaultSelectedValue="tab1"
+                defaultSelectedValue={selectedTab1}
                 appearance="subtle"
                 onTabSelect={handleTabSelect}
                 style={{marginLeft:"3vw", marginTop:"3vh"}}
@@ -1390,7 +1400,7 @@ const MGReviewer = () => {
     <Breadcrumb/>
         <h2 style={themestate?{color:'white'}:{}}>Review</h2>
       <TabList
-        defaultSelectedValue="tab1"
+        defaultSelectedValue='tab1'
         appearance="subtle"
         onTabSelect={handleTabSelect2}
         style={themestate?{color:'white'}:{}}
@@ -1402,7 +1412,7 @@ const MGReviewer = () => {
         
       </TabList>
       <div className={styles.controls}>
-      <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleAddEmployee}><ArrowClockwiseRegular className={styles.iconLarge}/>Refresh</Button>
+      <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleRefresh}><ArrowClockwiseRegular className={styles.iconLarge}/>Refresh</Button>
         <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleDeleteEmployee}><ArrowDownRegular  className={styles.iconLarge}/>Export</Button>
         <SearchBox
               placeholder="Search..."
@@ -1496,7 +1506,7 @@ const MGReviewer = () => {
        <TableCell>{item.department.dept_name}</TableCell>
        <TableCell>{item.date_of_joining}</TableCell>
        <TableCell>{item.appraisal_date}</TableCell>
-       <TableCell>{item.reporting_manager}</TableCell>
+       <TableCell>{item.manager_name}</TableCell>
      </TableRow>
      
       ))}
@@ -1519,7 +1529,7 @@ const MGReviewer = () => {
         <TableCell>{item.department.dept_name}</TableCell>
         <TableCell>{item.date_of_joining}</TableCell>
         <TableCell>{item.appraisal_date}</TableCell>
-        <TableCell>{item.reporting_manager}</TableCell>
+        <TableCell>{item.manager_name}</TableCell>
       </TableRow>
      
       ))}

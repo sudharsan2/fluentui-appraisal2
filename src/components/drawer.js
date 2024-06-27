@@ -1199,7 +1199,7 @@ const NavDrawerDefault = (props) => {
   {collapse ? (
     <NavDrawerBody
         style={themestate?{backgroundColor:darktheme.sidebarcolordark, cursor:"pointer",WebkitTapHighlightColor: 'transparent'}:{cursor:"pointer",WebkitTapHighlightColor: 'transparent'}}
-        selectedValue ={selectedValue}
+        
      >
       <Tooltip content={'Dashboard'} positioning='after' withArrow={true} appearance={themestate?"inverted":"normal"}>
       <NavItem

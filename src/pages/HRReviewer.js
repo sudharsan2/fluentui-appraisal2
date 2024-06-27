@@ -52,7 +52,7 @@ import { OverlayDrawer, DrawerHeader, DrawerHeaderTitle, DrawerBody } from '@flu
 import {AddRegular, PersonDeleteRegular , EditRegular, SearchRegular, FilterRegular, FilterDismissRegular, FilterAddRegular, ChartMultipleFilled,ChartMultipleRegular,Dismiss24Regular ,Timer20Regular,Calendar20Regular, ArrowDownRegular, ArrowClockwiseRegular,ShareMultiple24Filled ,Add24Filled,ShareIos24Filled,CheckmarkCircleFilled  } from "@fluentui/react-icons"; // Import the icons
 import './page.css';
 import zIndex from "@mui/material/styles/zIndex";
-import {Modal, Form, Input, DatePicker, Select,  Row, Col, message } from 'antd';
+import {Modal, Form, Input, DatePicker, Select,  Row, Col, message,Rate } from 'antd';
 
 const useStyles = makeStyles({
   root: {
@@ -409,7 +409,7 @@ const HRReviewer = () => {
   const [selectedTab1, setSelectedTab1] = React.useState('tab1');
   const [yetToBeFilledEmployees, setyetToBeFilledEmployees] = useState([]);
   const [filledEmployees, setFilledEmployees] = useState([]);
-
+  const [refresh, setRefresh] = useState(false);
 
   const [formdataemployee,setformdataemployee] = useState({});
 
@@ -427,7 +427,14 @@ const HRReviewer = () => {
   const [initialValues, setInitialValues] = useState({});
   const [formEdit] = Form.useForm();
  
- 
+  const handleCheckboxChange = (event, empId) => {
+    event.stopPropagation();
+    handleItemsChange(empId);
+    
+    console.log("clicked")
+    setOpen(false);
+    
+  };
 
   const fetchyetToBeFilledEmployeeData = () => {
     axios.get('http://127.0.0.1:9000/user/getEmployeeforHRReviewerYet')
@@ -535,8 +542,9 @@ const HRReviewer = () => {
   };
  
   
-  const handleAddEmployee = () => {
-    alert("Add Employee functionality to be implemented");
+  const handleRefresh = () => {
+    setRefresh(!refresh);
+    message.success("Data has been Refreshed");
   };
  
   const handleRowClick = async (employee) => {
@@ -566,8 +574,34 @@ const HRReviewer = () => {
    
   };
  
-  const handleDeleteEmployee = () => {
-    alert("Delete Employee functionality to be implemented");
+  const handleDeleteEmployee = async () => {
+    console.log(JSON.stringify({ ids: itemSelected }));
+    try {
+      const response = await fetch('http://127.0.0.1:9000/user/employee/multi-delete/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ids: itemSelected }),
+      });
+ 
+      if (response.ok) {
+       
+        // Clear the selectedItems state
+        message.success("Successfully Deleted Selected Employees");
+        setSelectedItems({});
+        // Optionally clear the itemSelected state
+        setItemSelected([]);
+        fetchyetToBeFilledEmployeeData();
+        fetchfilledEmployeeData();
+      } else {
+        // alert('Failed to delete employees');
+      }
+    } catch (error) {
+      message.error("Error Deleting employees");
+      
+      // alert('An error occurred while deleting employees');
+    }
   };
  
   const handleEditEmployee = () => {
@@ -580,10 +614,25 @@ const HRReviewer = () => {
 
 
   const handleItemsChange = (id) => {
-    setSelectedItems((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
+    // event.stopPropagation();
+    let newSelectedItems;
+    let newTrueSelectedIds;
+    setSelectedItems((prev) => {
+     newSelectedItems = {
+        ...prev,
+        [id]: !prev[id],
+      };
+ 
+      // Update the array of true selected IDs based on the new selectedItems state
+      newTrueSelectedIds = Object.keys(newSelectedItems).filter(
+        (key) => newSelectedItems[key] === true
+      );
+ 
+      // Update the itemSelected state with the new array of true selected IDs
+      setItemSelected(newTrueSelectedIds);
+ 
+      return newSelectedItems;
+    });
   };
 
   // const handleItemsChange = (id) => {
@@ -769,24 +818,24 @@ const HRReviewer = () => {
         <DrawerBody>
         <div>
           <div style={{marginLeft:"3vw", marginTop:"2vh",display:"flex",width:"100%"}}>
-            <Avatar color="brand" initials="BR" name="brand color avatar" size={96}/>
+            <Avatar color="brand"  name={selectedEmployee.employee_name} size={96}/>
             <div style={{display:"flex",marginLeft:"2vw", flexDirection:"column",justifyContent:"center",width:"60%"}}>
-            <Text  size={700} style={{marginBottom:"2vh", fontWeight:"bold",color:themestate?"white":""}}> {selectedEmployee.name}</Text>
+            <Text  size={700} style={{marginBottom:"2vh", fontWeight:"bold",color:themestate?"white":""}}> {selectedEmployee.employee_name}</Text>
             <div style={{display:"flex" ,width:"100%",justifyContent: "space-between"}}>
-            <Text  size={250} style={{fontWeight:"bold",color:themestate?"white":""}}> {selectedEmployee.empid} </Text>
+            <Text  size={250} style={{fontWeight:"bold",color:themestate?"white":""}}> {selectedEmployee.employee_id} </Text>
             <div style={{display:"flex"}}>
             <Timer20Regular style={{color:'rgb(1,105,185)'}}/>
             <Text  size={250} style={{marginLeft:"3px",fontWeight:"bold",color:themestate?"white":""}}> Yet to fill the employee form</Text>
             </div>
             <div style={{display:"flex"}}>
             <Calendar20Regular style={{color:'rgb(1,105,185)'}}/>
-            <Text  size={250} style={{marginLeft:"3px", fontWeight:"bold",color:themestate?"white":""}}> 1 May 2024</Text>
+            <Text  size={250} style={{marginLeft:"3px", fontWeight:"bold",color:themestate?"white":""}}> {selectedEmployee.appraisal_date}</Text>
             </div>
             </div>
             </div>
             </div>
             <TabList
-                defaultSelectedValue='tab1'
+                defaultSelectedValue={selectedTab1}
                 appearance="subtle"
                 onTabSelect={handleTabSelect}
                 style={{marginLeft:"3vw", marginTop:"3vh"}}
@@ -794,7 +843,7 @@ const HRReviewer = () => {
                 <Tab className={themestate ? "tab dark drawer" : "tab light drawer"} style= {{border:'1px solid transparent'}} value="tab1">Employee Info</Tab>
                 <Tab className={themestate ? "tab dark drawer" : "tab light drawer"} style= {{border:'1px solid transparent'}} value="tab2">Employee Form</Tab>
                 <Tab className={themestate ? "tab dark drawer" : "tab light drawer"} style= {{border:'1px solid transparent'}} value="tab3">Manager Form</Tab>
-                <Tab className={themestate ? "tab dark drawer" : "tab light drawer"} style= {{border:'1px solid transparent'}} value="tab4">Reviewer Form</Tab>
+                {formdataemployee.canSeeReviewerComments&&<Tab className={themestate ? "tab dark drawer" : "tab light drawer"} style= {{border:'1px solid transparent'}} value="tab4">Reviewer Form</Tab>}
             </TabList>
             {selectedTab1 === 'tab1' && (
               <div className={`${styles.container} ${styles.gridTemplate1}`}>
@@ -911,9 +960,9 @@ const HRReviewer = () => {
           />
             <div style={{ marginTop: 'auto', padding: '1rem', borderTop: '1px solid #ccc' }}>
               <div style={{display:"flex", justifyContent:"center", alignItems:"center"}}>
-            <Rating value={formdataemployee.self_rating} size="large" onChange={(_, data) => {console.log(data.value); }} />
+              <Rate disabled defaultValue={formdataemployee.self_rating/2}/>
           {/* <Rating value={value} onChange={handleRatingChange} /> */}
-          <p style={{marginLeft:"2px"}}>{2*value}</p>
+          <p style={{marginLeft:"5px"}}>{formdataemployee.self_rating}</p>
           </div>
         </div>
           </div>
@@ -1090,9 +1139,9 @@ const HRReviewer = () => {
             <div style={{ marginTop: 'auto', padding: '1rem', borderTop: '1px solid #ccc' }}>
           {/* <Rating value={value} onChange={handleRatingChange} /> */}
           <div style={{display:"flex", justifyContent:"center", alignItems:"center"}}>
-            <Rating value={formdatamanager.self_rating} size="large" onChange={(_, data) => {console.log(data.value); }} />
+          <Rate disabled defaultValue={formdatamanager.self_rating/2}/>
           {/* <Rating value={value} onChange={handleRatingChange} /> */}
-          <p style={{marginLeft:"2px"}}>{2*formdatamanager.self_rating}</p>
+          <p style={{marginLeft:"2px"}}>{formdatamanager.self_rating}</p>
           </div>
         </div>
           </div>
@@ -1230,9 +1279,9 @@ const HRReviewer = () => {
             <div style={{ marginTop: 'auto', padding: '1rem', borderTop: '1px solid #ccc' }}>
           {/* <Rating value={value} onChange={handleRatingChange} /> */}
           <div style={{display:"flex", justifyContent:"center", alignItems:"center"}}>
-            <Rating value={formdatareviewer.self_rating} size="large" onChange={(_, data) => {console.log(data.value); }} />
+          <Rate disabled defaultValue={formdatareviewer.self_rating/2}/>
           
-          <p style={{marginLeft:"2px"}}>{2*formdatareviewer.self_rating}</p>
+          <p style={{marginLeft:"2px"}}>{formdatareviewer.self_rating}</p>
           </div>
         </div>
           </div>
@@ -1382,11 +1431,11 @@ const HRReviewer = () => {
         
       </TabList>
       <div className={styles.controls}>
-      <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleAddEmployee}><ChartMultipleRegular className={styles.iconLarge}/>Statistics</Button>
+      <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleRefresh}><ChartMultipleRegular className={styles.iconLarge}/>Statistics</Button>
          <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleDeleteEmployee}><PersonDeleteRegular className={styles.iconLarge}/>Delete Employee</Button>
         {/* <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleEditEmployee}><EditRegular className={styles.iconLarge}/>Edit Employee</Button> */}
        
-       <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleAddEmployee}><ArrowClockwiseRegular className={styles.iconLarge}/>Refresh</Button>
+       <Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleRefresh}><ArrowClockwiseRegular className={styles.iconLarge}/>Refresh</Button>
         {/*<Button className={themestate ? "button dark" : "button"} style= {{border:'1px solid transparent'}} onClick={handleDeleteEmployee}><ArrowDownRegular  className={styles.iconLarge}/>Export</Button> */}
          <SearchBox
               placeholder="Search..."
@@ -1445,18 +1494,14 @@ const HRReviewer = () => {
          checked={!!selectedItems[item.employee_id]}
          style={{ zIndex: 1000 }}
          onClick={(event) => event.stopPropagation()}
-         onChange={(event) => {
-           
-           handleItemsChange(item.employee_id);
-           setOpen(false);
-         }}
+         onChange={(event) => handleCheckboxChange(event, item.employee_id)}
        />
        <TableCell>{item.employee_id}</TableCell>
        <TableCell>{item.employee_name}</TableCell>
        <TableCell>{item.department.dept_name}</TableCell>
        <TableCell>{item.date_of_joining}</TableCell>
        <TableCell>{item.appraisal_date}</TableCell>
-       <TableCell>{item.reporting_manager}</TableCell>
+       <TableCell>{item.manager_name}</TableCell>
      </TableRow>
      
       ))}
@@ -1469,18 +1514,14 @@ const HRReviewer = () => {
           checked={!!selectedItems[item.employee_id]}
           style={{ zIndex: 1000 }}
           onClick={(event) => event.stopPropagation()}
-          onChange={(event) => {
-            
-            handleItemsChange(item.employee_id);
-            setOpen(false);
-          }}
+          onChange={(event) => handleCheckboxChange(event, item.employee_id)}
         />
         <TableCell>{item.employee_id}</TableCell>
         <TableCell>{item.employee_name}</TableCell>
         <TableCell>{item.department.dept_name}</TableCell>
         <TableCell>{item.date_of_joining}</TableCell>
         <TableCell>{item.appraisal_date}</TableCell>
-        <TableCell>{item.reporting_manager}</TableCell>
+        <TableCell>{item.manager_name}</TableCell>
       </TableRow>
      
       ))}

@@ -482,7 +482,7 @@ const HRManager = () => {
 
   
   const fetchyetToBeFilledEmployeeData = () => {
-    axios.get('http://127.0.0.1:9000/user/getEmployeeforHRManageryYet')
+    axios.get('https://aceapi.focusrtech.com:82/user/getEmployeeforHRManageryYet')
       .then(response => {
         setyetToBeFilledEmployees(response.data);
         console.log({"data1": response.data})
@@ -493,7 +493,7 @@ const HRManager = () => {
   };
  
   const fetchfilledEmployeeData = () => {
-    axios.get('http://127.0.0.1:9000/user/getEmployeeforHRManagerFilled')
+    axios.get('https://aceapi.focusrtech.com:82/user/getEmployeeforHRManagerFilled')
       .then(response => {
         setFilledEmployees(response.data);
         console.log({"data1": response.data})
@@ -512,7 +512,7 @@ const HRManager = () => {
 
   const handlesharetoManager = async (parameter) => {
     try {
-      const result = await axios.post(`http://127.0.0.1:9000/user/employee/changeFormStatus/${parameter}`, {
+      const result = await axios.post(`https://aceapi.focusrtech.com:82/user/employee/changeFormStatus/${parameter}`, {
         "status":"sharedtoreviewer"
       });
       if (result.status === 200 || result.status === 201) {
@@ -527,7 +527,7 @@ const HRManager = () => {
 
   const handleShareLinkClick = async (parameter) => {
     try {
-      const result = await axios.post('http://127.0.0.1:9000/user/form-links', {
+      const result = await axios.post('https://aceapi.focusrtech.com:82/user/form-links', {
         "empId": parameter, // Include the parameter in the request data
       });
       const token = result.data.token; // Extract the token from the response
@@ -625,7 +625,7 @@ const HRManager = () => {
 
   const handleRowClick = async (employee) => {
     try {
-      const response1 = await axios.get(`http://127.0.0.1:9000/user/team-member/remarks/${employee.employee_id}`);
+      const response1 = await axios.get(`https://aceapi.focusrtech.com:82/user/team-member/remarks/${employee.employee_id}`);
       setformdataemployee(response1.data);
       
       
@@ -639,7 +639,7 @@ const HRManager = () => {
     }
     try {
       
-      const response2 = await axios.get(`http://127.0.0.1:9000/user/appraiser/remarks/${employee.employee_id}`);
+      const response2 = await axios.get(`https://aceapi.focusrtech.com:82/user/appraiser/remarks/${employee.employee_id}`);
       setformdatamanager(response2.data);
       
     } catch (err) {
@@ -660,7 +660,7 @@ const HRManager = () => {
   const handleDeleteEmployee = async () => {
     console.log(JSON.stringify({ ids: itemSelected }));
     try {
-      const response = await fetch('http://127.0.0.1:9000/user/employee/multi-delete/', {
+      const response = await fetch('https://aceapi.focusrtech.com:82/user/employee/multi-delete/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -454,7 +454,7 @@ const HRReviewer = (props) => {
 const fetchEmployeeData = () => {
     const token = localStorage.getItem('accessToken'); // Replace with your actual token
   
-    axios.get('http://127.0.0.1:9000/user/rvsummarylist', {
+    axios.get('https://aceapi.focusrtech.com:82/user/rvsummarylist', {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -469,7 +469,7 @@ const fetchEmployeeData = () => {
   };
  
   const fetchfilledEmployeeData = () => {
-    axios.get('http://127.0.0.1:9000/user/getEmployeeforHRReviewerFilled')
+    axios.get('https://aceapi.focusrtech.com:82/user/getEmployeeforHRReviewerFilled')
       .then(response => {
         setFilledEmployees(response.data);
         console.log({"data1": response.data})
@@ -507,7 +507,7 @@ const fetchEmployeeData = () => {
       console.log({"year":data?.nextOption?.text})
   
       try {
-        const response1 = await axios.get(`http://127.0.0.1:9000/user/team-member/remarks/${selectedEmployee.employee_id}/${data?.nextOption?.text}`);
+        const response1 = await axios.get(`https://aceapi.focusrtech.com:82/user/team-member/remarks/${selectedEmployee.employee_id}/${data?.nextOption?.text}`);
         setformdataemployee(response1.data);
       } catch (err) {
         console.error("Failed to fetch team member remarks:", err);
@@ -515,7 +515,7 @@ const fetchEmployeeData = () => {
       }
     
       try {
-        const response2 = await axios.get(`http://127.0.0.1:9000/user/appraiser/remarks/${selectedEmployee.employee_id}/${data?.nextOption?.text}`);
+        const response2 = await axios.get(`https://aceapi.focusrtech.com:82/user/appraiser/remarks/${selectedEmployee.employee_id}/${data?.nextOption?.text}`);
         setformdatamanager(response2.data);
       } catch (err) {
         console.error("Failed to fetch appraiser remarks:", err);
@@ -523,7 +523,7 @@ const fetchEmployeeData = () => {
       }
     
       try {
-        const response3 = await axios.get(`http://127.0.0.1:9000/user/reviewer/remarks/${selectedEmployee.employee_id}/${data?.nextOption?.text}`);
+        const response3 = await axios.get(`https://aceapi.focusrtech.com:82/user/reviewer/remarks/${selectedEmployee.employee_id}/${data?.nextOption?.text}`);
         setformdatareviewer(response3.data);
       } catch (err) {
         console.error("Failed to fetch reviewer remarks:", err);
@@ -600,19 +600,19 @@ const fetchEmployeeData = () => {
  
   // const handleRowClick = async (employee) => {
   //   try {
-  //     const response1 = await axios.get(`http://127.0.0.1:9000/user/team-member/remarks/${employee.employee_id}`);
+  //     const response1 = await axios.get(`https://aceapi.focusrtech.com:82/user/team-member/remarks/${employee.employee_id}`);
   //     setformdataemployee(response1.data);
-  //     const response2 = await axios.get(`http://127.0.0.1:9000/user/appraiser/remarks/${employee.employee_id}`);
+  //     const response2 = await axios.get(`https://aceapi.focusrtech.com:82/user/appraiser/remarks/${employee.employee_id}`);
       
   //     setformdatamanager(response2.data);
 
-  //     const response3 = await axios.get(`http://127.0.0.1:9000/user/reviewer/remarks/${employee.employee_id}`);
+  //     const response3 = await axios.get(`https://aceapi.focusrtech.com:82/user/reviewer/remarks/${employee.employee_id}`);
       
   //     setformdatareviewer(response3.data);
   //   } catch (err) {
-  //     const response1 = await axios.get(`http://127.0.0.1:9000/user/team-member/remarks/${employee.employee_id}`);
+  //     const response1 = await axios.get(`https://aceapi.focusrtech.com:82/user/team-member/remarks/${employee.employee_id}`);
   //     setformdataemployee(err);
-  //     const response2 = await axios.get(`http://127.0.0.1:9000/user/appraiser/remarks/${employee.employee_id}`);
+  //     const response2 = await axios.get(`https://aceapi.focusrtech.com:82/user/appraiser/remarks/${employee.employee_id}`);
       
   //     setformdatamanager(err);
   //     // console.log({ "question1": formdataemployee.question_1 });
@@ -627,7 +627,7 @@ const fetchEmployeeData = () => {
  
   const handleRowClick = async (employee) => {
     try {
-      const response1 = await axios.get(`http://127.0.0.1:9000/user/team-member/remarks/${employee.employee_id}`);
+      const response1 = await axios.get(`https://aceapi.focusrtech.com:82/user/team-member/remarks/${employee.employee_id}`);
       setformdataemployee(response1.data);
     } catch (err) {
       console.error("Failed to fetch team member remarks:", err);
@@ -635,7 +635,7 @@ const fetchEmployeeData = () => {
     }
   
     try {
-      const response2 = await axios.get(`http://127.0.0.1:9000/user/appraiser/remarks/${employee.employee_id}`);
+      const response2 = await axios.get(`https://aceapi.focusrtech.com:82/user/appraiser/remarks/${employee.employee_id}`);
       setformdatamanager(response2.data);
     } catch (err) {
       console.error("Failed to fetch appraiser remarks:", err);
@@ -643,7 +643,7 @@ const fetchEmployeeData = () => {
     }
   
     try {
-      const response3 = await axios.get(`http://127.0.0.1:9000/user/reviewer/remarks/${employee.employee_id}`);
+      const response3 = await axios.get(`https://aceapi.focusrtech.com:82/user/reviewer/remarks/${employee.employee_id}`);
       setformdatareviewer(response3.data);
     } catch (err) {
       console.error("Failed to fetch reviewer remarks:", err);
@@ -658,7 +658,7 @@ const fetchEmployeeData = () => {
   const handleDeleteEmployee = async () => {
     console.log(JSON.stringify({ ids: itemSelected }));
     try {
-      const response = await fetch('http://127.0.0.1:9000/user/employee/multi-delete/', {
+      const response = await fetch('https://aceapi.focusrtech.com:82/user/employee/multi-delete/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

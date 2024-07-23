@@ -60,7 +60,7 @@ const FormPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:9000/user/form-links/${token}`);
+        const response = await axios.get(`https://aceapi.focusrtech.com:82/user/form-links/${token}`);
         setResponse1(response.data); // Assuming response.data contains the necessary data
         
       } catch (error) {
@@ -94,8 +94,8 @@ const FormPage = () => {
           }
         });
 
-      const response = await axios.put(`http://127.0.0.1:9000/user/handlesubmitted/${response1.tokens}`, formData);
-      const response2 = await axios.post(`http://127.0.0.1:9000/user/team-member/remarks/${response1.employee_id}`, filteredData);
+      const response = await axios.put(`https://aceapi.focusrtech.com:82/user/handlesubmitted/${response1.tokens}`, formData);
+      const response2 = await axios.post(`https://aceapi.focusrtech.com:82/user/team-member/remarks/${response1.employee_id}`, filteredData);
       
       setChange(true)
     } catch (error) {
@@ -700,7 +700,7 @@ export default FormPage;
 //   useEffect(() => {
 //     const fetchData = async () => {
 //       try {
-//         const response = await axios.get(`http://127.0.0.1:9000/user/form-links/${token}`);
+//         const response = await axios.get(`https://aceapi.focusrtech.com:82/user/form-links/${token}`);
 //         setResponse1(response.data);
 //       } catch (error) {
 //         console.error('Error fetching data:', error);
@@ -729,7 +729,7 @@ export default FormPage;
 //     event.preventDefault();
 
 //     try {
-//       const response = await axios.put(`http://127.0.0.1:9000/user/handleSubmitted/${response1.tokens}`, formData);
+//       const response = await axios.put(`https://aceapi.focusrtech.com:82/user/handleSubmitted/${response1.tokens}`, formData);
 //       setChange(true);
 //     } catch (error) {
 //       console.error('Error:', error);

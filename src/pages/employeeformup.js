@@ -113,7 +113,7 @@
 //   useEffect(() => {
 //     const fetchData = async () => {
 //       try {
-//         const response = await axios.get(`http://127.0.0.1:9000/user/form-links/${token}`);
+//         const response = await axios.get(`https://aceapi.focusrtech.com:82/user/form-links/${token}`);
 //         setResponse1(response.data);
 //         formData.name = response1.employee_name;
 //         formData.employee_id = response1.employee_id;
@@ -165,8 +165,8 @@
 //           }
 //         });
  
-//       const response = await axios.put(`http://127.0.0.1:9000/user/handlesubmitted/${response1.tokens}`,{"h1":"Hello"});
-//       const response2 = await axios.post(`http://127.0.0.1:9000/user/team-member/remarks/${response1.employee_id}`, formData);
+//       const response = await axios.put(`https://aceapi.focusrtech.com:82/user/handlesubmitted/${response1.tokens}`,{"h1":"Hello"});
+//       const response2 = await axios.post(`https://aceapi.focusrtech.com:82/user/team-member/remarks/${response1.employee_id}`, formData);
      
 //       setChange(true)
 //     } catch (error) {
@@ -838,7 +838,7 @@ const [formData1, setFormData1] = useState({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:9000/user/form-links/${token}`);
+        const response = await axios.get(`https://aceapi.focusrtech.com:82/user/form-links/${token}`);
         setResponse1(response.data);
         formData.name = response1.employee_name;
         formData.employee_id = response1.employee_id;
@@ -892,8 +892,8 @@ const [formData1, setFormData1] = useState({
           }
         });
  
-      const response = await axios.put(`http://127.0.0.1:9000/user/handlesubmitted/${response1.tokens}`,{"h1":"Hello"});
-      const response2 = await axios.post(`http://127.0.0.1:9000/user/team-member/remarks/${response1.employee_id}`, formData);
+      const response = await axios.put(`https://aceapi.focusrtech.com:82/user/handlesubmitted/${response1.tokens}`,{"h1":"Hello"});
+      const response2 = await axios.post(`https://aceapi.focusrtech.com:82/user/team-member/remarks/${response1.employee_id}`, formData);
      
       setChange(true)
       setStart(false);

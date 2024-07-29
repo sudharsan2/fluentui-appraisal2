@@ -439,7 +439,7 @@ const MGReviewer = () => {
  
   const fetchtodoEmployeeData = () => {
     const token2 = localStorage.getItem("accessToken");
-    axios.get('https://aceapi.focusrtech.com:82/user/getEmployeeforMgreviewertodo',{
+    axios.get('http://127.0.0.1:8004/user/getEmployeeforMgreviewertodo',{
       headers: {
         Authorization: `Bearer ${token2}`
       }
@@ -455,7 +455,7 @@ const MGReviewer = () => {
  
   const fetchwaitingEmployeeData = () => {
     const token2 = localStorage.getItem("accessToken");
-    axios.get('https://aceapi.focusrtech.com:82/user/getEmployeeforMgreviewerFilled',{
+    axios.get('http://127.0.0.1:8004/user/getEmployeeforMgreviewerFilled',{
       headers: {
         Authorization: `Bearer ${token2}`
       }
@@ -477,16 +477,16 @@ const MGReviewer = () => {
   
   const handleRowClick = async (employee) => {
     try {
-      const response1 = await axios.get(`https://aceapi.focusrtech.com:82/user/team-member/remarks/${employee.employee_id}`);
+      const response1 = await axios.get(`http://127.0.0.1:8004/user/team-member/remarks/${employee.employee_id}`);
       setformdataemployee(response1.data);
-      const response2 = await axios.get(`https://aceapi.focusrtech.com:82/user/appraiser/remarks/${employee.employee_id}`);
+      const response2 = await axios.get(`http://127.0.0.1:8004/user/appraiser/remarks/${employee.employee_id}`);
       setformdatamanager(response2.data);
-      const response3 = await axios.get(`https://aceapi.focusrtech.com:82/user/reviewer/remarks/${employee.employee_id}`);
+      const response3 = await axios.get(`http://127.0.0.1:8004/user/reviewer/remarks/${employee.employee_id}`);
       setformdatareviewer(response3.data);
     } catch (err) {
-      const response1 = await axios.get(`https://aceapi.focusrtech.com:82/user/team-member/remarks/${employee.employee_id}`);
+      const response1 = await axios.get(`http://127.0.0.1:8004/user/team-member/remarks/${employee.employee_id}`);
       setformdataemployee(response1.data);
-      const response2 = await axios.get(`https://aceapi.focusrtech.com:82/user/appraiser/remarks/${employee.employee_id}`);
+      const response2 = await axios.get(`http://127.0.0.1:8004/user/appraiser/remarks/${employee.employee_id}`);
       setformdatamanager(response2.data);
       setformdataemployee(response1.data);
 

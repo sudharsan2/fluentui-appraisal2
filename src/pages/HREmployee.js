@@ -333,7 +333,7 @@ const HREmployee = (props) => {
   //   const currentMonth = currentDate.getMonth(); // 0-based index, January is 0
   //   const nextMonth = (currentMonth + 1) % 12;
  
-  //   axios.get('https://aceapi.focusrtech.com:82/user/employee/list')
+  //   axios.get('http://127.0.0.1:8004/user/employee/list')
   //     .then(response => {
   //       setData(response.data);
   //     })
@@ -396,7 +396,7 @@ const HREmployee = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("https://aceapi.focusrtech.com:82/user/managerlist");
+        const response = await axios.get("http://127.0.0.1:8004/user/managerlist");
         setOptions(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -417,7 +417,7 @@ const HREmployee = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("https://aceapi.focusrtech.com:82/user/reviewerlist");
+        const response = await axios.get("http://127.0.0.1:8004/user/reviewerlist");
         setOptions1(response.data);
         console.log({"response":response.data});
       } catch (error) {
@@ -431,7 +431,7 @@ const HREmployee = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("https://aceapi.focusrtech.com:82/user/departmentlist");
+        const response = await axios.get("http://127.0.0.1:8004/user/departmentlist");
         setOptions2(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -455,7 +455,7 @@ const HREmployee = (props) => {
   }, [addedDetails]);
 
   const fetchEmployeeData = () => {
-    axios.get('https://aceapi.focusrtech.com:82/user/employee/list')
+    axios.get('http://127.0.0.1:8004/user/employee/list')
       .then(response => {
         setData(response.data);
         console.log({"data1": response.data})
@@ -467,7 +467,7 @@ const HREmployee = (props) => {
 
   const fetchEmployeeData1 = () => {
     setTimeout(() => {
-      axios.get('https://aceapi.focusrtech.com:82/user/employee/list')
+      axios.get('http://127.0.0.1:8004/user/employee/list')
         .then(response => {
           setData(response.data);
           console.log({"data1": response.data})
@@ -501,7 +501,7 @@ const HREmployee = (props) => {
   }, [data]);
  
   // useEffect(() => {
-  //   axios.get('https://aceapi.focusrtech.com:82/user/employee/list')
+  //   axios.get('http://127.0.0.1:8004/user/employee/list')
   //     .then(response => {
   //       setData(response.data);
   //     })
@@ -681,7 +681,7 @@ const HREmployee = (props) => {
  
   const handleRowClick = async (employee) => {
     try {
-      const response1 = await axios.get(`https://aceapi.focusrtech.com:82/user/team-member/remarks/${employee.employee_id}`);
+      const response1 = await axios.get(`http://127.0.0.1:8004/user/team-member/remarks/${employee.employee_id}`);
       setformdataemployee(response1.data);
       
       if (response1.status===500){
@@ -758,7 +758,7 @@ const HREmployee = (props) => {
       console.log({ "active": optionValue });
   
       try {
-        const result = await axios.post(`https://aceapi.focusrtech.com:82/user/employee/addReviewer/${optionValue}`, {
+        const result = await axios.post(`http://127.0.0.1:8004/user/employee/addReviewer/${optionValue}`, {
           "empId" : selectedEmployee.employee_id,
           "status": "sharedtomanager"
         });
@@ -774,7 +774,7 @@ const HREmployee = (props) => {
 
   const handlesharetoManager = async (parameter) => {
     try {
-      const result = await axios.post(`https://aceapi.focusrtech.com:82/user/employee/changeFormStatus/${parameter}`, {
+      const result = await axios.post(`http://127.0.0.1:8004/user/employee/changeFormStatus/${parameter}`, {
         "status":"sharedtomanager"
       });
       if (result.status === 200 || result.status === 201) {
@@ -789,7 +789,7 @@ const HREmployee = (props) => {
 
   const handleShareLinkClick = async (parameter) => {
     try {
-      const result = await axios.post('https://aceapi.focusrtech.com:82/user/form-links', {
+      const result = await axios.post('http://127.0.0.1:8004/user/form-links', {
         "empId": parameter, // Include the parameter in the request data
       });
       const token = result.data.token; // Extract the token from the response
@@ -863,7 +863,7 @@ const HREmployee = (props) => {
   const handleDeleteEmployee = async () => {
     console.log(JSON.stringify({ ids: itemSelected }));
     try {
-      const response = await fetch('https://aceapi.focusrtech.com:82/user/employee/multi-delete/', {
+      const response = await fetch('http://127.0.0.1:8004/user/employee/multi-delete/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -892,7 +892,7 @@ const HREmployee = (props) => {
   const handleEditEmployee1 = async () => {
     console.log(JSON.stringify({ ids: itemSelected }));
     try {
-      const response = await fetch(`https://aceapi.focusrtech.com:82/user/employee/${itemSelected}`, {
+      const response = await fetch(`http://127.0.0.1:8004/user/employee/${itemSelected}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -942,7 +942,7 @@ const HREmployee = (props) => {
     const empdetails = {...values,"manager":activeOptionId, "reviewer":activeOptionId1,"department":activeOptionId2}
     setaddedDetails(empdetails)
     try {
-      const response = await axios.post('https://aceapi.focusrtech.com:82/user/employee/list', empdetails, {
+      const response = await axios.post('http://127.0.0.1:8004/user/employee/list', empdetails, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -984,7 +984,7 @@ const HREmployee = (props) => {
     const empdetails = {...values,"reviewer":activeOptionId, "manager":activeOptionId1,"department":activeOptionId2}
     setaddedDetails(empdetails)
     try {
-      const response = await axios.put(`https://aceapi.focusrtech.com:82/user/employee/${itemSelected[0]}`, empdetails, {
+      const response = await axios.put(`http://127.0.0.1:8004/user/employee/${itemSelected[0]}`, empdetails, {
         headers: {
           'Content-Type': 'application/json',
         },

@@ -1119,6 +1119,8 @@ const NavDrawerDefault = (props) => {
             return '3';
         case '/hrreviewer':
             return '4';
+        // case '/hrmd':
+        //   return '4'
         case '/hrsummary':
             return '5';
         default:
@@ -1143,10 +1145,13 @@ const NavDrawerDefault = (props) => {
             break;
         case 'manager':
             navigate("/hrmanager");
-            break;   
+            break;  
         case 'reviewer':
             navigate("/hrreviewer");
             break;  
+        // case 'md':
+        //     navigate("/hrmd");
+        //     break; 
         case 'summary':
         navigate("/hrsummary");
         break;
@@ -1251,6 +1256,18 @@ const NavDrawerDefault = (props) => {
        
       </NavItem>
       </Tooltip>
+
+      {/* <Tooltip content={'MD'} positioning='after' withArrow={true} appearance={themestate?"inverted":"normal"}>
+      <NavItem
+        target="_blank"
+        icon={<PersonStarRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
+        onClick={() => someClickHandler('md')}
+        value="4"
+        className={themestate? styles.navItemdark : styles.navItemlight}
+      >
+       
+      </NavItem>
+      </Tooltip> */}
  
  
       <Tooltip content={'Summary'} positioning='after' withArrow={true} appearance={themestate?"inverted":"normal"}>
@@ -1320,6 +1337,19 @@ const NavDrawerDefault = (props) => {
        
       </NavItem>
       </div>
+      {/* <div style={{width:'100%'}}>
+      <NavItem
+        target="_blank"
+        icon={<PersonStarRegular style={themestate?{color:darktheme.fontcolordark}:{color:lighttheme.fontcolorlight}} />}
+        onClick={() => someClickHandler('md')}
+        value="4"
+        className={themestate? styles.navItemdark : styles.navItemlight}
+        style={{ marginTop: "10px", fontSize:"17px"}}  
+        >
+        <div style={themestate?{marginTop:"2px" , color:darktheme.fontcolordark}:{marginTop:"2px" , color:lighttheme.fontcolorlight}}>MD</div>
+       
+      </NavItem>
+      </div> */}
       <div style={{width:'100%'}}>
       <NavItem
         target="_blank"

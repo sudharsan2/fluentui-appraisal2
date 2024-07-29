@@ -482,7 +482,7 @@ const HRManager = () => {
 
   
   const fetchyetToBeFilledEmployeeData = () => {
-    axios.get('https://aceapi.focusrtech.com:82/user/getEmployeeforHRManageryYet')
+    axios.get('http://127.0.0.1:8004/user/getEmployeeforHRManageryYet')
       .then(response => {
         setyetToBeFilledEmployees(response.data);
         console.log({"data1": response.data})
@@ -493,7 +493,7 @@ const HRManager = () => {
   };
  
   const fetchfilledEmployeeData = () => {
-    axios.get('https://aceapi.focusrtech.com:82/user/getEmployeeforHRManagerFilled')
+    axios.get('http://127.0.0.1:8004/user/getEmployeeforHRManagerFilled')
       .then(response => {
         setFilledEmployees(response.data);
         console.log({"data1": response.data})
@@ -512,7 +512,7 @@ const HRManager = () => {
 
   const handlesharetoManager = async (parameter) => {
     try {
-      const result = await axios.post(`https://aceapi.focusrtech.com:82/user/employee/changeFormStatus/${parameter}`, {
+      const result = await axios.post(`http://127.0.0.1:8004/user/employee/changeFormStatus/${parameter}`, {
         "status":"sharedtoreviewer"
       });
       if (result.status === 200 || result.status === 201) {
@@ -527,13 +527,13 @@ const HRManager = () => {
 
   const handleShareLinkClick = async (parameter) => {
     try {
-      const result = await axios.post('https://aceapi.focusrtech.com:82/user/form-links', {
+      const result = await axios.post('http://127.0.0.1:8004/user/form-links', {
         "empId": parameter, // Include the parameter in the request data
       });
       const token = result.data.token; // Extract the token from the response
 
       // Copy the token to the clipboard
-      navigator.clipboard.writeText(token).then(() => {
+      navigator.clipboard.writeText(`http://localhost:3000/form/${token}`).then(() => {
         setCopied(true);
         setTimeout(() => setCopied(false), 2000); // Reset copied state after 2 seconds
       }).catch((error) => {
@@ -625,7 +625,7 @@ const HRManager = () => {
 
   const handleRowClick = async (employee) => {
     try {
-      const response1 = await axios.get(`https://aceapi.focusrtech.com:82/user/team-member/remarks/${employee.employee_id}`);
+      const response1 = await axios.get(`http://127.0.0.1:8004/user/team-member/remarks/${employee.employee_id}`);
       setformdataemployee(response1.data);
       
       
@@ -639,7 +639,7 @@ const HRManager = () => {
     }
     try {
       
-      const response2 = await axios.get(`https://aceapi.focusrtech.com:82/user/appraiser/remarks/${employee.employee_id}`);
+      const response2 = await axios.get(`http://127.0.0.1:8004/user/appraiser/remarks/${employee.employee_id}`);
       setformdatamanager(response2.data);
       
     } catch (err) {
@@ -660,7 +660,7 @@ const HRManager = () => {
   const handleDeleteEmployee = async () => {
     console.log(JSON.stringify({ ids: itemSelected }));
     try {
-      const response = await fetch('https://aceapi.focusrtech.com:82/user/employee/multi-delete/', {
+      const response = await fetch('http://127.0.0.1:8004/user/employee/multi-delete/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -972,12 +972,15 @@ const HRManager = () => {
       </div>
 
       <div className={styles.gridrow} style={{ gridArea: 'editDetails' }}>
-      <div className={`${styles.section} ${styles.editDetails}`}>
-        {/* <div className={styles.editDetails}>
-          <EditRegular className={styles.editIcon} />
-          <span>Edit Details</span>
-        </div> */}
-      </div>
+      <div className={`${styles.section} ${styles.share}`}>
+                  <div className={styles.content} style={{display: "flex"}}>
+                    <ShareMultiple24Filled style={{color:'rgb(1,105,185)'}}/>
+                    <Link style={{ marginLeft: '10px' }} onClick={() => handleShareLinkClick(selectedEmployee.employee_id)}>
+                      Share Form Link
+                    </Link>
+              {copied && <span style={{ marginLeft: '10px', color: 'green' }}>Copied to clipboard!</span>}
+                  </div>
+                </div>
       </div>
 
       <div className={styles.gridrow} style={{ gridArea: 'focusRExperience' }}>

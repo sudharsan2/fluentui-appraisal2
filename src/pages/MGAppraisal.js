@@ -503,7 +503,7 @@ const MGAppraisal = () => {
     const fetchtodoEmployeeData = () => {
       const token2 = localStorage.getItem('accessToken');
       console.log(token2)
-      axios.get('https://aceapi.focusrtech.com:82/user/getEmployeeforMgappraisaltodo',{
+      axios.get('http://127.0.0.1:8004/user/getEmployeeforMgappraisaltodo',{
         headers: {
           Authorization: `Bearer ${token2}`
         }
@@ -519,7 +519,7 @@ const MGAppraisal = () => {
    
     const fetchwaitingEmployeeData = () => {
       const token2 = localStorage.getItem('accessToken');
-      axios.get('https://aceapi.focusrtech.com:82/user/getEmployeeforMgappraisalWaiting',{
+      axios.get('http://127.0.0.1:8004/user/getEmployeeforMgappraisalWaiting',{
         headers: {
           Authorization: `Bearer ${token2}`
         }
@@ -705,7 +705,7 @@ const MGAppraisal = () => {
   const handleSubmit = async () => {
     try {
       console.log({"id":formdataemployee})
-      const result = await axios.post(`https://aceapi.focusrtech.com:82/user/appraiser/remarks/${formdataemployee.employee_id}`,formdata
+      const result = await axios.post(`http://127.0.0.1:8004/user/appraiser/remarks/${formdataemployee.employee_id}`,formdata
         
       );
       if (result.status === 201) {
@@ -781,10 +781,10 @@ const MGAppraisal = () => {
  
   const handleRowClick = async (employee) => {
     try {
-      const response1 = await axios.get(`https://aceapi.focusrtech.com:82/user/team-member/remarks/${employee.employee_id}`);
+      const response1 = await axios.get(`http://127.0.0.1:8004/user/team-member/remarks/${employee.employee_id}`);
       setformdataemployee(response1.data);
       console.log({"formdataemployee":response1.data})
-      const response2 = await axios.get(`https://aceapi.focusrtech.com:82/user/appraiser/remarks/${employee.employee_id}`);
+      const response2 = await axios.get(`http://127.0.0.1:8004/user/appraiser/remarks/${employee.employee_id}`);
       setformdata(response2.data);
       
     } catch (err) {
@@ -805,7 +805,7 @@ const MGAppraisal = () => {
 
   // const handlesharetoHR = async (parameter) => {
   //   try {
-  //     const result = await axios.post(`https://aceapi.focusrtech.com:82/user/employee/changeFormStatus/${formdataemployee.id}`, {
+  //     const result = await axios.post(`http://127.0.0.1:8004/user/employee/changeFormStatus/${formdataemployee.id}`, {
   //       "empId":parameter,"status":"managerfilled","canSeeManagerComments":true
   //     });
   //      // Extract and set the token from the response
@@ -816,7 +816,7 @@ const MGAppraisal = () => {
 
   const handlesharetoHR = async (parameter) => {
     try {
-      const result = await axios.post(`https://aceapi.focusrtech.com:82/user/employee/changeFormStatus/${formdataemployee.id}`, {
+      const result = await axios.post(`http://127.0.0.1:8004/user/employee/changeFormStatus/${formdataemployee.id}`, {
         "empId": parameter,
         "status": "managerfilled",
         "canSeeManagerComments": true

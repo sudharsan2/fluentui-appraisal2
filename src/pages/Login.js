@@ -212,25 +212,12 @@ const Login = () => {
 
   useEffect(() => {
     const rolesString = localStorage.getItem("role");
-    if (isAuthenticated === 2) {
-      if (rolesString.includes("HR")) {
-            navigate("/hremployee");
-          } else if (rolesString.includes("Manager")) {
-            navigate("/mgappraisal");
-          } else if (rolesString.includes("Reviewer")) {
-            navigate("/rvreviewer");
-          } else if (rolesString.includes("Manager") && rolesString.includes("Reviewer")) {
-            // Add specific navigation if needed
-          } else {
-            navigate("/hrdashboard");
-            // console.log(rolesString)
-          }
-      
+    if (isAuthenticated === 3) {
       notification.success({
         message: "Login Successful",
         description: "You have successfully logged in.",
       });
-    } else if (isAuthenticated === 3) {
+    } else if (isAuthenticated === 2) {
       notification.error({
         message: "Login Failed",
         description: isError || "An error occurred during login.",
@@ -248,7 +235,7 @@ const Login = () => {
   const handleSubmit = async () => {
     try {
       const response = await axios.post(
-        "https://aceapi.focusrtech.com:82/user/signin",
+        "http://127.0.0.1:8004/user/signin",
         {
           username: formik.values.username,
           password: formik.values.password
@@ -271,8 +258,8 @@ const Login = () => {
           description: "You have successfully logged in.",
         });
       }
-      else if (role.includes("Manager")) {
-        navigate("/mgappraisal");
+      else if (role.includes("MD")) {
+        navigate("/md");
         notification.success({
           message: "Login Successful",
           description: "You have successfully logged in.",

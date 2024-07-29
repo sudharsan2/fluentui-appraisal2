@@ -394,7 +394,7 @@ const labels = {
   // Add more labels as needed
 };
  
-const HRReviewer = (props) => {
+const MDSummary = (props) => {
   const styles = useStyles();
   const [data, setData] = useState([]);
   const [selectedTab, setSelectedTab] = React.useState("tab1");
@@ -454,7 +454,7 @@ const HRReviewer = (props) => {
 const fetchEmployeeData = () => {
     const token = localStorage.getItem('accessToken'); // Replace with your actual token
   
-    axios.get('http://127.0.0.1:8004/user/mgsummarylist', {
+    axios.get('http://127.0.0.1:8004/user/rvsummarylist', {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -1172,7 +1172,7 @@ const fetchEmployeeData = () => {
         </div>
       )}
         {selectedTab1 === 'tab3' && (
-          
+        
         <div style={{ display: 'flex', marginTop: '5px' }}>
           <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
           <Nav
@@ -1451,7 +1451,7 @@ const fetchEmployeeData = () => {
           </div>
         </div>
         </div>
-          
+         
       )}
      
         </div>
@@ -1611,6 +1611,6 @@ const fetchEmployeeData = () => {
   );
 };
  
-export default HRReviewer;
+export default MDSummary;
  
  
